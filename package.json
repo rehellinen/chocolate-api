@@ -1,0 +1,33 @@
+{
+  "name": "general_bg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rehellinen/general_bg.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rehellinen/general_bg/issues"
+  },
+  "homepage": "https://github.com/rehellinen/general_bg#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/register": "^7.0.0"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "@babel/polyfill": "^7.0.0",
+    "chalk": "^2.4.1",
+    "glob": "^7.1.3",
+    "koa": "^2.6.1",
+    "koa-router": "^7.4.0",
+    "ramda": "^0.25.0"
+  }
+}
