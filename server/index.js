@@ -21,18 +21,18 @@ class Server {
 
   start () {
     // 使用中间件
-    this.useMiddlewares()
+    this.useMiddlewares()(middlewares)
     // 设置监听
     this.app.listen(this.port, this.host)
     console.log(chalk.blue(`Server listens on ${this.host}:${this.port}`))
   }
 
   useMiddlewares () {
-    R.map(R.pipe(
+    return R.map(R.pipe(
       item => `${r('./middleware')}/${item}`,
       require,
       R.map(item => item(this.app))
-    ))(middlewares)
+    ))
   }
 }
 
