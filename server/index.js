@@ -5,11 +5,35 @@
  */
 
 import Koa from 'koa'
+import {resolve} from 'path'
+import R from 'ramda'
+import chalk from 'chalk'
 
-const app = new Koa()
+const r = path => resolve(__dirname, path)
+const middlewares = ['router']
 
-app.use(async (ctx) => {
-  ctx.body = 'hello world'
-})
+class Server {
+  constructor () {
+    this.app = new Koa()
+    this.host = process.env.HOST || '127.0.0.1'
+    this.port = process.env.PORT || 9527
+  }
 
-app.listen(9527)
+  start () {
+    // 使用中间件
+    this.useMiddlewares()
+    // 设置监听
+    this.app.listen(this.port, this.host)
+    console.log(chalk.blue(`Server listens on ${this.host}:${this.port}`))
+  }
+
+  useMiddlewares () {
+    R.map(R.pipe(
+      item => `${r('./middleware')}/${item}`,
+      require,
+      R.map(item => item(this.app))
+    ))(middlewares)
+  }
+}
+
+(new Server()).start()
