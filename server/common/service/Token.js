@@ -88,7 +88,7 @@ export class Token {
    * @param extParams 额外参数
    * @return {Promise<void>}
    */
-  async getFromWechat (extParams) {
+  async getFromUrl (extParams) {
     const params = Object.assign({
       appid: this.appId,
       secret: this.appSecret,

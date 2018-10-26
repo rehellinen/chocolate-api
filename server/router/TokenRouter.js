@@ -14,7 +14,7 @@ class TokenRouter {
   }
 
   @get('check')
-  checkToken (ctx, next) {
-    TokenController.checkToken(ctx, next)
+  async checkToken (ctx, next) {
+    await TokenController.checkToken(ctx, next)
   }
 }

@@ -5,17 +5,18 @@
  */
 import {UserToken} from "../common/service/UserToken"
 import {SuccessMessage} from "../common/exception/SuccessMessage"
+import {Token} from "../common/service/Token"
 
 export class TokenController {
   static async getToken (ctx) {
     const token = await (new UserToken()).get(ctx.query.code)
-    console.log(token)
     throw new SuccessMessage({
       data: {token}
     })
   }
 
-  static checkToken () {
-
+  static checkToken (ctx) {
+    Token.checkToken(ctx)
+    throw new SuccessMessage()
   }
 }

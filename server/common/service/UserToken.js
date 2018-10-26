@@ -19,7 +19,7 @@ export class UserToken extends Token{
 
   async get (code) {
     // 从微信服务器拿到openId
-    const data = await this.getFromWechat({
+    const data = await this.getFromUrl({
       grant_type: 'authorization_code',
       js_code: code
     })
