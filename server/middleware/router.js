@@ -17,7 +17,7 @@ export const router = app => {
   // 生成路由
   for (let [conf, action] of routerMap) {
     const routerPath = conf.target.routerPrefix + conf.path
-    router[conf.method](routerPath, action)
+    router[conf.method](routerPath, ...action)
   }
   app.use(router.routes())
   app.use(router.allowedMethods())

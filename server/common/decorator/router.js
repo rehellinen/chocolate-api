@@ -41,6 +41,6 @@ const baseMethod = (conf) => {
     target[key].prototype.method = conf.method
     conf.path = normalizePath(conf.path)
     conf.target = target
-    routerMap.set(conf, target[key])
+    routerMap.set(conf, [target[key]])
   }
 }
