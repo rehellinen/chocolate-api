@@ -5,6 +5,7 @@
  */
 import {controller, get} from "../common/decorator/router"
 import {TokenController} from "../controller/TokenController"
+import {validate} from "../common/decorator/validate"
 
 @controller('token')
 class TokenRouter {
@@ -14,6 +15,7 @@ class TokenRouter {
   }
 
   @get('check')
+  @validate({name: 'User', scene: 'push'})
   async checkToken (ctx, next) {
     await TokenController.checkToken(ctx, next)
   }

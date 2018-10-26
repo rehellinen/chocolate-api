@@ -6,8 +6,8 @@
 export const validate = ({name, scene}) => {
   // TODO: 验证name首字母是否大写
   const Validate = require(`../validate/${name}Validate`)[`${name}Validate`]
-  return addMiddleware((ctx) => {
-    new Validate().check(ctx, scene)
+  return addMiddleware(async (ctx) => {
+    await new Validate().check(ctx, scene)
   })
 }
 
