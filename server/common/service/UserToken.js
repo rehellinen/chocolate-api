@@ -9,9 +9,9 @@ import {BuyerModel} from "../../../../weixin_nuxt/server/model/BuyerModel"
 export class UserToken extends Token{
   constructor() {
     const conf = {
-      appId: config.WECHAT.BUYER_MP.APP_ID,
-      appSecret: config.WECHAT.BUYER_MP.APP_SECRET,
-      url: config.WECHAT_API.MP_CODE
+      appId: $config.WECHAT.APP_ID,
+      appSecret: $config.WECHAT.APP_SECRET,
+      url: $config.WECHAT_API.MP_OPENID
     }
     super(conf)
   }
