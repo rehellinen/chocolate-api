@@ -17,7 +17,6 @@ export class BaseException extends Error{
 
   getError () {
     return {
-      httpCode: this.httpCode,
       status: this.status,
       message: this.message,
       data: this.data

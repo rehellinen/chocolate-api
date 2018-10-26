@@ -9,9 +9,9 @@ export class UserValidate extends BaseValidate{
   constructor() {
     super()
     this.rules = {
-      number: ['require', '学号'],
-      telephone: ['require', '手机号'],
-      type: ['require', '类型']
+      number: ['require', '学号不能为空'],
+      telephone: ['require', '手机号不能为空'],
+      type: ['require', '类型不能为空']
     }
 
     this.scene = {

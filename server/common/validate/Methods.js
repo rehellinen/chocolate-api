@@ -9,7 +9,7 @@ export class Methods {
   require (data = {}, field = '', errInfo = '') {
     if (!data[field]) {
       throw new ParamsException({
-        message: `${errInfo ? errInfo : field}不能为空`
+        message: `${errInfo ? errInfo : field}`
       })
     }
   }

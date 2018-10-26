@@ -6,8 +6,8 @@
 
 export default {
   WECHAT: {
-    APP_ID: 'wx1b2ecb8981e28b61',
-    APP_SECRET: '5af2bd361cf8a199f15dbcda0f76ace1'
+    APP_ID: '',
+    APP_SECRET: ''
   },
 
   WECHAT_API: {
