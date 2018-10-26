@@ -22,5 +22,10 @@ export default {
     password: '123456',
     database: 'lecture',
     charset: 'utf8'
+  },
+
+  SCOPE: {
+    USER: 10,
+    SUPER: 30
   }
 }
