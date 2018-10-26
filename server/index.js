@@ -11,7 +11,7 @@ import chalk from 'chalk'
 import config from './utils/config'
 
 const r = path => resolve(__dirname, path)
-const middlewares = ['router']
+const middlewares = ['exception', 'router']
 global.$config = config
 
 class Server {
