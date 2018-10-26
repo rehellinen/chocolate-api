@@ -107,7 +107,7 @@ export class BaseModel {
     let userId
     const savedData = {
       open_id: openid,
-      status: config.STATUS.NORMAL
+      status: $config.STATUS.NORMAL
     }
 
     const user = await this.model
@@ -134,7 +134,7 @@ export class BaseModel {
 
   _processCondition (model, condition) {
     if (!condition.hasOwnProperty('status')){
-      condition['status'] = config.STATUS.NORMAL
+      condition['status'] = $config.STATUS.NORMAL
     }
     for (let key in condition) {
       model = model.where(key, 'in', condition[key])

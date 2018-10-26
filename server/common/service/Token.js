@@ -5,12 +5,11 @@
  */
 import {WECHAT} from '../../utils/config'
 import axios from 'axios'
-import {AccountModel} from '../../../../weixin_nuxt/server/model/AccountModel'
 import md5 from 'md5'
-import {getRandChars} from '../../../../weixin_nuxt/utils/utils'
+import {getRandChars} from '../../utils/utils'
 import cache from 'memory-cache'
-import {WechatException} from "../../../../weixin_nuxt/server/libs/exception/WechatException"
-import {TokenException} from "../../../../weixin_nuxt/server/libs/exception/TokenException"
+import {WechatException} from "../exception/WechatException"
+import {TokenException} from "../exception/TokenException"
 
 export class Token {
   constructor (conf = {}) {
@@ -65,7 +64,7 @@ export class Token {
   static generateToken () {
     const str = getRandChars(32)
     const time = new Date().getTime()
-    const prefix = config.TOKEN_PREFIX
+    const prefix = $config.TOKEN_PREFIX
 
     return md5(`${str}-${time}-${prefix}`)
   }
@@ -77,8 +76,7 @@ export class Token {
   saveToCache (cachedValue) {
     const cachedKey = Token.generateToken()
 
-    cache.put(cachedKey, JSON.stringify(cachedValue), config.TOKEN_EXPIRES_IN, () => {
-      console.log('de')
+    cache.put(cachedKey, JSON.stringify(cachedValue), $config.TOKEN_EXPIRES_IN, () => {
       cache.del(cachedKey)
     })
 

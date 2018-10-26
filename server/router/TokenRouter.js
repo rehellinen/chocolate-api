@@ -8,8 +8,13 @@ import {TokenController} from "../controller/TokenController"
 
 @controller('token')
 class TokenRouter {
-  @get('')
-  getToken (ctx, next) {
-    TokenController.getToken(ctx, next)
+  @get('user')
+  async getToken (ctx, next) {
+    await TokenController.getToken(ctx, next)
+  }
+
+  @get('check')
+  checkToken (ctx, next) {
+    TokenController.checkToken(ctx, next)
   }
 }
