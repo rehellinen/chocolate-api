@@ -42,7 +42,7 @@ const baseMethod = (conf) => {
 
     const length = target[key].length
     let action = target[key][length - 1]
-
+    console.log('route')
     action.prototype.method = conf.method
     conf.path = normalizePath(conf.path)
     conf.target = target
