@@ -39,7 +39,6 @@ export class Token {
   static getSpecifiedValue (ctx, key = 'id') {
     const info = cache.get(ctx.header.token)
     const infoObj =  JSON.parse(info)
-    console.log(infoObj)
     if (!info || !infoObj[key]) {
       throw new TokenException()
     }

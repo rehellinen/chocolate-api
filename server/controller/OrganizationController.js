@@ -10,8 +10,8 @@ import {Token} from "../common/service/Token"
 export class OrganizationController {
   static async register (ctx) {
     let savedData = ctx.checkedParams
-    savedData.OID = Token.getSpecifiedValue(ctx)
-    const token = await new OrganizationModel().saveOne()
+    savedData.UID = Token.getSpecifiedValue(ctx)
+    const token = await new OrganizationModel().saveOne(savedData)
     throw new SuccessMessage({ data: token })
   }
 }
