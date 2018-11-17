@@ -6,11 +6,21 @@
 import {ParamsException} from "../exception/ParamsException"
 
 export class Methods {
-  require (data = {}, field = '', errInfo = '') {
+  require (data = {}, field = '', fieldCN = '') {
     if (!data[field]) {
-      throw new ParamsException({
-        message: `${errInfo ? errInfo : field}`
-      })
+      this.throw(field, fieldCN, '不能为空')
     }
+  }
+
+  positiveInt (data = {}, field = '', fieldCN = '') {
+    if(!/(^[1-9]\d*$)/.test(data[field])) {
+      this.throw(field, fieldCN, '必须为正整数')
+    }
+  }
+
+  throw (field, fieldCN, message) {
+    throw new ParamsException({
+      message: fieldCN ? fieldCN : field + message
+    })
   }
 }

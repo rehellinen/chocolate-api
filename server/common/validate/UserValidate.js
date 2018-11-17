@@ -9,13 +9,11 @@ export class UserValidate extends BaseValidate{
   constructor() {
     super()
     this.rules = {
-      number: ['require', '学号不能为空'],
-      telephone: ['require', '手机号不能为空'],
-      type: ['require', '类型不能为空']
+      code: ['require|positiveInt', 'code不能为空|code必须为数字']
     }
 
     this.scene = {
-      push: ['number', 'telephone', 'type']
+      push: ['code']
     }
   }
 }

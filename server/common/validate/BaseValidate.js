@@ -23,10 +23,12 @@ export class BaseValidate extends Methods{
 
     for (let field of rules) {
       const rule = this.rules[field]
-      const validateFunc = rule[0]
-      const errInfo = rule[1]
+      const validateFunc = rule[0].split('|')
+      const errInfo = rule[1].split('|')
 
-      this[validateFunc](params, field, errInfo)
+      validateFunc.forEach((item, index) => {
+        this[item](params, field, errInfo[index])
+      })
 
       checkedParams[field] = params[field]
     }
