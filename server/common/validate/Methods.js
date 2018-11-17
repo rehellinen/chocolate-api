@@ -20,7 +20,7 @@ export class Methods {
 
   throw (field, fieldCN, message) {
     throw new ParamsException({
-      message: fieldCN ? fieldCN : field + message
+      message: (fieldCN ? fieldCN : field) + message
     })
   }
 }

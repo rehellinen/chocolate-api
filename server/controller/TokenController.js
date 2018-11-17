@@ -9,7 +9,7 @@ import {Token} from "../common/service/Token"
 
 export class TokenController {
   static async getToken (ctx) {
-    const token = await (new UserToken()).get(ctx.query.code)
+    const token = await new UserToken().get(ctx.query.code)
     throw new SuccessMessage({ data: token })
   }
 

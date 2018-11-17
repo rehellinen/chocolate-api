@@ -10,15 +10,14 @@ import {validate, auth} from "../common/decorator/middleware"
 @controller('token')
 class TokenRouter {
   @get('user')
-  @validate({name: 'User', scene: 'push'})
+  @validate({name: 'Token', scene: 'get'})
   async getToken (ctx, next) {
     await TokenController.getToken(ctx, next)
   }
 
 
   @get('check')
-  @auth('user')
-  @validate({name: 'User', scene: 'push'})
+  @validate({name: 'Token', scene: 'check'})
   async checkToken (ctx, next) {
     await TokenController.checkToken(ctx, next)
   }
