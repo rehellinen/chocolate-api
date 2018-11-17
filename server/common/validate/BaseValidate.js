@@ -33,7 +33,7 @@ export class BaseValidate extends Methods{
       checkedParams[field] = params[field]
     }
 
-    this.checkedParams = checkedParams
+    ctx.checkedParams = checkedParams
   }
 
   async getParams (ctx) {
@@ -48,9 +48,5 @@ export class BaseValidate extends Methods{
       params = parseParams(rawReqBody)
     }
     return params
-  }
-
-  getCheckedData () {
-    return this.checkedParams
   }
 }

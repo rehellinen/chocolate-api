@@ -16,7 +16,7 @@ export const validate = ({name, scene}) => {
 
 export const auth = (type) => {
   let scope
-  if (type === 'user') {
+  if (type === 'user' || !type) {
     scope = $config.SCOPE.USER
   } else if (type === 'super') {
     scope = $config.SCOPE.SUPER

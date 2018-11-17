@@ -115,21 +115,28 @@ export class BaseModel {
       .fetch()
 
     if (!user) {
-      let res = await this.model
-        .forge(savedData)
-        .save(null, {method: 'insert'})
-      if (!res) {
-        throw new DatabaseException({
-          message: '写入数据失败',
-          status: 40001
-        })
-      }
+      const res = await this.saveOpenId(savedData)
       userId = res.id
     } else {
       userId = user.attributes.id
     }
 
     return userId
+  }
+
+  async saveOne (data) {
+    let model = this.model.forge(data)
+
+    const res = await model.save(null, {method: 'insert'})
+
+    if (!res) {
+      throw new DatabaseException({
+        message: '写入数据失败',
+        status: 40001
+      })
+    }
+
+    return res
   }
 
   _processCondition (model, condition) {
