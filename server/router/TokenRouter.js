@@ -17,7 +17,6 @@ class TokenRouter {
 
 
   @get('check')
-  @validate({name: 'Token', scene: 'check'})
   async checkToken (ctx, next) {
     await TokenController.checkToken(ctx, next)
   }

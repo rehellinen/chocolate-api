@@ -39,7 +39,7 @@ export class Token {
   static getSpecifiedValue (ctx, key = 'id') {
     const info = cache.get(ctx.header.token)
     const infoObj =  JSON.parse(info)
-
+    console.log(infoObj)
     if (!info || !infoObj[key]) {
       throw new TokenException()
     }
@@ -79,7 +79,6 @@ export class Token {
     cache.put(cachedKey, JSON.stringify(cachedValue), $config.TOKEN_EXPIRES_IN, () => {
       cache.del(cachedKey)
     })
-
     return cachedKey
   }
 

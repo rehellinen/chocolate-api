@@ -5,7 +5,7 @@ export class OrganizationModel extends BaseModel{
     super()
 
     this.model = this.db.Model.extend({
-      tableName: 'ORGANIZATION'
+      tableName: 'ORGANI'
     })
   }
 }

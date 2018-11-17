@@ -109,18 +109,16 @@ export class BaseModel {
       UOPENID: openid,
       USTATE: $config.STATUS.NORMAL
     }
-
     const user = await this.model
       .where(savedData)
       .fetch()
 
     if (!user) {
-      const res = await this.saveOpenId(savedData)
-      userId = res.id
+      const res = await this.saveOne(savedData)
+      userId = res.UID
     } else {
-      userId = user.attributes.id
+      userId = user.attributes.UID
     }
-
     return userId
   }
 
