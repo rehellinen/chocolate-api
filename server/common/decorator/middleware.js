@@ -10,7 +10,7 @@ export const validate = ({name, scene}) => {
   const Validate = require(`../validate/${name}Validate`)[`${name}Validate`]
   return addMiddleware(async (ctx, next) => {
     await new Validate().check(ctx, scene)
-    next()
+    await next()
   })
 }
 
@@ -21,9 +21,9 @@ export const auth = (type) => {
   } else if (type === 'super') {
     scope = $config.SCOPE.SUPER
   }
-  return addMiddleware((ctx, next) => {
+  return addMiddleware(async (ctx, next) => {
     Token.checkScope(ctx, scope)
-    next()
+    await next()
   })
 }
 
