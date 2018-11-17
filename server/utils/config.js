@@ -25,7 +25,7 @@ export default {
   },
 
   TOKEN_PREFIX: 'chenqixuan@github.com/rehellinen',
-  TOKEN_EXPIRES_IN: 7200,
+  TOKEN_EXPIRES_IN: 7200 * 1000,
   SCOPE: {
     USER: 10,
     SUPER: 30
