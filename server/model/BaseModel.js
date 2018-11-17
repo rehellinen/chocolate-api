@@ -106,8 +106,8 @@ export class BaseModel {
   async saveOpenId (openid) {
     let userId
     const savedData = {
-      open_id: openid,
-      status: $config.STATUS.NORMAL
+      UOPENID: openid,
+      USTATE: $config.STATUS.NORMAL
     }
 
     const user = await this.model

@@ -16,11 +16,11 @@ export default {
   },
 
   DATABASE: {
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '123456',
-    database: 'mp',
+    host: 'cdb-o82ih1uv.gz.tencentcdb.com',
+    port: 10040,
+    user: 'test',
+    password: 'a12345678',
+    database: 'competition',
     charset: 'utf8'
   },
 
