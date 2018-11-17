@@ -13,7 +13,7 @@ export class UserModel extends BaseModel{
 
     let that = this
     this.model = this.db.Model.extend({
-      tableName: 'user',
+      tableName: 'USER',
       image: function () {
         return this.hasOne(that.image, 'id', 'image_id')
       }
