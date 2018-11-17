@@ -1,4 +1,4 @@
-import {controller, get, post} from "../common/decorator/router"
+import {controller, get, post, put} from "../common/decorator/router"
 import {OrganizationController} from "../controller/OrganizationController"
 import {validate, auth} from "../common/decorator/middleware"
 
@@ -7,7 +7,20 @@ class OrganizationRouter {
   @post('/')
   @auth('user')
   @validate({name: 'Organization', scene: 'register'})
-  async getToken (ctx, next) {
+  async register (ctx, next) {
     await OrganizationController.register(ctx, next)
+  }
+
+  @get('/')
+  @auth('user')
+  async get (ctx, next) {
+    await OrganizationController.get(ctx, next)
+  }
+
+  @put('/')
+  @auth('user')
+  @validate({name: 'Organization', scene: 'edit'})
+  async put (ctx, next) {
+    await OrganizationController.put(ctx, next)
   }
 }

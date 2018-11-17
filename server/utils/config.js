@@ -5,6 +5,8 @@
  */
 
 export default {
+  DEBUG: true,
+
   WECHAT: {
     APP_ID: 'wxe869b1edab698fd5',
     APP_SECRET: 'b9ee1d34857dc6cf06a3a008e483a06b'

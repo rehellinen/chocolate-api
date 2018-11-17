@@ -14,4 +14,16 @@ export class OrganizationController {
     const token = await new OrganizationModel().saveOne(savedData)
     throw new SuccessMessage({ data: token })
   }
+
+  static async get (ctx) {
+    let uid = Token.getSpecifiedValue(ctx)
+    const data = await new OrganizationModel().getByUID(uid)
+    throw new SuccessMessage({ data })
+  }
+
+  static async put (ctx) {
+    let uid = Token.getSpecifiedValue(ctx)
+    const data = await new OrganizationModel().editByUID(uid, ctx.checkedParams)
+    throw new SuccessMessage({ data })
+  }
 }

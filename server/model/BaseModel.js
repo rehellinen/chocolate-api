@@ -56,7 +56,7 @@ export class BaseModel {
    * @param order Array 设置排序的字段
    * @return {Promise<*>}
    */
-  async getAll (condition = {}, relation = [], order = ['id']) {
+  async getAll (condition = {}, relation = [], order = []) {
     let data
     let model = this.model.forge()
 
@@ -137,10 +137,23 @@ export class BaseModel {
     return res
   }
 
-  _processCondition (model, condition) {
-    if (!condition.hasOwnProperty('status')){
-      condition['status'] = $config.STATUS.NORMAL
+  async editOne (condition = {}, data) {
+    let model = this.model.forge(data)
+
+    this._processCondition(model, condition)
+    const res = await model.where(condition).save(null, {method: 'update'})
+
+    if (!res) {
+      throw new DatabaseException({
+        message: '写入数据失败',
+        status: 40001
+      })
     }
+
+    return res
+  }
+
+  _processCondition (model, condition) {
     for (let key in condition) {
       model = model.where(key, 'in', condition[key])
     }

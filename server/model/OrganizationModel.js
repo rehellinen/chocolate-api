@@ -8,4 +8,13 @@ export class OrganizationModel extends BaseModel{
       tableName: 'ORGANI'
     })
   }
+
+  async getByUID (uid) {
+    const data = await this.getAll({UID: uid})
+    return data[0]
+  }
+
+  async editByUID (uid, data) {
+    return await this.editOne({UID: uid}, data)
+  }
 }

@@ -12,7 +12,8 @@ export class OrganizationValidate extends BaseValidate{
     }
 
     this.scene = {
-      register: ['ONAME', 'OSIMPINTRO', 'OINTRO', 'OPHONE', 'OEMAIL']
+      register: ['ONAME', 'OSIMPINTRO', 'OINTRO', 'OPHONE', 'OEMAIL'],
+      edit: ['ONAME', 'OSIMPINTRO', 'OINTRO', 'OPHONE', 'OEMAIL']
     }
   }
 }

@@ -8,8 +8,17 @@ export const exception = (app) => {
       ctx.type = types.json
       ctx.body = e.getError()
     } else {
-      console.log(e.toString())
-      ctx.body = e.toString()
+      if ($config.DEBUG) {
+        console.log(e)
+        ctx.status = 500
+        ctx.type = types.json
+        ctx.body = {
+          status: 500,
+          message: e.toString()
+        }
+      } else {
+        ctx.body = '服务器内部错误'
+      }
     }
   }
 
