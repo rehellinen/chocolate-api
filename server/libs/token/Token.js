@@ -3,10 +3,10 @@
  *  Create By rehellinen
  *  Create On 2018/9/28 20:37
  */
-import {WECHAT} from '../../../config/config'
+import {WECHAT} from '../../config/config'
 import axios from 'axios'
 import md5 from 'md5'
-import {getRandChars} from '../../../utils/utils'
+import {getRandChars} from '../../utils/utils'
 import cache from 'memory-cache'
 import {WechatException} from "../../exception/WechatException"
 import {TokenException} from "../../exception/TokenException"

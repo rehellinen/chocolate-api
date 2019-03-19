@@ -1,4 +1,4 @@
-import {BaseValidate} from "./BaseValidate"
+import {BaseValidate} from "../libs/validate/BaseValidate"
 
 export class OrganizationValidate extends BaseValidate{
   constructor() {

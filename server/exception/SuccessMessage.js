@@ -1,4 +1,4 @@
-import {BaseException} from "./BaseException"
+import {BaseException} from "../libs/exception/BaseException"
 
 export class SuccessMessage extends BaseException{
   constructor(config) {

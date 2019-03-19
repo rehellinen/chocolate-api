@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/12 22:38
  */
-import {BaseValidate} from "./BaseValidate"
+import {BaseValidate} from "../libs/validate/BaseValidate"
 
 export class TokenValidate extends BaseValidate{
   constructor() {
