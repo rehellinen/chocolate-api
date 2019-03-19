@@ -6,8 +6,7 @@
 import database from './database'
 import config from './config'
 import custom from './custom'
-import wechat from './wechat'
 
 export default Object.assign(
-  {}, config, custom, {database}, {wechat}
+  {}, config, custom, {database}
 )

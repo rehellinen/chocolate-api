@@ -4,7 +4,7 @@
  *  Create On 2018/10/18 14:53
  */
 import {Token} from "./Token"
-import {UserModel} from "../../model/UserModel"
+import {UserModel} from "../../../model/UserModel"
 
 export class UserToken extends Token{
   constructor() {
