@@ -7,6 +7,8 @@
 export default {
   // 是否开启调试模式
   DEBUG: true,
+  // 是否把配置放到全局作用域
+  GLOBAL_CONF: true,
   // 生成token的前缀
   TOKEN_PREFIX: 'chenqixuan@github.com/rehellinen',
   // token过期时间（单位为ms）

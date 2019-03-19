@@ -4,11 +4,15 @@
  *  Create On 2018/9/26 10:21
  */
 import X2JS from 'x2js'
-let x2js = new X2JS({
+import {resolve} from 'path'
+
+export const r = path => resolve(__dirname, '../', path)
+
+export let x2js = new X2JS({
   escapeMode: false
 })
 
-function parseXML (xml) {
+export function parseXML (xml) {
   return x2js.xml2js(xml.toString())
 }
 
@@ -38,7 +42,7 @@ function formatMessage (data) {
   return msg
 }
 
-function getRandChars (length = 16) {
+export function getRandChars (length = 16) {
   let str = ''
   let strPol = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   let max = strPol.length - 1
@@ -50,7 +54,7 @@ function getRandChars (length = 16) {
   return str
 }
 
-function parseParams (params) {
+export function parseParams (params) {
   params = params.toString()
   let paramsObj = {}
   if (params.startsWith('<')) {
@@ -70,9 +74,7 @@ function parseParams (params) {
   return paramsObj
 }
 
-function isEmptyObj (obj) {
+export function isEmptyObj (obj) {
   let keys = Object.keys(obj)
   return keys.length === 0;
 }
-
-export {parseXML, formatMessage, getRandChars, parseParams, isEmptyObj}

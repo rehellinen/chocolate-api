@@ -7,7 +7,7 @@ import Router from 'koa-router'
 import glob from 'glob'
 import R from 'ramda'
 import {resolve} from 'path'
-import {routerMap} from "../common/decorator/router"
+import {routerMap} from "../decorator/router"
 
 export const router = app => {
   const router = new Router()

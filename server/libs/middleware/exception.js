@@ -1,5 +1,5 @@
-import {types} from "../utils/mime"
-import {BaseException} from "../common/exception/BaseException"
+import {types} from "../../utils/mime"
+import {BaseException} from "../exception/BaseException"
 
 export const exception = (app) => {
   const processError = (e, ctx) => {
