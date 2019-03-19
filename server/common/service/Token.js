@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/9/28 20:37
  */
-import {WECHAT} from '../../utils/config'
+import {WECHAT} from '../../config/config'
 import axios from 'axios'
 import md5 from 'md5'
 import {getRandChars} from '../../utils/utils'
