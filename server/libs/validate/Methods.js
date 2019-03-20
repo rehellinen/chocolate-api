@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/13 10:24
  */
-import {ParamsException} from "../../exception/ParamsException"
+import {ParamsException} from "../../common/exception/ParamsException"
 
 export class Methods {
   require (data = {}, field = '', fieldCN = '') {
