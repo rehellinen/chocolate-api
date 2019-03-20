@@ -6,13 +6,13 @@
 import Router from 'koa-router'
 import glob from 'glob'
 import R from 'ramda'
-import {resolve} from 'path'
+import {r} from "../../utils/utils"
 import {routerMap} from "../decorator/router"
 
 export const router = app => {
   const router = new Router()
   // 执行路由文件
-  R.map(require)(glob.sync(resolve(__dirname, '../router', './*.js')))
+  R.map(require)(glob.sync(r('./router/*.js')))
 
   // 生成路由
   for (let [conf, action] of routerMap) {

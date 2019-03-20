@@ -11,9 +11,9 @@ const index = new IndexController()
 
 @controller('index')
 class IndexRouter {
-  @get('user')
-  @validate({name: 'Index', scene: 'get'})
-  @auth('super')
+  @get('')
+  @validate({name: 'Index', scene: 'id'})
+  // @auth('super')
   async getToken (ctx, next) {
     await index.index(ctx, next)
   }
