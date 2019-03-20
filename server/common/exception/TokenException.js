@@ -1,4 +1,4 @@
-import {BaseException} from "../libs/exception/BaseException"
+import {BaseException} from "../../libs/exception/BaseException"
 
 export class TokenException extends BaseException{
   constructor(config) {

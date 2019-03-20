@@ -5,25 +5,27 @@
 ~~~
 |-- config            配置文件目录
 |-- controller        控制器
-|-- exception         自定义错误类型
+|-- model             模型
+|-- utils             工具  
+|-- common            公共模块目录
+|   |-- exception     用户自定义异常 / 框架内置异常
+|   |-- validate      验证器
+|   |-- router        路由
 |-- libs              框架核心类库
 |   |-- config        配置
 |   |-- decorator     装饰器
-|   |-- exception     异常
+|   |-- exception     异常处理
 |   |-- middleware    中间件
 |   |-- model         模型
 |   |-- token         Token令牌
 |   |-- validate      验证器
-|-- model             模型
-|-- router            路由
-|-- validate          自定验证器
-|-- utils             工具  
 ~~~
 libs 是框架核心类库，一般不需要修改其中的代码。
-其他目录在下面会有详细介绍。
 
 ## 框架基本用法
 ### （一）路由：
+路由文件存放目录：/common/router  
+
 最简单的路由定义如下：
 ```
 @controller('index')
@@ -35,12 +37,13 @@ class IndexRouter {
 }
 ```
 上述代码定义了用get方法访问'index/user'的路由
-其余HTTP方式用的装饰器: @post, @put, @del
+其余HTTP方式所用的装饰器: @post, @put, @del
 
 > 建议：路由层仅负责路由转发，控制器层负责业务逻辑编写。
 
 
 ### （二）配置：
+配置文件存放目录：/config
 ```
 |-- config            配置文件目录
 |   |-- config.js     框架核心配置文件
@@ -54,6 +57,7 @@ GLOBAL_CONF配置为true时，可用$config访问配置。
 
 
 ### （三）异常：
+自定义异常存放目录：/common/exception  
 框架内置了一套异常处理体系。  
 返回的JSON格式：
 ```

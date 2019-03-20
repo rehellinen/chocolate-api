@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/13 10:34
  */
-import {BaseException} from "../libs/exception/BaseException"
+import {BaseException} from "../../libs/exception/BaseException"
 
 export class ParamsException extends BaseException{
   constructor(config) {

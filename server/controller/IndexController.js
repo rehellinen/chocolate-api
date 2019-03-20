@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2019/3/19 23:06
  */
-import {SuccessMessage} from "../exception/SuccessMessage"
+import {SuccessMessage} from "../common/exception/SuccessMessage"
 
 export class IndexController {
   index (ctx, next) {

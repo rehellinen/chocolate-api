@@ -8,8 +8,7 @@ import axios from 'axios'
 import md5 from 'md5'
 import {getRandChars} from '../../utils/utils'
 import cache from 'memory-cache'
-import {WechatException} from "../../exception/WechatException"
-import {TokenException} from "../../exception/TokenException"
+import {TokenException} from "../../common/exception/TokenException"
 
 export class Token {
   constructor (conf = {}) {
@@ -79,27 +78,5 @@ export class Token {
       cache.del(cachedKey)
     })
     return cachedKey
-  }
-
-  /**
-   * 从微信API获取数据
-   * @param extParams 额外参数
-   * @return {Promise<void>}
-   */
-  async getFromUrl (extParams) {
-    const params = Object.assign({
-      appid: this.appId,
-      secret: this.appSecret,
-    }, extParams)
-
-    const {data} = await axios.get(this.url, { params })
-
-    if (!data.openid) {
-      throw new WechatException({
-        message: data.errmsg
-      })
-    }
-
-    return data
   }
 }
