@@ -129,3 +129,67 @@ rules为一个对象：
 scene为一个对象：  
 键为情景名称。  
 值为一个数组，数组元素为需要校验的数据名称。
+
+
+### （五）模型
+模型存放目录：/model  
+
+#### 介绍
+1. 基于Bookshelf.js，更多高级用法请参考文档
+2. 用this.model获取当前模型实例
+  
+#### 使用方式
+```
+export class IndexModel extends BaseModel {
+  constructor() {
+    super({
+      tableName: 'article'
+    })
+  }
+}
+```
+构造函数接受一个对象：  
+tableName - 表的名称
+conf - 关联模型的配置
+
+#### BaseModel类内置的方法：
+```
+  /**
+   * 参数解释
+   * @param id int 数据的ID
+   * @param condition Object 要查询的数据的条件
+   * @param relation String 关联的模型名称
+   * @param order Array 设置排序的字段  
+   * @param pageConf Object 分页配置
+   * @param data Object 数据
+   */
+
+  // 根据id获取数据
+  async getOneById ({id, condition = {}, relation = []})
+  
+  // 获取所有数据
+  async getAll ({condition = {}, relation = [], order = ['id']}) 
+    
+  // 分页方法
+  async pagination ({pageConf = {}, 
+    condition = {}, 
+    relation = [], 
+    order = ['id']
+  })
+  
+  // 保存一条数据
+  async saveOne (data)
+  
+  // 编辑一条数据
+  async editOne ({condition = {}, data})
+  
+  // 根据ID删除一条数据
+  async deleteById (id) {
+```
+
+### （六）控制器
+控制器存放目录：/controller  
+编写业务逻辑
+
+### （七）工具
+工具存放目录：/utils
