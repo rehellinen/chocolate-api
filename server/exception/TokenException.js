@@ -3,8 +3,10 @@ import {BaseException} from "../libs/exception/BaseException"
 export class TokenException extends BaseException{
   constructor(config) {
     super(config)
-    if (!this.httpCode) this.httpCode = 401
-    if (!this.status) this.status = 90000
-    if (!this.message) this.message = 'Token已过期或无效'
+    this.setDefault({
+      httpCode: 401,
+      status: 90000,
+      message: 'Token已过期或无效'
+    })
   }
 }

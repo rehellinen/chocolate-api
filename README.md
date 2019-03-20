@@ -7,6 +7,7 @@
 |-- controller        控制器
 |-- exception         自定义错误类型
 |-- libs              框架核心类库
+|   |-- config        配置
 |   |-- decorator     装饰器
 |   |-- exception     异常
 |   |-- middleware    中间件
@@ -22,7 +23,7 @@ libs 是框架核心类库，一般不需要修改其中的代码。
 其他目录在下面会有详细介绍。
 
 ## 框架基本用法
-### 路由：
+### （一）路由：
 最简单的路由定义如下：
 ```
 @controller('index')
@@ -36,15 +37,54 @@ class IndexRouter {
 上述代码定义了用get方法访问'index/user'的路由
 其余HTTP方式用的装饰器: @post, @put, @del
 
->建议：路由层仅负责路由转发，控制器层负责业务逻辑编写。
+> 建议：路由层仅负责路由转发，控制器层负责业务逻辑编写。
 
 
-### 配置：
+### （二）配置：
 ```
 |-- config            配置文件目录
 |   |-- config.js     框架核心配置文件
 |   |-- custom.js     自定义配置
 |   |-- database.js   数据库配置
-|   |-- index.js      汇总上述配置文件
 ```
->注：配置项在文件中有详细注释
+> 注：配置项具体作用在文件中有详细注释
+
+#### 获取配置
+GLOBAL_CONF配置为true时，可用$config访问配置。
+
+
+### （三）异常：
+框架内置了一套异常处理体系。  
+返回的JSON格式：
+```
+{
+  "status": 1,
+  "message": "成功访问"
+}
+```
+
+#### 抛出异常
+```
+throw new SuccessMessage({
+  status: 10000,          // 自定义错误码
+  httpCode: 200,          // http状态码
+  message: '成功访问',    // 返回的描述信息
+  data: {success: true}   // 返回的数据
+})
+```
+
+#### 自定义异常
+```
+export class ParamsException extends BaseException{
+  constructor(config) {
+    super(config)
+    this.setDefault({
+      httpCode: 400,
+      status: 10000,
+      message: '参数错误'
+    })
+  }
+}
+```
+> 当发生HTTP状态码为500的错误时：  
+只有DEBUG设置为true，会展示详细错误信息。

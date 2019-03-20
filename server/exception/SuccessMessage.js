@@ -3,8 +3,10 @@ import {BaseException} from "../libs/exception/BaseException"
 export class SuccessMessage extends BaseException{
   constructor(config) {
     super(config)
-    if (!this.httpCode) this.httpCode = 200
-    if (!this.status) this.status = 1
-    if (!this.message) this.message = '请求成功'
+    this.setDefault({
+      httpCode: 200,
+      status: 1,
+      message: '请求成功'
+    })
   }
 }

@@ -15,6 +15,12 @@ export class BaseException extends Error{
     }
   }
 
+  setDefault ({httpCode, status, message}) {
+    if (!this.httpCode) this.httpCode = httpCode
+    if (!this.status) this.status = status
+    if (!this.message) this.message = message
+  }
+
   getError () {
     return {
       status: this.status,
