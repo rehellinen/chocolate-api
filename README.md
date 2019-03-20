@@ -22,5 +22,16 @@ libs 是框架核心类库，一般不需要修改其中的代码。
 其他目录在下面会有详细介绍。
 
 
-### 路由篇：
-
+### 路由：
+最简单的路由定义如下：
+```
+@controller('index')
+class IndexRouter {
+  @get('user')
+  async getToken (ctx, next) {
+    await index.index(ctx, next)
+  }
+}
+```
+上述代码定义了用get方法访问'index/user'的路由  
+其余HTTP方式用的装饰器: @post, @put, @del
