@@ -14,4 +14,4 @@ require('@babel/register')({
 require('@babel/polyfill')
 
 // 启动服务器
-require('./server/index')
+require('./src/index')
