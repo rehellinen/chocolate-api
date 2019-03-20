@@ -26,7 +26,7 @@ libs 是框架核心类库，一般不需要修改其中的代码。
 ### （一）路由：
 路由文件存放目录：/common/router  
 
-最简单的路由定义如下：
+#### 路由定义
 ```
 @controller('index')
 class IndexRouter {
@@ -57,9 +57,8 @@ GLOBAL_CONF配置为true时，可用$config访问配置。
 
 
 ### （三）异常：
-自定义异常存放目录：/common/exception  
-框架内置了一套异常处理体系。  
-返回的JSON格式：
+自定义异常存放目录：/common/exception    
+#### 返回的JSON格式：
 ```
 {
   "status": 1,
@@ -92,3 +91,41 @@ export class ParamsException extends BaseException{
 ```
 > 当发生HTTP状态码为500的错误时：  
 只有DEBUG设置为true，会展示详细错误信息。
+
+
+### （四）验证器
+验证器存放目录：/common/validate  
+#### 使用方式
+需要配合路由使用：
+```
+@controller('index')
+class IndexRouter {
+  @get('user')
+  @validate({name: 'index', scene: 'id'})
+  // 上述代码表示去寻找IndexValidate中scene为id的字段
+  async getToken (ctx, next) { }
+}
+```
+
+#### 自定义验证器
+```
+export class IndexValidate extends BaseValidate{
+  constructor() {
+    super()
+    this.rules = {
+      id: ['require', 'id']
+    }
+
+    this.scene = {
+      id: ['id']
+    }
+  }
+}
+```
+rules为一个对象：  
+键为需要校验的数据名称。  
+值为一个数组，第一项为规则，第二项为出现错误时的错误提示。
+
+scene为一个对象：  
+键为情景名称。  
+值为一个数组，数组元素为需要校验的数据名称。
