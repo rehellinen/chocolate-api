@@ -1,9 +1,9 @@
 import {types} from "../../utils/mime"
-import {BaseException} from "../exception/BaseException"
+import {Exception} from "../exception/Exception"
 
 export const exception = (app) => {
   const processError = (e, ctx) => {
-    if (e instanceof BaseException) {
+    if (e instanceof Exception) {
       ctx.status = e.httpCode
       ctx.type = types.json
       ctx.body = e.getError()

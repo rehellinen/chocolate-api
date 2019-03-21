@@ -7,7 +7,7 @@ import {Methods} from "./Methods"
 import getRawBody from 'raw-body'
 import {parseParams} from "../../utils/utils"
 
-export class BaseValidate extends Methods{
+export class Validate extends Methods{
   constructor (rules = {}, scene = {}) {
     super()
     this.rules = rules

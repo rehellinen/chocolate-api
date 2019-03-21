@@ -3,9 +3,9 @@
  *  Create By rehellinen
  *  Create On 2018/10/13 10:34
  */
-import {BaseException} from "../../libs/exception/BaseException"
+import {Exception} from "../../libs/exception/Exception"
 
-export class ParamsException extends BaseException{
+export class ParamsException extends Exception{
   constructor(config) {
     super(config)
     this.setDefault({

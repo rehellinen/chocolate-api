@@ -6,7 +6,7 @@
 import {DataBase} from './DataBase'
 import {DatabaseException} from "../../common/exception/DatabaseException"
 
-export class BaseModel {
+export class Model {
   /**
    * 初始化模型
    * @param tableName

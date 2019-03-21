@@ -20,24 +20,23 @@
 |   |-- token         Token令牌
 |   |-- validate      验证器
 ~~~
-libs 是框架核心类库，一般不需要修改其中的代码。
 
 ## 框架基本用法
 ### （一）路由：
 路由文件存放目录：/common/router  
 
 #### 路由定义
+`@controller, @get, @post, @put, @del` 所在文件：/libs/decorator/router.js
 ```
 @controller('index')
 class IndexRouter {
+  // get方法访问'index/user'的路由
   @get('user')
   async getToken (ctx, next) {
     await index.index(ctx, next)
   }
 }
 ```
-上述代码定义了用get方法访问'index/user'的路由
-其余HTTP方式所用的装饰器: @post, @put, @del
 
 > 建议：路由层仅负责路由转发，控制器层负责业务逻辑编写。
 
@@ -53,7 +52,7 @@ class IndexRouter {
 > 注：配置项具体作用在文件中有详细注释
 
 #### 获取配置
-GLOBAL_CONF配置为true时，可用$config访问配置。
+GLOBAL_CONF配置为true时，可通过全局变量$config访问配置。
 
 
 ### （三）异常：
@@ -77,8 +76,9 @@ throw new SuccessMessage({
 ```
 
 #### 自定义异常
+`Exception` 所在文件：/libs/exception/BaseException.js
 ```
-export class ParamsException extends BaseException{
+export class ParamsException extends Exception{
   constructor(config) {
     super(config)
     this.setDefault({
@@ -90,45 +90,55 @@ export class ParamsException extends BaseException{
 }
 ```
 > 当发生HTTP状态码为500的错误时：  
-只有DEBUG设置为true，会展示详细错误信息。
+只有DEBUG设置为true，才展示详细错误信息。
 
 
 ### （四）验证器
 验证器存放目录：/common/validate  
+#### 作用
+对前端传来的数据进行校验。  
+GET、POST、PUT、DELETE方法携带的数据均能进行校验。
+
 #### 使用方式
+`@validate` 所在文件：/libs/decorator/decorator.js
 需要配合路由使用：
 ```
 @controller('index')
 class IndexRouter {
   @get('user')
   @validate({name: 'index', scene: 'id'})
-  // 上述代码表示去寻找IndexValidate中scene为id的字段
+  // 表示验证IndexValidate中id情景
   async getToken (ctx, next) { }
 }
 ```
 
 #### 自定义验证器
+`Validate` 所在文件：/libs/exception/BaseException.js
+文件命名规则为 `${name}Validate`
 ```
-export class IndexValidate extends BaseValidate{
+export class IndexValidate extends Validate{
   constructor() {
     super()
     this.rules = {
+      // 键为需要校验的数据名称
+      // 值为一个数组，第一项为验证方法，第二项为出现错误时的错误提示
       id: ['require', 'id']
     }
-
     this.scene = {
+      // 键为情景名称
+      // 值为一个数组，数组元素为需要校验的数据
       id: ['id']
     }
   }
 }
 ```
-rules为一个对象：  
-键为需要校验的数据名称。  
-值为一个数组，第一项为规则，第二项为出现错误时的错误提示。
 
-scene为一个对象：  
-键为情景名称。  
-值为一个数组，数组元素为需要校验的数据名称。
+#### 验证方法
+内置的验证方法：/libs/validate/Methods.js
+```
+require           // 不能为空
+positiveInt       // 是否为正整数
+```
 
 
 ### （五）模型
@@ -136,11 +146,12 @@ scene为一个对象：
 
 #### 介绍
 1. 基于Bookshelf.js，更多高级用法请参考文档
-2. 用this.model获取当前模型实例
+2. this.model可获取当前模型实例
   
 #### 使用方式
+`Model` 所在文件：/libs/exception/BaseException.js
 ```
-export class IndexModel extends BaseModel {
+export class IndexModel extends Model {
   constructor() {
     super({
       tableName: 'article'
@@ -152,7 +163,7 @@ export class IndexModel extends BaseModel {
 tableName - 表的名称
 conf - 关联模型的配置
 
-#### BaseModel类内置的方法：
+#### Model类内置的方法：
 ```
   /**
    * 参数解释
@@ -184,7 +195,7 @@ conf - 关联模型的配置
   async editOne ({condition = {}, data})
   
   // 根据ID删除一条数据
-  async deleteById (id) {
+  async deleteById (id)
 ```
 
 ### （六）控制器

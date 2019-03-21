@@ -1,4 +1,4 @@
-export class BaseException extends Error{
+export class Exception extends Error{
   constructor (config = {}) {
     super()
     if (config.hasOwnProperty('httpCode')) {
