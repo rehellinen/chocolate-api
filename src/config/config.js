@@ -11,6 +11,10 @@ export default {
   ALLOW_CORS: false,
   // 是否把配置放到全局作用域（全局变量名称为：$config）
   GLOBAL_CONF: true,
+  // 上传文件的根目录，upload表示/src/upload/
+  UPLOAD_DIR: 'upload',
+  // 上传文件的名称
+  UPLOAD_NAME: 'file',
   // 生成token的前缀
   TOKEN_PREFIX: 'chenqixuan@github.com/rehellinen',
   // token过期时间（单位为ms）

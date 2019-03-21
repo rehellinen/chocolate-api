@@ -229,5 +229,27 @@ static checkToken (ctx)
 // 获取Token：new Token($config.SCOPE.USER).get(cachedData)
 ```
 
+#### multer(上传文件)
+所在目录：/libs/utils/multer.js  
+`multer.js` 输出变量 `fileName` 和路由中间件 `upload`   
+（1）如何使用  
+需配合路由使用：
+```
+@controller('image')
+class ImageRouter {
+  @post('')
+  // @middleware装饰器在/libs/decorator/decorator.js
+  // upload中间件在/libs/utils/multer.js
+  @middleware(upload)
+  async addImage (ctx, next) {
+  }
+}
+```
+（2）如何获取上传后的文件名
+```
+import {fileName} from "./libs/utils/multer"
+```
+
+
 ### （七）控制器
 控制器存放目录：/controller  

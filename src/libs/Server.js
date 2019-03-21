@@ -6,7 +6,7 @@
 import Koa from 'koa'
 import R from 'ramda'
 import chalk from 'chalk'
-import config from '../config/config'
+import config from './config/index'
 import {r} from "./utils/utils"
 
 const middlewares = ['exception', 'router']
