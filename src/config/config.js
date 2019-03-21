@@ -7,6 +7,8 @@
 export default {
   // 是否开启调试模式
   DEBUG: true,
+  // 是否允许API跨域访问
+  ALLOW_CORS: false,
   // 是否把配置放到全局作用域（全局变量名称为：$config）
   GLOBAL_CONF: true,
   // 生成token的前缀

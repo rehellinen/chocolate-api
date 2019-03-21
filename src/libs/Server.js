@@ -10,6 +10,7 @@ import config from '../config/config'
 import {r} from "../utils/utils"
 
 const middlewares = ['exception', 'router']
+if (config.ALLOW_CORS) middlewares.splice(1, 0, 'cors')
 
 if (config.GLOBAL_CONF) global.$config = config
 
