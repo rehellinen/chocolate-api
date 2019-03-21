@@ -18,8 +18,8 @@ if (config.GLOBAL_CONF) global.$config = config
 export class Server {
   constructor () {
     this.app = new Koa()
-    this.host = process.env.HOST || '127.0.0.1'
-    this.port = process.env.PORT || 3000
+    this.host = process.env.HOST || config.HOST || '127.0.0.1'
+    this.port = process.env.PORT || config.PORT || 3000
   }
 
   start () {
