@@ -1,4 +1,4 @@
-import {types} from "../../utils/mime"
+import {types} from "../utils/mime"
 import {Exception} from "../exception/Exception"
 
 export const exception = (app) => {

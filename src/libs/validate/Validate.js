@@ -5,7 +5,7 @@
  */
 import {Methods} from "./Methods"
 import getRawBody from 'raw-body'
-import {parseParams} from "../../utils/utils"
+import {parseParams} from "../utils/utils"
 
 export class Validate extends Methods{
   constructor (rules = {}, scene = {}) {

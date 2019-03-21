@@ -3,8 +3,8 @@
  *  Create By rehellinen
  *  Create On 2018/10/12 21:24
  */
-import {Token} from "../token/Token"
-import {r} from "../../utils/utils"
+import {Token} from "../utils/Token"
+import {r} from "../utils/utils"
 
 export const validate = ({name, scene}) => {
   // name首字母设置为大写

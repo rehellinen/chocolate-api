@@ -5,8 +5,7 @@
 ~~~
 |-- config            配置文件目录
 |-- controller        控制器
-|-- model             模型
-|-- utils             工具  
+|-- model             模型 
 |-- common            公共模块目录
 |   |-- exception     用户自定义异常 / 框架内置异常
 |   |-- validate      验证器
@@ -18,6 +17,7 @@
 |   |-- middleware    中间件
 |   |-- model         模型
 |   |-- token         Token令牌
+|   |-- utils         工具
 |   |-- validate      验证器
 ~~~
 
@@ -198,9 +198,36 @@ conf - 关联模型的配置
   async deleteById (id)
 ```
 
-### （六）控制器
-控制器存放目录：/controller  
-编写业务逻辑
+### （六）工具
+工具存放目录：/libs/utils
 
-### （七）工具
-工具存放目录：/utils
+#### Token令牌
+`Token` 所在目录：/libs/utils/Token.js  
+内置方法：
+```
+/**
+ * 获取Token的主方法
+ * @param scope 权限值
+ * @param cachedData 需要缓存的数据
+ * @param key 缓存的键
+ */
+
+constructor (scope)
+
+// 获取Token的主方法
+get (cachedData)
+
+// 验证权限是否合法
+static checkScope (ctx, scope)
+
+// 获取缓存的指定数据
+static getSpecifiedValue (ctx, key)
+
+// 检查Token是否过期
+static checkToken (ctx)
+
+// 获取Token：new Token($config.SCOPE.USER).get(cachedData)
+```
+
+### （七）控制器
+控制器存放目录：/controller  

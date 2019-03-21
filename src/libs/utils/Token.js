@@ -3,24 +3,32 @@
  *  Create By rehellinen
  *  Create On 2018/9/28 20:37
  */
-import {WECHAT} from '../../config/config'
-import axios from 'axios'
 import md5 from 'md5'
-import {getRandChars} from '../../utils/utils'
 import cache from 'memory-cache'
+import {getRandChars} from './utils'
 import {TokenException} from "../../common/exception/TokenException"
 
 export class Token {
-  constructor (conf = {}) {
-    this.appId = conf.appId
-    this.appSecret = conf.appSecret
-    this.url = conf.url
+  /**
+   * @param scope 权限值
+   */
+  constructor (scope) {
+    this.scope = scope
+  }
+
+  /**
+   * 获取Token的主方法
+   * @param cachedData 需要缓存的数据
+   */
+  get (cachedData) {
+    Object.assign(cachedData, { scope: this.scope })
+    return this._saveToCache(cachedData)
   }
 
   /**
    * 验证权限是否合法
-   * @param ctx
-   * @param scope
+   * @param ctx koa2上下文
+   * @param scope 权限值
    */
   static checkScope (ctx, scope) {
     const cachedScope = Token.getSpecifiedValue(ctx, 'scope')
@@ -30,12 +38,12 @@ export class Token {
   }
 
   /**
-   * 获取指定的数据
-   * @param ctx
-   * @param key
+   * 获取缓存的指定数据
+   * @param ctx koa2上下文
+   * @param key 缓存的键
    * @return {*}
    */
-  static getSpecifiedValue (ctx, key = 'id') {
+  static getSpecifiedValue (ctx, key) {
     const info = cache.get(ctx.header.token)
     const infoObj =  JSON.parse(info)
     if (!info || !infoObj[key]) {
@@ -46,7 +54,7 @@ export class Token {
   }
 
   /**
-   * 坚持Token是否过期
+   * 检查Token是否过期
    * @param ctx Koa2上下文
    */
   static checkToken (ctx) {
@@ -59,7 +67,7 @@ export class Token {
   /**
    * 生成Token令牌
    */
-  static generateToken () {
+  static _generateToken () {
     const str = getRandChars(32)
     const time = new Date().getTime()
     const prefix = $config.TOKEN_PREFIX
@@ -71,8 +79,8 @@ export class Token {
    * 保存Token到缓存
    * @param cachedValue 需要保存的信息
    */
-  saveToCache (cachedValue) {
-    const cachedKey = Token.generateToken()
+  _saveToCache (cachedValue) {
+    const cachedKey = Token._generateToken()
 
     cache.put(cachedKey, JSON.stringify(cachedValue), $config.TOKEN_EXPIRES_IN, () => {
       cache.del(cachedKey)
