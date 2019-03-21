@@ -26,6 +26,14 @@ export class Token {
   }
 
   /**
+   * 验证权限是管理员
+   * @param ctx
+   */
+  static isSuper (ctx) {
+    Token.checkScope(ctx, $config.SCOPE.SUPER)
+  }
+
+  /**
    * 验证权限是否合法
    * @param ctx koa2上下文
    * @param scope 权限值

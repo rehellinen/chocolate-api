@@ -220,6 +220,9 @@ get (cachedData)
 // 验证权限是否合法
 static checkScope (ctx, scope)
 
+// 验证权限是管理员
+static isSuper (ctx)
+
 // 获取缓存的指定数据
 static getSpecifiedValue (ctx, key)
 
