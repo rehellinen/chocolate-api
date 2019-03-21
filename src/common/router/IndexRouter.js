@@ -4,7 +4,7 @@
  *  Create On 2018/10/25 23:08
  */
 import {controller, get} from "../../libs/decorator/router"
-import {auth, validate} from "../../libs/decorator/middleware"
+import {auth, validate} from "../../libs/decorator/decorator"
 import {IndexController} from "../../controller/IndexController"
 
 const index = new IndexController()

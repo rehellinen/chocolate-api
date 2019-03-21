@@ -6,7 +6,7 @@
 import X2JS from 'x2js'
 import {resolve} from 'path'
 
-export const r = path => resolve(__dirname, '../', path)
+export const r = path => resolve(__dirname, '../../', path)
 
 export let x2js = new X2JS({
   escapeMode: false

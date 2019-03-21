@@ -10,7 +10,7 @@ export const validate = ({name, scene}) => {
   // name首字母设置为大写
   name = name.substr(0, 1).toUpperCase() + name.substr(1, name.length-1)
 
-  const Validate = require(r(`./validate/${name}Validate`))[`${name}Validate`]
+  const Validate = require(r(`./common/validate/${name}Validate`))[`${name}Validate`]
   return addMiddleware(async (ctx, next) => {
     await new Validate().check(ctx, scene)
     await next()
