@@ -7,7 +7,7 @@ import {ParamsException} from "../../common/exception/ParamsException"
 
 export class Methods {
   require (data = {}, field = '', fieldCN = '') {
-    if (!data[field]) {
+    if (data[field] == null) {
       this.throw(field, fieldCN, '不能为空')
     }
   }
