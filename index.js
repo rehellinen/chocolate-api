@@ -1,17 +1,12 @@
 /**
  *  index.js
  *  Create By rehellinen
- *  Create On 2018/10/25 18:45
+ *  Create On 2019/3/4 10:29
  */
-require('@babel/register')({
-  presets: [
-    '@babel/preset-env'
-  ],
-  plugins: [
-    ["@babel/plugin-proposal-decorators", { "legacy": true }],
-  ]
-})
-require('@babel/polyfill')
-
 // 启动服务器
-require('./src/index')
+if (process.env.NODE_ENV === 'production') {
+  require('./dist/libs/index.js')
+} else {
+  require('@babel/register')
+  require('./src/libs/index.js')
+}
