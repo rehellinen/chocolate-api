@@ -11,18 +11,11 @@ import {TokenException} from "../../common/exception/TokenException"
 export class Token {
   /**
    * @param scope 权限值
+   * @param expireTime 过期时间
    */
-  constructor (scope) {
+  constructor (scope, expireTime = $config.TOKEN_EXPIRES_IN) {
     this.scope = scope
-  }
-
-  /**
-   * 获取Token的主方法
-   * @param cachedData 需要缓存的数据
-   */
-  get (cachedData) {
-    Object.assign(cachedData, { scope: this.scope })
-    return this._saveToCache(cachedData)
+    this.expireTime = expireTime
   }
 
   /**
@@ -53,12 +46,12 @@ export class Token {
    */
   static getSpecifiedValue (ctx, key) {
     const info = cache.get(ctx.header.token)
-    const infoObj =  JSON.parse(info)
-    if (!info || !infoObj[key]) {
+
+    if (!info || !JSON.parse(info)[key]) {
       throw new TokenException()
     }
 
-    return infoObj[key]
+    return JSON.parse(info)[key]
   }
 
   /**
@@ -84,15 +77,23 @@ export class Token {
   }
 
   /**
+   * 获取Token的主方法
+   * @param cachedData 需要缓存的数据
+   */
+  get (cachedData = {}) {
+    Object.assign(cachedData, { scope: this.scope })
+    return this._saveToCache(cachedData)
+  }
+
+  /**
    * 保存Token到缓存
    * @param cachedValue 需要保存的信息
    */
   _saveToCache (cachedValue) {
     const cachedKey = Token._generateToken()
-
-    cache.put(cachedKey, JSON.stringify(cachedValue), $config.TOKEN_EXPIRES_IN, () => {
-      cache.del(cachedKey)
-    })
+    cache.put(cachedKey, JSON.stringify(cachedValue),
+      this.expireTime, () => cache.del(cachedKey)
+    )
     return cachedKey
   }
 }

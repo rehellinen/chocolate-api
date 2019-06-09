@@ -30,7 +30,7 @@ export class Validate extends Methods{
         this[item](params, field, errInfo[index])
       })
 
-      checkedParams[field] = decodeURIComponent(params[field])
+      checkedParams[field] = params[field]
     }
 
     ctx.checkedParams = checkedParams

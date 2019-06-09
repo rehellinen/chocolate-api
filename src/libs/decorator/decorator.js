@@ -25,7 +25,8 @@ export const auth = (type) => {
     scope = $config.SCOPE.SUPER
   }
   return middleware(async (ctx, next) => {
-    Token.checkScope(ctx, scope)
+    // TODO: 取消注释
+    // Token.checkScope(ctx, scope)
     await next()
   })
 }

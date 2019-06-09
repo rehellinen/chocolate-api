@@ -7,9 +7,12 @@ import {ParamsException} from "../../common/exception/ParamsException"
 
 export class Methods {
   require (data = {}, field = '', fieldCN = '') {
-    if (data[field] == null) {
+    if (data[field] == null || data[field] === '') {
       this.throw(field, fieldCN, '不能为空')
     }
+  }
+
+  empty (data = {}, field = '', fieldCN = '') {
   }
 
   positiveInt (data = {}, field = '', fieldCN = '') {

@@ -13,23 +13,37 @@ export class Model {
    * @param conf Object
    *  - relation Array 定义需要进行关联的模型
    */
-  constructor ({tableName, conf = {}}) {
+  constructor ({tableName, relation = [], relationFunc = []}) {
     // 获取唯一的db实例
     this.db = DataBase.getInstance()
-    // 初始化对应的表
-    this.generateModel('model', tableName)
     // 初始化需要进行关联的模型
-    if (conf.relation && Array.isArray(conf.relation)) {
-      for (let item of conf.relation) {
+    this.relation = relation
+    if (Array.isArray(relation) && relation.length > 0) {
+      for (let item of relation) {
         this.generateModel(item)
       }
     }
+    // 初始化当前模型对应的表
+    this.generateModel('model', tableName, relationFunc)
   }
 
-  generateModel (modelName, tableName = modelName) {
-    this[modelName] = this.db.Model.extend({
-      tableName: tableName
-    })
+  generateModel (modelName, tableName = modelName, relationFunc) {
+    const conf = {tableName}
+
+    let that = this
+    if (Array.isArray(relationFunc) && relationFunc.length > 0) {
+      for (let item of relationFunc) {
+        conf[item.modelName] = function () {
+          return this[item.type ? item.type : 'hasOne'](
+            that[item.modelName],
+            item.local,
+            item.foreign
+          )
+        }
+      }
+    }
+
+    this[modelName] = this.db.Model.extend(conf)
   }
 
   /**
@@ -45,7 +59,6 @@ export class Model {
     this._processCondition(model, condition)
 
     data = await model.fetch({withRelated: relation})
-
     if (!data) {
       throw new DatabaseException()
     }
@@ -90,15 +103,19 @@ export class Model {
     this._processOrder(model, order)
 
     data = await model.fetchPage({
-      pageSize: pageConf.pageSize,
-      page: pageConf.page,
+      pageSize: pageConf.pageSize || $config.PAGE_SIZE,
+      page: pageConf.page || 1,
       withRelated: relation
     })
 
     if (data.isEmpty()) {
       throw new DatabaseException()
     }
-    return data.serialize()
+
+    return {
+      data: data.serialize(),
+      page: data.pagination
+    }
   }
 
   /**
@@ -150,9 +167,18 @@ export class Model {
     })
   }
 
-
+  // 支持三种方式输入condition
+  // 1. 对象：{ status: 1, id: 6 }
+  // 2. 数组: ['status', '=', '1']
+  // 3. 二维数组: [ ['status', '=', '1'], ['id', '=', '6'] ]
   _processCondition (model, condition) {
     if (Array.isArray(condition)) {
+      if (Array.isArray(condition[0])) {
+        for (let item of condition) {
+          model = model.where(...item)
+        }
+        return
+      }
       model = model.where(...condition)
       return
     }
@@ -164,7 +190,11 @@ export class Model {
 
   _processOrder (model, order) {
     for (let item of order) {
-      model = model.orderBy(item, 'DESC')
+      if (typeof item === 'object') {
+        model = model.orderBy(item.field, item.orderRule)
+      } else {
+        model = model.orderBy(item, 'DESC')
+      }
     }
   }
 }

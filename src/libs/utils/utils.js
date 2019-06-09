@@ -6,6 +6,7 @@
 import X2JS from 'x2js'
 import {resolve} from 'path'
 
+// 从根目录（index.js所在目录开始寻找）
 export const r = path => resolve(__dirname, '../../', path)
 
 export let x2js = new X2JS({

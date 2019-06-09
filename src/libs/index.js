@@ -14,7 +14,6 @@ if (config.ALLOW_CORS) middlewares.splice(1, 0, 'cors')
 
 if (config.GLOBAL_CONF) global.$config = config
 
-
 export class Server {
   constructor () {
     this.app = new Koa()
@@ -38,3 +37,5 @@ export class Server {
     ))
   }
 }
+
+new Server().start()
