@@ -1,7 +1,7 @@
 {
   "name": "re-api",
   "version": "1.0.0",
-  "description": "course's API",
+  "description": "a API framework based on Koa2",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch ./src --exec node index.js",
