@@ -15,8 +15,8 @@ export class Model {
 
   /**
    * 初始化模型
-   * @param tableName 表名
-   * @param relationConf 配置关联模型
+   * @param {String} tableName 表名
+   * @param {Array} relationConf 配置关联模型
    *  - tableName  需要进行关联的表名
    *  - local 主键
    *  - foreign 外键
@@ -30,9 +30,9 @@ export class Model {
 
   /**
    * 根据id获取数据
-   * @param id int 数据的ID
-   * @param condition Object 要查询的数据的条件
-   * @param relation String 关联的模型名称
+   * @param {Number} id 数据的ID
+   * @param {Object} condition 要查询的数据的条件
+   * @param {Array} relation 关联的模型名称
    * @return {Promise<void>}
    */
   async getOneById ({id, condition = {}, relation = []}) {
@@ -49,9 +49,9 @@ export class Model {
 
   /**
    * 获取所有数据
-   * @param condition Array 查询条件
-   * @param relation String 关联的模型名称
-   * @param order Array 设置排序的字段
+   * @param {Object} condition Array 查询条件
+   * @param {Array} relation String 关联的模型名称
+   * @param {Array} order Array 设置排序的字段
    * @return {Promise<*>}
    */
   async getAll ({condition = {}, relation = [], order = ['id']}) {
@@ -71,10 +71,10 @@ export class Model {
 
   /**
    * 分页方法
-   * @param pageConf Object 分页配置
-   * @param condition Object 查询条件
-   * @param relation String 关联的模型名称
-   * @param order Array 设置排序的字段
+   * @param {Object} pageConf 分页配置
+   * @param {Object} condition 查询条件
+   * @param {Array} relation 关联的模型名称
+   * @param {Array} order 设置排序的字段
    * @return {Promise<*>}
    */
   async pagination ({pageConf = {}, condition = {}, relation = [], order = ['id']}) {
@@ -101,8 +101,8 @@ export class Model {
   }
 
   /**
-   * 保存一条数据
-   * @param data
+   * 保存数据
+   * @param {Object} data 数据对象
    * @return {Promise<void>}
    */
   async saveOne (data) {
@@ -183,7 +183,11 @@ export class Model {
     })
   }
 
-  // 处理关联模型配置
+  /**
+   * 处理关联模型配置
+   * @param {Array} relationConf 关联配置对象数组
+   * @private
+   */
   _processRelation (relationConf = []) {
     if (!Array.isArray(relationConf)) {
       return
@@ -205,36 +209,57 @@ export class Model {
     return conf
   }
 
-  // 根据配置生成模型
+  /**
+   * 根据配置生成模型
+    * @param {Object} config 模型配置
+   * @private
+   */
   _generateModel (config) {
     this[`_${config.tableName}`] = this.db.Model.extend(config)
   }
 
-  // 支持三种方式输入condition
-  // 1. 对象：{ status: 1, id: 6 }
-  // 2. 数组: ['status', '=', '1']
-  // 3. 二维数组: [ ['status', '=', '1'], ['id', '=', '6'] ]
+  /**
+   * 处理条件配置
+   * @param {Object} model 模型对象
+   * @param {Object|Array} condition
+   * condition支持3种方式输入
+   * 1. 对象：{ status: 1, id: 6 }
+   * 2. 数组: ['status', '=', '1']
+   * 3. 二维数组: [ ['status', '=', '1'], ['id', '=', '6'] ]
+   * @private
+   */
   _processCondition (model, condition) {
     if (Array.isArray(condition)) {
       if (Array.isArray(condition[0])) {
+        // 处理第二种方式
         for (let item of condition) {
           model = model.where(...item)
         }
         return
       }
+      // 处理第三种方式
       model = model.where(...condition)
       return
     }
-
+    // 处理第一种方式
     for (let key in condition) {
       model = model.where(key, 'in', condition[key])
     }
   }
 
+  /**
+   * 处理排序配置
+   * @param {Object} model 模型对象
+   * @param {Array} order
+   * order支持3种方式输入
+   * 1. 数组: ['order', 'id']
+   * 2. 对象数组: [ { field: 'order', rule: 'ASC' } ]
+   * @private
+   */
   _processOrder (model, order) {
     for (let item of order) {
       if (typeof item === 'object') {
-        model = model.orderBy(item.field, item.orderRule)
+        model = model.orderBy(item.field, item.rule)
       } else {
         model = model.orderBy(item, 'DESC')
       }
