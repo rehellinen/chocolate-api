@@ -7,43 +7,25 @@ import {DataBase} from './DataBase'
 import {DatabaseException} from "../../common/exception/DatabaseException"
 
 export class Model {
+  // 获取唯一的db实例
+  db = DataBase.getInstance()
+  // 所有需要关联的表的名称
+  relation = []
+
+
   /**
    * 初始化模型
-   * @param tableName
-   * @param conf Object
-   *  - relation Array 定义需要进行关联的模型
+   * @param tableName 表名
+   * @param relationConf 配置关联模型
+   *  - tableName  需要进行关联的表名
+   *  - local 主键
+   *  - foreign 外键
    */
-  constructor ({tableName, relation = [], relationFunc = []}) {
-    // 获取唯一的db实例
-    this.db = DataBase.getInstance()
-    // 初始化需要进行关联的模型
-    this.relation = relation
-    if (Array.isArray(relation) && relation.length > 0) {
-      for (let item of relation) {
-        this.generateModel(item)
-      }
-    }
-    // 初始化当前模型对应的表
-    this.generateModel('model', tableName, relationFunc)
-  }
-
-  generateModel (modelName, tableName = modelName, relationFunc) {
-    const conf = {tableName}
-
-    let that = this
-    if (Array.isArray(relationFunc) && relationFunc.length > 0) {
-      for (let item of relationFunc) {
-        conf[item.modelName] = function () {
-          return this[item.type ? item.type : 'hasOne'](
-            that[item.modelName],
-            item.local,
-            item.foreign
-          )
-        }
-      }
-    }
-
-    this[modelName] = this.db.Model.extend(conf)
+  constructor ({tableName, relationConf = []}) {
+    // 初始化关联模型
+    const config = this._processRelation()
+    // 初始化模型
+    this._generateModel(Object.assign(config, { tableName }))
   }
 
   /**
@@ -165,6 +147,33 @@ export class Model {
       condition: {id},
       data: {status: $config.STATUS.DELETED}
     })
+  }
+
+  // 处理关联模型配置
+  _processRelation (relationConf = []) {
+    if (!Array.isArray(relationConf)) {
+      return
+    }
+
+    let conf = {}
+    let _this = this
+    relationConf.forEach(item => {
+      this._generateModel({ tableName: item.tableName })
+      conf[item.tableName] = function () {
+        return this[item.type ? item.type : 'hasOne']
+        (
+          _this[`_${item.tableName}`],
+          item.local,
+          item.foreign
+        )
+      }
+    })
+    return conf
+  }
+
+  // 根据配置生成模型
+  _generateModel (config) {
+    this[`_${config.tableName}`] = this.db.Model.extend(config)
   }
 
   // 支持三种方式输入condition
