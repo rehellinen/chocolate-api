@@ -121,20 +121,36 @@ export class Model {
   }
 
   /**
-   * 编辑一条数据
-   * @param condition
-   * @param data
+   * 根据ID修改数据
+   * 软删除，即status设为$config.STATUS.DELETED
+   * @param {Number} id 主键
+   * @returns {Promise<void>}
+   */
+  async editById (id) {
+    return await this.edit({
+      condition: { id }
+    })
+  }
+
+  /**
+   * 根据特定条件修改一条数据
+   * @param {Object} condition 条件对象
+   * @param {Object} data 数据对象
    * @return {Promise<void>}
    */
-  async editOne ({condition = {}, data}) {
+  async edit ({condition = {}, data}) {
     let model = this.model.forge(data)
 
     this._processCondition(model, condition)
     const res = await model.where(condition).save(null, {method: 'update'})
 
     if (!res) {
+      let message = '写入数据失败'
+      if (data.status === $config.STATUS.DELETED) {
+        message = '删除数据失败'
+      }
       throw new DatabaseException({
-        message: '写入数据失败',
+        message,
         status: 40001
       })
     }
@@ -149,7 +165,9 @@ export class Model {
    * @returns {Promise<void>}
    */
   async deleteById (id) {
-    return await this.delete({ id })
+    return await this.delete({
+      condition: { id }
+    })
   }
 
   /**
@@ -158,8 +176,8 @@ export class Model {
    * @param {Object} condition 条件对象
    * @returns {Promise<void>}
    */
-  async delete (condition = {}) {
-    return await this.editOne({
+  async delete ({ condition = {} }) {
+    return await this.edit({
       condition,
       data: { status: $config.STATUS.DELETED }
     })
