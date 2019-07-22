@@ -142,10 +142,26 @@ export class Model {
     return res
   }
 
+  /**
+   * 根据ID删除数据
+   * 软删除，即status设为$config.STATUS.DELETED
+   * @param {Number} id 主键
+   * @returns {Promise<void>}
+   */
   async deleteById (id) {
+    return await this.delete({ id })
+  }
+
+  /**
+   * 根据特定条件删除数据
+   * 软删除，即status设为$config.STATUS.DELETED
+   * @param {Object} condition 条件对象
+   * @returns {Promise<void>}
+   */
+  async delete (condition = {}) {
     return await this.editOne({
-      condition: {id},
-      data: {status: $config.STATUS.DELETED}
+      condition,
+      data: { status: $config.STATUS.DELETED }
     })
   }
 
