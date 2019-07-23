@@ -105,7 +105,7 @@ export class Model {
    * @param {Object} data 数据对象
    * @return {Promise<void>}
    */
-  async saveOne (data) {
+  async save (data) {
     let model = this.model.forge(data)
 
     const res = await model.save(null, {method: 'insert'})
@@ -223,27 +223,17 @@ export class Model {
    * @param {Object} model 模型对象
    * @param {Object|Array} condition
    * condition支持3种方式输入
-   * 1. 对象：{ status: 1, id: 6 }
-   * 2. 数组: ['status', '=', '1']
-   * 3. 二维数组: [ ['status', '=', '1'], ['id', '=', '6'] ]
+   * 1. { status: 1, id: 6 }
+   * 2. {status: ['=', 1], id: ['=', 6]}
    * @private
    */
   _processCondition (model, condition) {
-    if (Array.isArray(condition)) {
-      if (Array.isArray(condition[0])) {
-        // 处理第二种方式
-        for (let item of condition) {
-          model = model.where(...item)
-        }
-        return
-      }
-      // 处理第三种方式
-      model = model.where(...condition)
-      return
-    }
-    // 处理第一种方式
     for (let key in condition) {
-      model = model.where(key, 'in', condition[key])
+      if (Array.isArray(condition[key])) {
+        model = model.where(key, ...condition[key])
+      } else {
+        model = model.where(key, '=', condition[key])
+      }
     }
   }
 
@@ -251,7 +241,7 @@ export class Model {
    * 处理排序配置
    * @param {Object} model 模型对象
    * @param {Array} order
-   * order支持3种方式输入
+   * order支持2种方式输入
    * 1. 数组: ['order', 'id']
    * 2. 对象数组: [ { field: 'order', rule: 'ASC' } ]
    * @private
