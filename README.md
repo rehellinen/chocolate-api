@@ -149,37 +149,50 @@ positiveInt       // 是否为正整数
 2. this.model可获取当前模型实例
   
 #### 使用方式
-`Model` 所在文件：/libs/exception/BaseException.js
+`Model` 所在文件：/libs/model/Model.js
 ```
+自定义模型：
 export class IndexModel extends Model {
   constructor() {
     super({
-      tableName: 'article'
+      // 表名 
+      tableName: 'article',
+      // 定义关联模型
+      relationConf: [
+        {
+          // 关联表名称
+          tableName: 'user',
+          // 主键
+          local: 'id',
+          // 外键
+          foreign: 'user_id'
+        }
+      ]
     })
   }
 }
 ```
-构造函数接受一个对象：  
-tableName - 表的名称
-conf - 关联模型的配置
 
-#### Model类内置的方法：
+#### Model实例方法：
+参数解释:
+1. id (Number) 数据的ID
+2. condition (Object) 查询条件，有以下两种格式：  
+    1. { status: 1, id: 6 }
+    2. { status: ['=', 1], id: ['=', 6] }
+3. order (Array) 排序条件
+    1. ['order', 'id']   
+    2. [ { field: 'order', rule: 'ASC' } ]
+4. relation (Array) 关联模型名称   
+5. pageConf (Object) 分页的配置
+    1. pageSize - 单页大小
+    2. page - 页码
+6. data (Object|Array) 需要添加 / 更新的数据    
 ```
-  /**
-   * 参数解释
-   * @param id int 数据的ID
-   * @param condition Object 要查询的数据的条件
-   * @param relation String 关联的模型名称
-   * @param order Array 设置排序的字段  
-   * @param pageConf Object 分页配置
-   * @param data Object 数据
-   */
-
   // 根据id获取数据
-  async getOneById ({id, condition = {}, relation = []})
+  getOneById ({id, condition = {}, relation = []})
   
   // 获取所有数据
-  async getAll ({condition = {}, relation = [], order = ['id']}) 
+  getAll ({condition = {}, relation = [], order = ['id']}) 
     
   // 分页方法
   async pagination ({pageConf = {}, 
@@ -188,14 +201,20 @@ conf - 关联模型的配置
     order = ['id']
   })
   
-  // 保存一条数据
-  async saveOne (data)
+  // 保存数据
+  async save (data)
   
-  // 编辑一条数据
-  async editOne ({condition = {}, data})
+  // 根据ID修改数据
+  async editById (id)
   
-  // 根据ID删除一条数据
+  // 根据特定条件修改一条数据
+  async edit ({condition = {}, data})
+  
+  // 根据ID删除数据
   async deleteById (id)
+  
+  // 根据特定条件删除数据
+  async delete ({ condition = {} })
 ```
 
 ### （六）工具
