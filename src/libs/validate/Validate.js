@@ -16,8 +16,8 @@ export class Validate extends Methods{
   }
 
   async check (ctx, scene) {
-    let checkedParams = {}
-    let params = await this.getParams(ctx)
+    const checkedParams = {}
+    const params = await this.getParams(ctx)
 
     const rules = this.scene[scene]
 
