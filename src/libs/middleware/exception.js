@@ -1,5 +1,5 @@
-import {types} from "../utils/mime"
-import {Exception} from "../exception/Exception"
+import {types} from "../utils"
+import {Exception} from "../exception"
 
 export const exception = (app) => {
   const processError = (e, ctx) => {

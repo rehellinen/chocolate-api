@@ -8,6 +8,8 @@ import config from '../../config/config'
 import custom from '../../config/custom'
 
 export default Object.assign(
-  {}, config, custom,
+  {},
+  config,
+  custom,
   { DATABASE: database }
 )
