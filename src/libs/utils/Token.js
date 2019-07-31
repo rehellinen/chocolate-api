@@ -6,7 +6,7 @@
 import md5 from 'md5'
 import cache from 'memory-cache'
 import {getRandChars} from './utils'
-import {TokenException} from "../../common/exception/TokenException"
+import {TokenException} from "../exception"
 
 export class Token {
   /**

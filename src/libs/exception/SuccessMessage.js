@@ -1,4 +1,4 @@
-import {Exception} from "../../libs/exception/Exception"
+import {Exception} from "./Exception"
 
 export class SuccessMessage extends Exception{
   constructor(config) {

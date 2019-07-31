@@ -1,4 +1,4 @@
-import {Exception} from "../../libs/exception/Exception"
+import {Exception} from "./Exception"
 
 export class TokenException extends Exception{
   constructor(config) {

@@ -4,7 +4,7 @@
  *  Create On 2018/9/25 22:46
  */
 import {DataBase} from './DataBase'
-import {DatabaseException} from "../../common/exception/DatabaseException"
+import {DatabaseException} from "../exception"
 
 export class Model {
   // 获取唯一的db实例

@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/13 10:34
  */
-import {Exception} from "../../libs/exception/Exception"
+import {Exception} from "./Exception"
 
 export class ParamsException extends Exception{
   constructor(config) {
