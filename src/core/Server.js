@@ -32,7 +32,7 @@ export class Server {
 
   useMiddlewares () {
     return R.map(R.pipe(
-      item => `${r('./libs/middleware')}/${item}`,
+      item => `${r('./core/middleware')}/${item}`,
       require,
       R.map(item => item(this.app))
     ))

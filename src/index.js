@@ -1,3 +1,3 @@
-import {Server} from './libs'
+import {Server} from './core'
 
 new Server().start()
