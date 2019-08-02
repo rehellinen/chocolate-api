@@ -3,20 +3,19 @@
 
 #### 新版框架重构中，预计八月底完成 ... 
 
-核心思想：
-1. 用更优雅的方式编写代码。
-2. 一切都是插件。
+核心思想： 用更优雅的方式编写代码。
 
 ### 框架目录：
 ~~~
-|-- config            配置文件目录
-|-- controller        控制器
-|-- model             模型 
+|-- app
+|   |-- router        路由
+|   |-- controller        控制器
+|   |-- model             模型 
 |-- common            公共模块目录
 |   |-- exception     用户自定义异常 / 框架内置异常
 |   |-- validate      验证器
-|   |-- router        路由
-|-- libs              框架核心类库
+|-- config            配置文件目录
+|-- core              框架核心类库
 |   |-- config        配置
 |   |-- decorator     装饰器
 |   |-- exception     异常处理
@@ -29,7 +28,7 @@
 
 ## 框架基本用法
 ### （一）路由：
-路由文件存放目录：/common/router  
+路由文件存放目录：/app/router  
 
 #### 路由定义
 `@controller, @get, @post, @put, @del` 所在文件：/libs/decorator/router.js
