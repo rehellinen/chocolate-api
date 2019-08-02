@@ -3,50 +3,41 @@
  *  Create By rehellinen
  *  Create On 2018/10/25 23:19
  */
+// 记录路由信息
 export const routerMap = new Map()
 
-export const controller = (path) => {
-  if (path === undefined) path = ''
+export const controller = (path = '') => {
   return (target) => {
-    path = normalizePath(path)
-    target.prototype.routerPrefix = path
+    // 路由URL的第一部分
+    target.prototype.routerPrefix = normalizePath(path)
   }
 }
 
-export const get = (path) => {
-  return baseMethod({ method: 'get', path })
-}
-
-export const post = (path) => {
-  return baseMethod({ method: 'post', path })
-}
-
-export const put = (path) => {
-  return baseMethod({ method: 'put', path })
-}
-
-export const del = (path) => {
-  return baseMethod({ method: 'del', path })
-}
-
-export const all = (path) => {
-  return baseMethod({ method: 'all', path })
-}
-
-const normalizePath = (path) => {
-  return path.startsWith('/') ? path : `/${path}`
-}
-
-const baseMethod = (conf) => {
-  if (conf.path === undefined) conf.path = ''
+const baseMethod = ({ path = '', method }) => {
   return (target, key) => {
     target[key] = Array.isArray(target[key]) ?  target[key] : [target[key]]
 
-    const length = target[key].length
-    let action = target[key][length - 1]
-    action.prototype.method = conf.method
-    conf.path = normalizePath(conf.path)
-    conf.target = target
-    routerMap.set(conf, target[key])
+    routerMap.set({
+      method,
+      target,
+      path: normalizePath(path)
+    }, target[key])
   }
+}
+
+export const get = (path) => baseMethod({ method: 'get', path })
+
+export const post = (path) => baseMethod({ method: 'post', path })
+
+export const put = (path) => baseMethod({ method: 'put', path })
+
+export const del = (path) => baseMethod({ method: 'del', path })
+
+export const all = (path) => baseMethod({ method: 'all', path })
+
+// 处理路径（只能以'/'开头，而不能以'/'结尾）
+const normalizePath = (path = '') => {
+  path = path.startsWith('/') ? path : `/${path}`
+  path = path.endsWith('/') ? path.substr(0, path.length - 1) : path
+  return path
 }
