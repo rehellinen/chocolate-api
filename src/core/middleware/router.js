@@ -12,11 +12,10 @@ import {routerMap} from "../decorator"
 export const router = app => {
   const router = new Router()
   // 执行路由文件
-  R.map(require)(glob.sync(r('./app/router/**/*@(Router).js')))
+  R.map(require)(glob.sync(r('./app/router/**/*.js')))
   // 生成路由
   for (let [conf, action] of routerMap) {
     const routerPath = conf.target.prefix + conf.path
-    console.log(routerPath)
     router[conf.method](routerPath, ...action)
   }
   app.use(router.routes())

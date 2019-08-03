@@ -1,1 +1,1 @@
-export * from './CmsMixin'
+export * from './cmsMixin'

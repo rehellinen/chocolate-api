@@ -12,7 +12,7 @@ const index = new IndexController()
 
 @mixin(CmsMixin)
 @controller('index')
-class IndexRouter {
+class Index {
   @get('')
   @validate({name: 'index', scene: 'id'})
   // @auth('super')
