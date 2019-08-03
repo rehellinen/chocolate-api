@@ -8,20 +8,27 @@ export const routerMap = new Map()
 
 export const controller = (path = '') => {
   return (target) => {
-    // 路由URL的第一部分
-    target.prototype.routerPrefix = normalizePath(path)
+    target.prototype.prefix = normalizePath(path)
   }
 }
 
-const baseMethod = ({ path = '', method }) => {
-  return (target, key) => {
-    target[key] = Array.isArray(target[key]) ?  target[key] : [target[key]]
-
-    routerMap.set({
-      method,
-      target,
-      path: normalizePath(path)
-    }, target[key])
+export const mixin = (...sources) => {
+  return (target) => {
+    for (let source of sources) {
+      for (let name of Object.getOwnPropertyNames(source.prototype)) {
+        // 跳过构造函数
+        if (name === 'constructor') {
+          continue
+        }
+        const action = source.prototype[name]
+        target[name] = Array.isArray(action) ?  action : [action]
+        routerMap.set({
+          target: target.prototype,
+          method: action.method,
+          path: normalizePath(action.path)
+        }, target[name])
+      }
+    }
   }
 }
 
@@ -40,4 +47,21 @@ const normalizePath = (path = '') => {
   path = path.startsWith('/') ? path : `/${path}`
   path = path.endsWith('/') ? path.substr(0, path.length - 1) : path
   return path
+}
+
+const baseMethod = ({ path = '', method }) => {
+  return (target, key) => {
+    // 处理mixin
+    if (target.constructor.name.includes('Mixin')) {
+      target[key].path = path
+      target[key].method = method
+      return
+    }
+    target[key] = Array.isArray(target[key]) ?  target[key] : [target[key]]
+    routerMap.set({
+      method,
+      target,
+      path: normalizePath(path)
+    }, target[key])
+  }
 }

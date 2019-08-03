@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/12 21:24
  */
-import {r} from "../utils"
+import {r, Token} from "../utils"
 
 export const validate = ({name, scene}) => {
   // name首字母设置为大写
@@ -24,8 +24,7 @@ export const auth = (type) => {
     scope = $config.SCOPE.SUPER
   }
   return middleware(async (ctx, next) => {
-    // TODO: 取消注释
-    // Token.checkScope(ctx, scope)
+    Token.checkScope(ctx, scope)
     await next()
   })
 }
