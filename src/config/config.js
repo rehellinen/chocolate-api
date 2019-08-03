@@ -27,5 +27,5 @@ export default {
   SCOPE: {
     USER: 10,
     SUPER: 30
-  },
+  }
 }

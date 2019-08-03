@@ -1,5 +1,5 @@
-import {post, put} from '../../../core/decorator'
-import {SuccessMessage} from '../../../core/exception'
+import { post, put } from '../../../core/decorator'
+import { SuccessMessage } from '../../../core/exception'
 
 export class CmsMixin {
   @post('/test')

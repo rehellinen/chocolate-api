@@ -3,7 +3,7 @@ module.exports = {
   extends: [
     'standard'
   ],
-  parser: 'eslint-parser',
+  parser: 'babel-eslint',
   parserOptions: {
     sourceType: 'module'
   },

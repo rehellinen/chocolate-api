@@ -1,3 +1,3 @@
-import {Server} from './core'
+import { Server } from './core'
 
 new Server().start()

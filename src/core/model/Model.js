@@ -3,15 +3,15 @@
  *  Create By rehellinen
  *  Create On 2018/9/25 22:46
  */
-import {DataBase} from './DataBase'
-import {DatabaseException} from "../exception"
+import { DataBase } from './DataBase'
+import { DatabaseException } from '../exception'
 
 export class Model {
   // 获取唯一的db实例
   db = DataBase.getInstance()
+
   // 所有需要关联的表的名称
   relation = []
-
 
   /**
    * 初始化模型
@@ -21,7 +21,7 @@ export class Model {
    *  - local 主键
    *  - foreign 外键
    */
-  constructor ({tableName, relationConf = []}) {
+  constructor ({ tableName, relationConf = [] }) {
     // 初始化关联模型
     const config = this._processRelation()
     // 初始化模型
@@ -35,12 +35,11 @@ export class Model {
    * @param {Array} relation 关联的模型名称
    * @return {Promise<void>}
    */
-  async getOneById ({id, condition = {}, relation = []}) {
-    let data
-    let model = this.model.forge().where('id', id)
+  async getOneById ({ id, condition = {}, relation = [] }) {
+    const model = this.model.forge().where('id', id)
     this._processCondition(model, condition)
 
-    data = await model.fetch({withRelated: relation})
+    const data = await model.fetch({ withRelated: relation })
     if (!data) {
       throw new DatabaseException()
     }
@@ -54,14 +53,13 @@ export class Model {
    * @param {Array} order Array 设置排序的字段
    * @return {Promise<*>}
    */
-  async getAll ({condition = {}, relation = [], order = ['id']}) {
-    let data
-    let model = this.model.forge()
+  async getAll ({ condition = {}, relation = [], order = ['id'] }) {
+    const model = this.model.forge()
 
     this._processCondition(model, condition)
     this._processOrder(model, order)
 
-    data = await model.fetchAll({withRelated: relation})
+    const data = await model.fetchAll({ withRelated: relation })
 
     if (data.isEmpty()) {
       throw new DatabaseException()
@@ -77,14 +75,13 @@ export class Model {
    * @param {Array} order 设置排序的字段
    * @return {Promise<*>}
    */
-  async pagination ({pageConf = {}, condition = {}, relation = [], order = ['id']}) {
-    let data
-    let model = this.model.forge()
+  async pagination ({ pageConf = {}, condition = {}, relation = [], order = ['id'] }) {
+    const model = this.model.forge()
 
     this._processCondition(model, condition)
     this._processOrder(model, order)
 
-    data = await model.fetchPage({
+    const data = await model.fetchPage({
       pageSize: pageConf.pageSize || $config.PAGE_SIZE,
       page: pageConf.page || 1,
       withRelated: relation
@@ -106,9 +103,9 @@ export class Model {
    * @return {Promise<void>}
    */
   async save (data) {
-    let model = this.model.forge(data)
+    const model = this.model.forge(data)
 
-    const res = await model.save(null, {method: 'insert'})
+    const res = await model.save(null, { method: 'insert' })
 
     if (!res) {
       throw new DatabaseException({
@@ -127,7 +124,7 @@ export class Model {
    * @returns {Promise<void>}
    */
   async editById (id) {
-    return await this.edit({
+    return this.edit({
       condition: { id }
     })
   }
@@ -138,11 +135,11 @@ export class Model {
    * @param {Object} data 数据对象
    * @return {Promise<void>}
    */
-  async edit ({condition = {}, data}) {
-    let model = this.model.forge(data)
+  async edit ({ condition = {}, data }) {
+    const model = this.model.forge(data)
 
     this._processCondition(model, condition)
-    const res = await model.where(condition).save(null, {method: 'update'})
+    const res = await model.where(condition).save(null, { method: 'update' })
 
     if (!res) {
       let message = '写入数据失败'
@@ -165,7 +162,7 @@ export class Model {
    * @returns {Promise<void>}
    */
   async deleteById (id) {
-    return await this.delete({
+    return this.delete({
       condition: { id }
     })
   }
@@ -177,7 +174,7 @@ export class Model {
    * @returns {Promise<void>}
    */
   async delete ({ condition = {} }) {
-    return await this.edit({
+    return this.edit({
       condition,
       data: { status: $config.STATUS.DELETED }
     })
@@ -193,13 +190,12 @@ export class Model {
       return
     }
 
-    let conf = {}
-    let _this = this
+    const conf = {}
+    const _this = this
     relationConf.forEach(item => {
       this._generateModel({ tableName: item.tableName })
       conf[item.tableName] = function () {
-        return this[item.type ? item.type : 'hasOne']
-        (
+        return this[item.type ? item.type : 'hasOne'](
           _this[`_${item.tableName}`],
           item.local,
           item.foreign
@@ -228,7 +224,7 @@ export class Model {
    * @private
    */
   _processCondition (model, condition) {
-    for (let key in condition) {
+    for (const key in condition) {
       if (Array.isArray(condition[key])) {
         model = model.where(key, ...condition[key])
       } else {
@@ -247,7 +243,7 @@ export class Model {
    * @private
    */
   _processOrder (model, order) {
-    for (let item of order) {
+    for (const item of order) {
       if (typeof item === 'object') {
         model = model.orderBy(item.field, item.rule)
       } else {

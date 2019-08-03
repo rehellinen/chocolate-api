@@ -3,10 +3,10 @@
  *  Create By rehellinen
  *  Create On 2018/10/13 10:34
  */
-import {Exception} from "./Exception"
+import { Exception } from './Exception'
 
-export class ParamsException extends Exception{
-  constructor(config) {
+export class ParamsException extends Exception {
+  constructor (config) {
     super(config)
     this.setDefault({
       httpCode: 400,

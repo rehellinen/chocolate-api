@@ -1,7 +1,7 @@
-import {Exception} from "./Exception"
+import { Exception } from './Exception'
 
-export class DatabaseException extends Exception{
-  constructor(config) {
+export class DatabaseException extends Exception {
+  constructor (config) {
     super(config)
     this.setDefault({
       httpCode: 404,

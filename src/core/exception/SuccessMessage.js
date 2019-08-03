@@ -1,7 +1,7 @@
-import {Exception} from "./Exception"
+import { Exception } from './Exception'
 
-export class SuccessMessage extends Exception{
-  constructor(config) {
+export class SuccessMessage extends Exception {
+  constructor (config) {
     super(config)
     this.setDefault({
       httpCode: 200,

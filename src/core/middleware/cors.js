@@ -12,11 +12,11 @@ export const cors = app => {
     maxAge: 5,
     credentials: true,
     allowMethods: ['GET', 'POST', 'DELETE', 'PUT'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'token'],
-  }));
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'token']
+  }))
 
   // 处理options请求
-  app.use(async (ctx, next)=> {
+  app.use(async (ctx, next) => {
     ctx.set('Access-Control-Allow-Origin', '*')
     ctx.set(
       'Access-Control-Allow-Headers',

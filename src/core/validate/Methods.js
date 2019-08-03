@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/13 10:24
  */
-import {ParamsException} from "../exception"
+import { ParamsException } from '../exception'
 
 export class Methods {
   require (data = {}, field = '', fieldCN = '') {
@@ -16,14 +16,14 @@ export class Methods {
   }
 
   positiveInt (data = {}, field = '', fieldCN = '') {
-    if(!/(^[1-9]\d*$)/.test(data[field])) {
+    if (!/(^[1-9]\d*$)/.test(data[field])) {
       this.throw(field, fieldCN, '必须为正整数')
     }
   }
 
   throw (field, fieldCN, message) {
     throw new ParamsException({
-      message: (fieldCN ? fieldCN : field) + message
+      message: (fieldCN || field) + message
     })
   }
 }

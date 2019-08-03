@@ -1,7 +1,7 @@
-import {Exception} from "./Exception"
+import { Exception } from './Exception'
 
-export class TokenException extends Exception{
-  constructor(config) {
+export class TokenException extends Exception {
+  constructor (config) {
     super(config)
     this.setDefault({
       httpCode: 401,

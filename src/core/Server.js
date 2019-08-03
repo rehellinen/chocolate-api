@@ -6,8 +6,8 @@
 import Koa from 'koa'
 import R from 'ramda'
 import chalk from 'chalk'
-import config from './config'
-import {r} from "./utils"
+import { config } from './config'
+import { r } from './utils'
 
 const middlewares = ['exception', 'router']
 // 是否使用CORS

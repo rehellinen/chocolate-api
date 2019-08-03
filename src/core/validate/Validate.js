@@ -3,11 +3,11 @@
  *  Create By rehellinen
  *  Create On 2018/10/12 21:21
  */
-import {Methods} from "./Methods"
+import { Methods } from './Methods'
 import getRawBody from 'raw-body'
-import {parseParams} from "../utils/utils"
+import { parseParams } from '../utils/utils'
 
-export class Validate extends Methods{
+export class Validate extends Methods {
   constructor (rules = {}, scene = {}) {
     super()
     this.rules = rules
@@ -21,7 +21,7 @@ export class Validate extends Methods{
 
     const rules = this.scene[scene]
 
-    for (let field of rules) {
+    for (const field of rules) {
       const rule = this.rules[field]
       const validateFunc = rule[0].split('|')
       const errInfo = rule[1].split('|')
