@@ -28,20 +28,38 @@
 
 ## 框架基本用法
 ### （一）路由：
-路由文件存放目录：/app/router  
-
 #### 路由定义
-`@controller, @get, @post, @put, @del` 所在文件：/libs/decorator/router.js
+路由类可使用的装饰器：
+1. @controller - 接收一个参数，为一级URL
+2. @get, @post, @put, @del - 接收一个参数，为二级URL
+3. @mixin - 为一个路由批量增加方法
+3. @middleware - 增加一个中间件到koa-router
+4. @validate - 详情可查看`验证器`
+5. @auth - 详情可查看`权限管理`
+
+定义路由
 ```
 @controller('index')
-class IndexRouter {
-  // get方法访问'index/user'的路由
+class Index {
+  // 定义用get方法访问'index/user'的路由
   @get('user')
   async getToken (ctx, next) {
-    await index.index(ctx, next)
+    await new IndexController.index(ctx, next)
   }
 }
 ```
+
+定义路由Mixin（必须以'Mixin'结尾）
+```
+export class CmsMixin {
+  @post('/test')
+  add () {
+    throw new SuccessMessage()
+  }
+}
+```
+
+
 
 > 建议：路由层仅负责路由转发，控制器层负责业务逻辑编写。
 
@@ -109,7 +127,7 @@ GET、POST、PUT、DELETE方法携带的数据均能进行校验。
 需要配合路由使用：
 ```
 @controller('index')
-class IndexRouter {
+class Index {
   @get('user')
   @validate({name: 'index', scene: 'id'})
   // 表示验证IndexValidate中id情景
