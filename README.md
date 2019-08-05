@@ -28,26 +28,29 @@
 
 ## 框架基本用法
 ### （一）路由：
-#### 路由定义
+#### 默认为二级路由，格式类似：user/add
 路由类可使用的装饰器：
 1. @controller - 接收一个参数，为一级URL
 2. @get, @post, @put, @del - 接收一个参数，为二级URL
 3. @mixin - 为一个路由批量增加方法
 3. @middleware - 增加一个中间件到koa-router
-4. @validate - 详情可查看`验证器`
-5. @auth - 详情可查看`权限管理`
+4. @validate - 详情可查看`验证器`部分
+5. @auth - 详情可查看`权限管理`部分
 
 定义路由
 ```
 @controller('index')
 class Index {
-  // 定义用get方法访问'index/user'的路由
-  @get('user')
-  async getToken (ctx, next) {
-    await new IndexController.index(ctx, next)
-  }
+  @validate({ name: 'index', scene: 'id' })
+  @auth('super')
+  @get('')
+  index = 'index.index'
 }
 ```
+几点说明：
+1. 上面定义了以'GET'方法访问'/index'的路由，并且将跳转至'IndexController'的'index'方法。
+2. @get等等http装饰器必须在最下层。
+3. @validate在@auth之上时，先验证参数再验证权限。
 
 定义路由Mixin（必须以'Mixin'结尾）
 ```
@@ -58,10 +61,6 @@ export class CmsMixin {
   }
 }
 ```
-
-
-
-> 建议：路由层仅负责路由转发，控制器层负责业务逻辑编写。
 
 
 ### （二）配置：
