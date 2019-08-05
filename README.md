@@ -27,9 +27,11 @@
 ~~~
 
 ## 框架基本用法
-### （一）路由：
-#### 默认为二级路由，格式类似：user/add
-路由类可使用的装饰器：
+### （一）路由
+#### 存放目录
+/app/router
+
+#### 路由类可使用的装饰器
 1. @controller - 接收一个参数，为一级URL
 2. @get, @post, @put, @del - 接收一个参数，为二级URL
 3. @mixin - 为一个路由批量增加方法
@@ -37,22 +39,26 @@
 4. @validate - 详情可查看`验证器`部分
 5. @auth - 详情可查看`权限管理`部分
 
-定义路由
+#### 定义路由
 ```
 @controller('index')
 class Index {
-  @validate({ name: 'index', scene: 'id' })
+  @validate({
+    name: 'index',
+    scene: 'id'
+  })
   @auth('super')
   @get('')
   index = 'index.index'
 }
 ```
 几点说明：
-1. 上面定义了以'GET'方法访问'/index'的路由，并且将跳转至'IndexController'的'index'方法。
-2. @get等等http装饰器必须在最下层。
-3. @validate在@auth之上时，先验证参数再验证权限。
+1. 默认为二级路由（第二级可以为空），格式类似'/index/test'
+2. 上面定义了以'GET'方法访问'/index'的路由，并且将跳转至'IndexController'的'index'方法。
+3. @get等等http装饰器必须在最下层。
+4. @validate在@auth之上时，先验证参数再验证权限。
 
-定义路由Mixin（必须以'Mixin'结尾）
+#### 定义路由Mixin（必须以'Mixin'结尾）
 ```
 export class CmsMixin {
   @post('/test')
@@ -63,7 +69,7 @@ export class CmsMixin {
 ```
 
 
-### （二）配置：
+### （二）配置
 配置文件存放目录：/config
 ```
 |-- config            配置文件目录
@@ -77,9 +83,9 @@ export class CmsMixin {
 GLOBAL_CONF配置为true时，可通过全局变量$config访问配置。
 
 
-### （三）异常：
+### （三）异常
 自定义异常存放目录：/common/exception    
-#### 返回的JSON格式：
+#### 返回的JSON格式
 ```
 {
   "status": 1,
@@ -116,50 +122,52 @@ export class ParamsException extends Exception{
 
 
 ### （四）验证器
-验证器存放目录：/common/validate  
+#### 验证器存放目录
+/common/validate  
+
 #### 作用
 对前端传来的数据进行校验。  
 GET、POST、PUT、DELETE方法携带的数据均能进行校验。
 
-#### 使用方式
-`@validate` 所在文件：/libs/decorator/decorator.js
-需要配合路由使用：
+#### 定义验证器
+1. scene定义验证场景，具体使用方法查看下面的示例
+2. @rule传入两个参数：  
+(1)验证的方法名称。  
+(2)验证不通过时的错误信息。
 ```
-@controller('index')
-class Index {
-  @get('user')
-  @validate({name: 'index', scene: 'id'})
-  // 表示验证IndexValidate中id情景
-  async getToken (ctx, next) { }
+export class IndexValidate extends Validate {
+  scene = {
+    add: ['name'],
+    edit: ['id', 'name']
+  }
+
+  @rule('require', 'id不能为空')
+  @rule('positiveInt', 'id必须为正整数')
+  id
+  @rule('require', 'name不能为空')
+  name
 }
 ```
 
-#### 自定义验证器
-`Validate` 所在文件：/libs/exception/BaseException.js
-文件命名规则为 `${name}Validate`
+#### 路由中使用
+`@validate`接受一个对象，对象包含name和scene两个属性。name为验证器的名称，scene为场景名称
 ```
-export class IndexValidate extends Validate{
-  constructor() {
-    super()
-    this.rules = {
-      // 键为需要校验的数据名称
-      // 值为一个数组，第一项为验证方法，第二项为出现错误时的错误提示
-      id: ['require', 'id']
-    }
-    this.scene = {
-      // 键为情景名称
-      // 值为一个数组，数组元素为需要校验的数据
-      id: ['id']
-    }
-  }
+@controller('index')
+class Index {
+  @validate({
+    name: 'index',
+    scene: 'id'
+  })
+  @auth('super')
+  @get('')
+  index = 'index.index'
 }
 ```
 
 #### 验证方法
-内置的验证方法：/libs/validate/Methods.js
 ```
 require           // 不能为空
-positiveInt       // 是否为正整数
+positiveInt       // 必须为正整数
 ```
 
 
