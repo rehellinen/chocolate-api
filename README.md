@@ -32,12 +32,12 @@
 /app/router
 
 #### 路由类可使用的装饰器
-1. @controller - 接收一个参数，为一级URL
-2. @get, @post, @put, @del - 接收一个参数，为二级URL
-3. @mixin - 为一个路由批量增加方法
-3. @middleware - 增加一个中间件到koa-router
-4. @validate - 详情可查看`验证器`部分
-5. @auth - 详情可查看`权限管理`部分
+1. `@controller` - 接收一个参数，为一级URL
+2. `@get`, `@post`, `@put`, `@del` - 接收一个参数，为二级URL
+3. `@mixin` - 为一个路由批量增加方法
+3. `@middleware` - 增加一个中间件到koa-router
+4. `@validate` - 详情可查看`验证器`部分
+5. `@auth` - 详情可查看`权限管理`部分
 
 #### 定义路由
 ```
@@ -55,8 +55,8 @@ class Index {
 几点说明：
 1. 默认为二级路由（第二级可以为空），格式类似'/index/test'
 2. 上面定义了以'GET'方法访问'/index'的路由，并且将跳转至'IndexController'的'index'方法。
-3. @get等等http装饰器必须在最下层。
-4. @validate在@auth之上时，先验证参数再验证权限。
+3. `@get`等等http装饰器必须在最下层。
+4. `@validate`在`@auth`之上时，先验证参数再验证权限。
 
 #### 定义路由Mixin（必须以'Mixin'结尾）
 ```
@@ -131,7 +131,7 @@ GET、POST、PUT、DELETE方法携带的数据均能进行校验。
 
 #### 定义验证器
 1. scene定义验证场景，具体使用方法查看下面的示例
-2. @rule传入两个参数：  
+2. `@rule`传入两个参数：  
 (1)验证的方法名称。  
 (2)验证不通过时的错误信息。
 ```
