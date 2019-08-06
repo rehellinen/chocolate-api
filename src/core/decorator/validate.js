@@ -1,6 +1,8 @@
 import { r } from '../utils'
 import { middleware } from './decorator'
 
+export const validateMap = new Map()
+
 export const validate = ({ name, scene }) => {
   // TODO: name首字母设置为大写
   name = name.substr(0, 1).toUpperCase() + name.substr(1, name.length - 1)
@@ -14,13 +16,9 @@ export const validate = ({ name, scene }) => {
 
 export const rule = (funcName, errInfo) => {
   return (target, key) => {
-    if (!target.rules) {
-      target.rules = {}
-    }
-
-    if (!target.rules[key]) {
-      target.rules[key] = []
-    }
-    target.rules[key].push([funcName, errInfo])
+    const rules = validateMap.get(target) || {}
+    if (!rules[key])  rules[key] = []
+    rules[key].push([funcName, errInfo])
+    validateMap.set(target, rules)
   }
 }
