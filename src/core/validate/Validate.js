@@ -4,8 +4,7 @@
  *  Create On 2018/10/12 21:21
  */
 import { Methods } from './Methods'
-import getRawBody from 'raw-body'
-import { parseParams } from '../utils/utils'
+import { getParams } from '../utils'
 import { validateMap } from '../decorator'
 
 
@@ -15,7 +14,7 @@ export class Validate extends Methods {
 
   async check (ctx, scene) {
     const checkedParams = {}
-    const params = await this.getParams(ctx)
+    const params = await getParams(ctx)
 
     // 获取该场景需要验证的所有字段
     const fields = this.scene[scene]
@@ -33,19 +32,5 @@ export class Validate extends Methods {
     }
 
     ctx.checkedParams = checkedParams
-  }
-
-  async getParams (ctx) {
-    let params
-    if (ctx.method === 'GET') {
-      params = ctx.query
-    } else {
-      const rawReqBody = await getRawBody(ctx.req, {
-        length: ctx.req.headers['content-length'],
-        limit: '1mb'
-      })
-      params = parseParams(rawReqBody)
-    }
-    return params
   }
 }
