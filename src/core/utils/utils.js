@@ -71,7 +71,6 @@ export function parseBody (params) {
  * @returns {Promise<*>}
  */
 export const getParams = async (ctx) => {
-  let params
   if (ctx.method === 'GET') {
     return ctx.query
   } else {
