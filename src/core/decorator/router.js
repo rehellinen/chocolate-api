@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/25 23:19
  */
-import { r } from '../utils'
+import { firstUpperCase, r } from '../utils'
 // 记录路由信息
 export const routerMap = new Map()
 
@@ -82,6 +82,3 @@ const getController = (str = '') => {
     }
   ]
 }
-
-// 首字母大写
-const firstUpperCase = ([first, ...rest]) => first.toUpperCase() + rest.join('')
