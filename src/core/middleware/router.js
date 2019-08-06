@@ -14,9 +14,9 @@ export const router = app => {
   // 执行路由文件
   R.map(require)(glob.sync(r('./app/router/**/*.js')))
   // 生成路由
-  for (const [conf, action] of routerMap) {
+  for (const [key, conf] of routerMap) {
     const routerPath = conf.target.prefix + conf.path
-    router[conf.method](routerPath, ...action)
+    router[conf.method](routerPath, ...conf.action)
   }
   app.use(router.routes())
   app.use(router.allowedMethods())
