@@ -3,6 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/25 23:19
  */
+import { r } from '../utils'
 // 记录路由信息
 export const routerMap = new Map()
 
@@ -50,18 +51,37 @@ const normalizePath = (path = '') => {
 }
 
 const baseMethod = ({ path = '', method }) => {
-  return (target, key) => {
+  return (target, key, descriptor) => {
     // 处理mixin
     if (target.constructor.name.includes('Mixin')) {
       target[key].path = path
       target[key].method = method
       return
     }
-    target[key] = Array.isArray(target[key]) ? target[key] : [target[key]]
-    routerMap.set({
+
+    const routerStr = descriptor.initializer && descriptor.initializer.call(this)
+    const action = getController(routerStr)
+    routerMap.set(key, {
+      action,
       method,
       target,
       path: normalizePath(path)
-    }, target[key])
+    })
   }
 }
+
+// 获取控制器
+const getController = (str = '') => {
+  const [controller, action] = str.split('.')
+  const Controller = require(
+    r(`./app/controller/${firstUpperCase(controller)}.js`)
+  )[`${firstUpperCase(controller)}Controller`]
+  return [
+    async (ctx, next) => {
+      await new Controller()[action](ctx, next)
+    }
+  ]
+}
+
+// 首字母大写
+const firstUpperCase = ([first, ...rest]) => first.toUpperCase() + rest.join('')
