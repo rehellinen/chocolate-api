@@ -1,4 +1,4 @@
-import { firstUpperCase, r } from '../utils'
+import {firstUpperCase, r} from '../utils'
 import { middleware } from './decorator'
 
 export const validateMap = new Map()
