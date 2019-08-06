@@ -1,12 +1,10 @@
-import { r } from '../utils'
+import { firstUpperCase, r } from '../utils'
 import { middleware } from './decorator'
 
 export const validateMap = new Map()
 
 export const validate = ({ name, scene }) => {
-  // TODO: name首字母设置为大写
-  name = name.substr(0, 1).toUpperCase() + name.substr(1, name.length - 1)
-
+  name = firstUpperCase(name)
   const Validate = require(r(`./common/validate/${name}`))[`${name}Validate`]
   return middleware(async (ctx, next) => {
     await new Validate().check(ctx, scene)
