@@ -3,18 +3,8 @@
  *  Create By rehellinen
  *  Create On 2018/10/12 21:24
  */
-import { r, Token } from '../utils'
-
-export const validate = ({ name, scene }) => {
-  // name首字母设置为大写
-  name = name.substr(0, 1).toUpperCase() + name.substr(1, name.length - 1)
-
-  const Validate = require(r(`./common/validate/${name}Validate`))[`${name}Validate`]
-  return middleware(async (ctx, next) => {
-    await new Validate().check(ctx, scene)
-    await next()
-  })
-}
+import { Token } from '../utils'
+import {routerMap} from './router'
 
 export const auth = (type) => {
   let scope
@@ -31,9 +21,9 @@ export const auth = (type) => {
 
 export const middleware = (middleware) => {
   return (target, key) => {
-    if (!Array.isArray(target[key])) {
-      target[key] = [target[key]]
-    }
-    target[key].unshift(middleware)
+    routerMap
+      .get(key)
+      .action
+      .unshift(middleware)
   }
 }
