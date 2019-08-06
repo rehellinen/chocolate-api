@@ -6,6 +6,7 @@
 import { Methods } from './Methods'
 import getRawBody from 'raw-body'
 import { parseParams } from '../utils/utils'
+import { validateMap } from '../decorator'
 
 
 export class Validate extends Methods {
@@ -18,9 +19,12 @@ export class Validate extends Methods {
 
     // 获取该场景需要验证的所有字段
     const fields = this.scene[scene]
+    // 获取验证器定义的所有字段的验证方法
+    const allRules = validateMap.get(this.constructor.prototype)
 
     for (const field of fields) {
-      const rules = this.rules[field]
+      // 单个字段的所有验证方法
+      const rules = allRules[field]
 
       for (const [funcName, errInfo] of rules) {
         this[funcName](params, field, errInfo)
