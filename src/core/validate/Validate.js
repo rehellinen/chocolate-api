@@ -7,29 +7,24 @@ import { Methods } from './Methods'
 import getRawBody from 'raw-body'
 import { parseParams } from '../utils/utils'
 
+
 export class Validate extends Methods {
-  constructor (rules = {}, scene = {}) {
-    super()
-    this.rules = rules
-    this.scene = scene
-    this.checkedParams = {}
-  }
+  // 场景配置
+  scene = {}
 
   async check (ctx, scene) {
     const checkedParams = {}
     const params = await this.getParams(ctx)
 
-    const rules = this.scene[scene]
+    // 获取该场景需要验证的所有字段
+    const fields = this.scene[scene]
 
-    for (const field of rules) {
-      const rule = this.rules[field]
-      const validateFunc = rule[0].split('|')
-      const errInfo = rule[1].split('|')
+    for (const field of fields) {
+      const rules = this.rules[field]
 
-      validateFunc.forEach((item, index) => {
-        this[item](params, field, errInfo[index])
-      })
-
+      for (const [funcName, errInfo] of rules) {
+        this[funcName](params, field, errInfo)
+      }
       checkedParams[field] = params[field]
     }
 
