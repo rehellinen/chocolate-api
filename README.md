@@ -54,7 +54,7 @@ class Index {
 ```
 几点说明：
 1. 默认为二级路由（第二级可以为空），格式类似'/index/test'
-2. 上面定义了以'GET'方法访问'/index'的路由，并且将跳转至'IndexController'的'index'方法。
+2. 上面定义了以'GET'方法访问'/index'的路由，并且将跳转至'Index'的'index'方法。
 3. `@get`等等http装饰器必须在最下层。
 4. `@validate`在`@auth`之上时，先验证参数再验证权限。
 
@@ -135,7 +135,7 @@ GET、POST、PUT、DELETE方法携带的数据均能进行校验。
 (1)验证的方法名称。  
 (2)验证不通过时的错误信息。
 ```
-export class IndexValidate extends Validate {
+export class Index extends Validate {
   scene = {
     add: ['name'],
     edit: ['id', 'name']
