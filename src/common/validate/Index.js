@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/12 22:38
  */
-import {rule, Validate} from '../../core'
+import { rule, Validate } from '../../core'
 
 export class IndexValidate extends Validate {
   scene = {

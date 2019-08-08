@@ -1,7 +1,7 @@
 import { controller, get, mixin, auth, validate } from '../../core'
 
 @controller('index')
-class Index {
+class IndexRouter {
   @validate({
     name: 'index',
     scene: 'id'
