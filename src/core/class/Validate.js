@@ -3,12 +3,12 @@
  *  Create By rehellinen
  *  Create On 2018/10/12 21:21
  */
-import { Methods } from './Methods'
+import { ValidateMethods } from './ValidateMethods'
 import { getParams } from '../utils'
 import { validateMap } from '../decorator'
 
 
-export class Validate extends Methods {
+export class Validate extends ValidateMethods {
   // 场景配置
   scene = {}
 

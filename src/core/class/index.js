@@ -1,5 +1,5 @@
 export * from './DataBase'
-export * from './Methods'
+export * from './ValidateMethods'
 export * from './Model'
 export * from './Server'
 export * from './Validate'

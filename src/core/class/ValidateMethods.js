@@ -1,11 +1,11 @@
 /**
- *  Methods.js
+ *  ValidateMethods.jsthods.js
  *  Create By rehellinen
  *  Create On 2018/10/13 10:24
  */
 import { ParamsException } from '../exception'
 
-export class Methods {
+export class ValidateMethods {
   require (data = {}, field = '', errInfo = '') {
     if (data[field] == null || data[field] === '') {
       this.throw(errInfo)
