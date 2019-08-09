@@ -1,5 +1,4 @@
 export * from './class'
-export * from './config'
 export * from './decorator'
 export * from './exception'
 export * from './middleware'

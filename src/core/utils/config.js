@@ -6,7 +6,7 @@
 import baseConf from '../../config/base.conf'
 import devConf from '../../config/dev.conf'
 import prodConf from '../../config/prod.conf'
-import { isProduction } from '../utils'
+import { isProduction } from './utils'
 
 export default {
   ...baseConf,
