@@ -46,6 +46,7 @@
     "memory-cache": "^0.2.0",
     "mysql": "^2.17.1",
     "nodemailer": "^6.2.1",
+    "portfinder": "^1.0.21",
     "ramda": "^0.25.0",
     "raw-body": "^2.4.0",
     "x2js": "^3.3.0"

@@ -6,6 +6,7 @@
 import Koa from 'koa'
 import R from 'ramda'
 import chalk from 'chalk'
+import portfinder from 'portfinder'
 import { r, getConfig } from '../utils'
 
 const config = getConfig()
@@ -29,13 +30,24 @@ export class Server {
     }
   }
 
-  start () {
-    // 使用中间件
+  async start () {
+    // 添加中间件
     this.useMiddlewares()(this.middlewares)
-    // 设置监听
+    // 判断端口号是否占用
+    await this.checkPort()
+    // 启动服务器
     this.app.listen(this.port, this.host)
     console.log(chalk.blue(`Welcome to use rehellinen-api ^ ^`))
     console.log(chalk.blue(`Server listens on ${this.host}:${this.port}`))
+  }
+
+  async checkPort () {
+    portfinder.basePort = this.port
+    const newPort = await portfinder.getPortPromise()
+    if (newPort !== this.port) {
+      console.log(chalk.red(`error: ${this.port} port is occupied. open a new port: ${newPort}\n`))
+      this.port = newPort
+    }
   }
 
   useMiddlewares () {
