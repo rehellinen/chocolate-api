@@ -100,3 +100,4 @@ export function isEmptyObj (obj) {
  */
 export const firstUpperCase = ([first, ...rest]) => first.toUpperCase() + rest.join('')
 
+export const isProduction = process.env.NODE_ENV === 'production'

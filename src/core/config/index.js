@@ -3,13 +3,12 @@
  *  Create By rehellinen
  *  Create On 2019/3/19 22:00
  */
-import dbConfig from '../../config/database'
-import baseConfig from '../../config/config'
-import customConfig from '../../config/custom'
+import baseConf from '../../config/base.conf'
+import devConf from '../../config/dev.conf'
+import prodConf from '../../config/prod.conf'
+import { isProduction } from '../utils'
 
-export const config = Object.assign(
-  {},
-  baseConfig,
-  customConfig,
-  { DATABASE: dbConfig }
-)
+export const config = {
+  ...baseConf,
+  ...(isProduction ? prodConf : devConf)
+}
