@@ -63,5 +63,13 @@ export default {
     database: '',
     // 字符集
     charset: 'utf8'
+  },
+  // 分页大小
+  PAGE_SIZE: 15,
+  // status映射
+  STATUS: {
+    NORMAL: 1,
+    ABNORMAL: 0,
+    DELETED: -1
   }
 }

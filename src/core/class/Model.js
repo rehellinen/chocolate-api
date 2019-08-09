@@ -5,7 +5,9 @@
  */
 import { DataBase } from './DataBase'
 import { DatabaseException } from '../exception'
+import { getConfig } from '../utils'
 
+const config = getConfig()
 export class Model {
   // 获取唯一的db实例
   db = DataBase.getInstance()
@@ -82,7 +84,7 @@ export class Model {
     this._processOrder(model, order)
 
     const data = await model.fetchPage({
-      pageSize: pageConf.pageSize || $config.PAGE_SIZE,
+      pageSize: pageConf.pageSize || config.PAGE_SIZE,
       page: pageConf.page || 1,
       withRelated: relation
     })
@@ -119,7 +121,7 @@ export class Model {
 
   /**
    * 根据ID修改数据
-   * 软删除，即status设为$config.STATUS.DELETED
+   * 软删除，即status设为config.STATUS.DELETED
    * @param {Number} id 主键
    * @returns {Promise<void>}
    */
@@ -143,7 +145,7 @@ export class Model {
 
     if (!res) {
       let message = '写入数据失败'
-      if (data.status === $config.STATUS.DELETED) {
+      if (data.status === config.STATUS.DELETED) {
         message = '删除数据失败'
       }
       throw new DatabaseException({
@@ -157,7 +159,7 @@ export class Model {
 
   /**
    * 根据ID删除数据
-   * 软删除，即status设为$config.STATUS.DELETED
+   * 软删除，即status设为config.STATUS.DELETED
    * @param {Number} id 主键
    * @returns {Promise<void>}
    */
@@ -169,14 +171,14 @@ export class Model {
 
   /**
    * 根据特定条件删除数据
-   * 软删除，即status设为$config.STATUS.DELETED
+   * 软删除，即status设为config.STATUS.DELETED
    * @param {Object} condition 条件对象
    * @returns {Promise<void>}
    */
   async delete ({ condition = {} }) {
     return this.edit({
       condition,
-      data: { status: $config.STATUS.DELETED }
+      data: { status: config.STATUS.DELETED }
     })
   }
 
