@@ -196,10 +196,11 @@ export class Model {
     const conf = {}
     const _this = this
     relationConf.forEach(item => {
+      this.relation.push(item.tableName)
       this._generateModel({ tableName: item.tableName })
       conf[item.tableName] = function () {
         return this[item.type ? item.type : 'hasOne'](
-          _this[`_${item.tableName}`],
+          _this[item.tableName],
           item.local,
           item.foreign
         )
@@ -214,7 +215,7 @@ export class Model {
    * @private
    */
   _generateModel (config) {
-    this[`_${config.tableName}`] = this.db.Model.extend(config)
+    this[config.tableName] = this.db.Model.extend(config)
   }
 
   /**
