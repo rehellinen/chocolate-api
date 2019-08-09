@@ -1,4 +1,4 @@
-import {firstUpperCase, r} from '../utils'
+import { firstUpperCase, r } from '../utils'
 import { middleware } from './decorator'
 
 export const validateMap = new Map()
@@ -15,7 +15,9 @@ export const validate = ({ name, scene }) => {
 export const rule = (funcName, errInfo) => {
   return (target, key) => {
     const rules = validateMap.get(target) || {}
-    if (!rules[key])  rules[key] = []
+    if (!rules[key]) {
+      rules[key] = []
+    }
     rules[key].push([funcName, errInfo])
     validateMap.set(target, rules)
   }

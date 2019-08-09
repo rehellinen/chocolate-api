@@ -5,7 +5,7 @@
  */
 import { r } from './utils'
 import Multer from 'koa-multer'
-import { getConfig } from './helper'
+import { getConfig } from './config'
 
 const config = getConfig()
 const uploadName = config.UPLOAD.UPLOAD_NAME

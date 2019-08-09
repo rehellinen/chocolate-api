@@ -4,7 +4,7 @@
  *  Create On 2019/3/4 11:50
  */
 import koaCors from 'koa2-cors'
-import { getConfig } from '../utils/helper'
+import { getConfig } from '../utils'
 
 const config = getConfig()
 
