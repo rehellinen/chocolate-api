@@ -14,7 +14,19 @@ export default {
   // CORS相关
   CORS: {
     // 是否允许API跨域访问
-    OPEN: false
+    OPEN: false,
+    // 允许的方法
+    METHODS: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'],
+    // Access-Control-Allow-Origin
+    ORIGIN: '*',
+    // Access-Control-Max-Age
+    MAX_AGE: 5,
+    // Access-Control-Allow-Credentials
+    CREDENTIALS: true,
+    // Access-Control-Expose-Headers
+    EXPOSE_HEADERS: ['WWW-Authenticate', 'Server-Authorization'],
+    // Access-Control-Allow-Methods
+    ALLOW_HEADERS: ['Content-Type', 'Authorization', 'Accept', 'token', 'Content-Length', 'X-Requested-With']
   },
   // 是否把配置放到全局作用域（全局变量名称为：$config）
   GLOBAL_CONF: true,

@@ -73,7 +73,7 @@ export class CmsMixin {
 配置文件存放目录：/config
 ```
 |-- config            配置文件目录
-|   |-- config.js     框架核心配置文件
+|   |-- base.conf.js     框架核心配置文件
 |   |-- custom.js     自定义配置
 |   |-- database.js   数据库配置
 ```
