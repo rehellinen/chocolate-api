@@ -8,7 +8,7 @@ import devConf from '../../config/dev.conf'
 import prodConf from '../../config/prod.conf'
 import { isProduction } from '../utils'
 
-export const config = {
+export default {
   ...baseConf,
   ...(isProduction ? prodConf : devConf)
 }
