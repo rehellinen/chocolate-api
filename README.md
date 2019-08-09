@@ -172,10 +172,10 @@ positiveInt       // 必须为正整数
 
 
 ### （五）模型
-模型存放目录：/model  
+模型存放目录：/app/model  
 
 #### 介绍
-1. 基于Bookshelf.js，更多高级用法请参考文档
+1. 基于Bookshelf.js，更多高级用法请参考Bookshelf文档
 2. this.model可获取当前模型实例
   
 #### 使用方式
@@ -190,12 +190,9 @@ export class IndexModel extends Model {
       // 定义关联模型
       relationConf: [
         {
-          // 关联表名称
-          tableName: 'user',
-          // 主键
-          local: 'id',
-          // 外键
-          foreign: 'user_id'
+          tableName: 'user', // 关联表名称
+          local: 'id', // 主键
+          foreign: 'user_id' // 外键
         }
       ]
     })
@@ -225,26 +222,27 @@ export class IndexModel extends Model {
   getAll ({condition = {}, relation = [], order = ['id']}) 
     
   // 分页方法
-  async pagination ({pageConf = {}, 
+  pagination ({
+    pageConf = {}, 
     condition = {}, 
     relation = [], 
     order = ['id']
   })
   
   // 保存数据
-  async save (data)
+  save (data)
   
   // 根据ID修改数据
-  async editById (id)
+  editById (id)
   
   // 根据特定条件修改一条数据
-  async edit ({condition = {}, data})
+  edit ({condition = {}, data})
   
   // 根据ID删除数据
-  async deleteById (id)
+  deleteById (id)
   
   // 根据特定条件删除数据
-  async delete ({ condition = {} })
+  delete ({ condition = {} })
 ```
 
 ### （六）工具
