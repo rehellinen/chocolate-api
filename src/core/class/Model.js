@@ -8,6 +8,7 @@ import { DatabaseException } from '../exception'
 import { getConfig } from '../utils'
 
 const config = getConfig()
+
 export class Model {
   // 获取唯一的db实例
   db = DataBase.getInstance()
@@ -226,11 +227,11 @@ export class Model {
    * @private
    */
   _processCondition (model, condition) {
-    for (const key in condition) {
-      if (Array.isArray(condition[key])) {
-        model = model.where(key, ...condition[key])
+    for (const [key, value] of condition.entries()) {
+      if (Array.isArray(value)) {
+        model = model.where(key, ...value)
       } else {
-        model = model.where(key, '=', condition[key])
+        model = model.where(key, '=', value)
       }
     }
   }
