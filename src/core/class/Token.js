@@ -17,7 +17,7 @@ export class Token {
    */
   constructor (scope, expireTime = config.TOKEN.TOKEN_EXPIRES_IN) {
     this.scope = scope
-    this.expireTime = expireTime
+    this.expireTime = expireTime * 1000
   }
 
   /**
