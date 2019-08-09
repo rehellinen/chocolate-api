@@ -6,27 +6,35 @@
 import Koa from 'koa'
 import R from 'ramda'
 import chalk from 'chalk'
-import { config } from '../config'
-import { r } from '../utils'
+import { r, getConfig } from '../utils'
 
-const middlewares = ['exception', 'router']
-// 是否使用CORS
-if (config.ALLOW_CORS) middlewares.splice(1, 0, 'cors')
-// 设置全局变量$config
-if (config.GLOBAL_CONF) global.$config = config
+const config = getConfig()
 
 export class Server {
+  // Koa2实例
+  app = new Koa()
+
+  // 中间件配置
+  middlewares = ['exception', 'router']
+
+  // 监听IP
+  host = process.env.HOST || config.HOST || '127.0.0.1'
+
+  // 监听端口
+  port = process.env.PORT || config.PORT || 3000
+
   constructor () {
-    this.app = new Koa()
-    this.host = process.env.HOST || config.HOST || '127.0.0.1'
-    this.port = process.env.PORT || config.PORT || 3000
+    if (config.CORS.OPEN) {
+      this.middlewares.splice(1, 0, 'cors')
+    }
   }
 
   start () {
     // 使用中间件
-    this.useMiddlewares()(middlewares)
+    this.useMiddlewares()(this.middlewares)
     // 设置监听
     this.app.listen(this.port, this.host)
+    console.log(chalk.blue(`Welcome to use rehellinen-api ^ ^`))
     console.log(chalk.blue(`Server listens on ${this.host}:${this.port}`))
   }
 
