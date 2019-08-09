@@ -12,7 +12,7 @@
 |   |-- controller    控制器
 |   |-- model         模型 
 |-- common            公共模块目录
-|   |-- exception     用户自定义异常 / 框架内置异常
+|   |-- exception     用户自定义异常
 |   |-- validate      验证器
 |-- config            配置文件目录
 |-- core              框架核心类库

@@ -1,4 +1,10 @@
-import { controller, get, mixin, auth, validate } from '../../core'
+import {
+  controller,
+  get,
+  mixin,
+  auth,
+  validate
+} from '../../core'
 
 @controller('index')
 class IndexRouter {
