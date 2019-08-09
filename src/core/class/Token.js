@@ -5,15 +5,17 @@
  */
 import md5 from 'md5'
 import cache from 'memory-cache'
-import { getRandChars } from './utils'
+import { getRandChars, getConfig } from '../utils'
 import { TokenException } from '../exception'
+
+const config = getConfig()
 
 export class Token {
   /**
    * @param scope 权限值
    * @param expireTime 过期时间
    */
-  constructor (scope, expireTime = $config.TOKEN_EXPIRES_IN) {
+  constructor (scope, expireTime = config.TOKEN.TOKEN_EXPIRES_IN) {
     this.scope = scope
     this.expireTime = expireTime
   }
@@ -23,7 +25,7 @@ export class Token {
    * @param ctx
    */
   static isSuper (ctx) {
-    Token.checkScope(ctx, $config.SCOPE.SUPER)
+    Token.checkScope(ctx, config.TOKEN.SCOPE.SUPER)
   }
 
   /**
@@ -71,7 +73,7 @@ export class Token {
   static _generateToken () {
     const str = getRandChars(32)
     const time = new Date().getTime()
-    const prefix = $config.TOKEN_PREFIX
+    const prefix = config.TOKEN.TOKEN_PREFIX
 
     return md5(`${str}-${time}-${prefix}`)
   }
