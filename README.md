@@ -9,21 +9,18 @@
 ~~~
 |-- app
 |   |-- router        路由
-|   |-- controller        控制器
-|   |-- model             模型 
+|   |-- controller    控制器
+|   |-- model         模型 
 |-- common            公共模块目录
 |   |-- exception     用户自定义异常 / 框架内置异常
 |   |-- validate      验证器
 |-- config            配置文件目录
 |-- core              框架核心类库
-|   |-- config        配置
+|   |-- class         类文件
 |   |-- decorator     装饰器
-|   |-- exception     异常处理
+|   |-- exception     异常
 |   |-- middleware    中间件
-|   |-- model         模型
-|   |-- token         Token令牌
 |   |-- utils         工具
-|   |-- validate      验证器
 ~~~
 
 ## 框架基本用法
@@ -72,15 +69,19 @@ export class CmsMixin {
 ### （二）配置
 配置文件存放目录：/config
 ```
-|-- config            配置文件目录
-|   |-- base.conf.js     框架核心配置文件
-|   |-- custom.js     自定义配置
-|   |-- database.js   数据库配置
+|-- config                配置文件目录
+|   |-- base.conf.js      基本配置
+|   |-- dev.conf.js       自定义配置
+|   |-- prod.conf.js      数据库配置
 ```
 > 注：配置项具体作用在文件中有详细注释
 
 #### 获取配置
-GLOBAL_CONF配置为true时，可通过全局变量$config访问配置。
+使用助手函数：getConfig
+```
+// 获取所有配置
+const config = getConfig()
+```
 
 
 ### （三）异常
@@ -249,16 +250,8 @@ export class IndexModel extends Model {
 工具存放目录：/libs/utils
 
 #### Token令牌
-`Token` 所在目录：/libs/utils/Token.js  
 内置方法：
 ```
-/**
- * 获取Token的主方法
- * @param scope 权限值
- * @param cachedData 需要缓存的数据
- * @param key 缓存的键
- */
-
 constructor (scope)
 
 // 获取Token的主方法
