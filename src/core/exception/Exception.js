@@ -1,16 +1,16 @@
 export class Exception extends Error {
   constructor (config = {}) {
     super()
-    if (config.hasOwnProperty('httpCode')) {
+    if (Reflect.has(config, 'httpCode')) {
       this.httpCode = config.httpCode
     }
-    if (config.hasOwnProperty('status')) {
+    if (Reflect.has(config, 'status')) {
       this.status = config.status
     }
-    if (config.hasOwnProperty('message')) {
+    if (Reflect.has(config, 'message')) {
       this.message = config.message
     }
-    if (config.hasOwnProperty('data')) {
+    if (Reflect.has(config, 'data')) {
       this.data = config.data
     }
   }
