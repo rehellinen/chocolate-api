@@ -13,4 +13,13 @@ const config = {
   ...(isProduction ? prodConf : devConf)
 }
 
-export const getConfig = () => config
+export const getConfig = (prefix = '') => {
+  let res = config
+  prefix.split('.').forEach(item => {
+    if (!item) {
+      return
+    }
+    res = res[item.toUpperCase()]
+  })
+  return res
+}
