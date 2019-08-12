@@ -31,8 +31,8 @@ export default {
     TOKEN_EXPIRES_IN: 7200, // token过期时间（单位为s）
     // token权限
     SCOPE: {
-      USER: 10,
-      SUPER: 30
+      USER: Symbol('user'),
+      SUPER: Symbol('super')
     }
   },
   // 数据库连接
@@ -44,11 +44,14 @@ export default {
     database: '', // 数据库名称
     charset: 'utf8' // 字符集
   },
-  PAGE_SIZE: 15, // 分页大小
-  // 数据库字段status的映射
-  STATUS: {
-    NORMAL: 1,
-    ABNORMAL: 0,
-    DELETED: -1
+  // 模型中用到的配置
+  MODEL: {
+    PAGE_SIZE: 15, // 分页大小
+    // 数据库字段status的映射
+    STATUS: {
+      NORMAL: 1,
+      ABNORMAL: 0,
+      DELETED: -1
+    }
   }
 }

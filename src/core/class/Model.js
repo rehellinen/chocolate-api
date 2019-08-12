@@ -7,7 +7,7 @@ import { DataBase } from './DataBase'
 import { DatabaseException } from '../exception'
 import { getConfig } from '../utils'
 
-const config = getConfig()
+const config = getConfig('model')
 
 export class Model {
   // 获取唯一的db实例
