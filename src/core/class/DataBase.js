@@ -18,7 +18,7 @@ export class DataBase {
   static _connect () {
     const knex = Knex({
       client: 'mysql',
-      connection: getConfig().DATABASE
+      connection: getConfig('database')
     })
 
     this.db = Bookshelf(knex)

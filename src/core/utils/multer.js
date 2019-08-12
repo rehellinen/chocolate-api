@@ -7,8 +7,8 @@ import { r } from './utils'
 import Multer from 'koa-multer'
 import { getConfig } from './config'
 
-const config = getConfig()
-const uploadName = config.UPLOAD.UPLOAD_NAME
+const config = getConfig('upload')
+const uploadName = config.UPLOAD_NAME
 const date = new Date()
 const month = date.getMonth().toString().length === 1
   ? '0' + (date.getMonth() + 1)
@@ -17,7 +17,7 @@ const today = `${date.getFullYear()}${month}${date.getDate()}`
 let fileName = ''
 
 const storage = Multer.diskStorage({
-  destination: r(`${config.UPLOAD.UPLOAD_DIR}/${today}`),
+  destination: r(`${config.UPLOAD_DIR}/${today}`),
   filename (ctx, file, cb) {
     const filenameArr = file.originalname.split('.')
     fileName = `${Date.now()}.${filenameArr[filenameArr.length - 1]}`
