@@ -1,10 +1,13 @@
 import {
   controller,
   get,
+  post,
   mixin,
   auth,
   validate,
-  getConfig
+  getConfig,
+  middleware,
+  Upload
 } from '../../core'
 
 const config = getConfig('token.scope')
@@ -18,4 +21,8 @@ class IndexRouter {
   @auth(config.SUPER)
   @get('')
   index = 'index.index'
+
+  @middleware(new Upload().getMiddleware())
+  @post('upload')
+  upload = 'index.upload'
 }

@@ -1,4 +1,4 @@
-import { types } from '../utils'
+import { types, getConfig } from '../utils'
 import { Exception } from '../exception'
 
 export const exception = (app) => {
@@ -8,7 +8,7 @@ export const exception = (app) => {
       ctx.type = types.json
       ctx.body = e.getError()
     } else {
-      if ($config.DEBUG) {
+      if (getConfig().DEBUG) {
         console.log(e)
         ctx.status = 500
         ctx.type = types.json
