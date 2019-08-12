@@ -90,7 +90,8 @@ const config = getConfig()
 ```
 {
   "status": 1,
-  "message": "成功访问"
+  "message": "错误描述",
+  "data": {}
 }
 ```
 
@@ -105,15 +106,14 @@ throw new SuccessMessage({
 ```
 
 #### 自定义异常
-`Exception` 所在文件：/libs/exception/BaseException.js
 ```
-export class ParamsException extends Exception{
+export class MyException extends Exception{
   constructor(config) {
     super(config)
     this.setDefault({
-      httpCode: 400,
-      status: 10000,
-      message: '参数错误'
+      httpCode: 401,
+      status: 99999,
+      message: '自定义异常'
     })
   }
 }
@@ -247,7 +247,6 @@ export class IndexModel extends Model {
 ```
 
 ### （六）工具
-工具存放目录：/libs/utils
 
 #### Token令牌
 内置方法：
@@ -273,24 +272,22 @@ static checkToken (ctx)
 ```
 
 #### multer(上传文件)
-所在目录：/libs/utils/multer.js  
-`multer.js` 输出变量 `fileName` 和路由中间件 `upload`   
-（1）如何使用  
-需配合路由使用：
+使用的是multer，更多功能请查阅相关文档  
+（1）使用  
+在路由中使用：
 ```
+import { controller, post, middleware, Upload } from '../../core'
+
 @controller('image')
 class ImageRouter {
   @post('')
-  // @middleware装饰器在/libs/decorator/decorator.js
-  // upload中间件在/libs/utils/multer.js
-  @middleware(upload)
-  async addImage (ctx, next) {
-  }
+  @middleware(new Upload().getMiddleware())
+  upload = 'index.upload'
 }
 ```
 （2）如何获取上传后的文件名
 ```
-import {fileName} from "./libs/utils/multer"
+ctx.file / ctx.files中获取
 ```
 
 
