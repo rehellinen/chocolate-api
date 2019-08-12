@@ -6,18 +6,29 @@
 import { getConfig } from '../utils'
 import { Token } from '../class'
 import { routerMap } from './router'
+import { TokenException } from '../exception'
 
-const config = getConfig()
+const config = getConfig('token')
 
 export const auth = (type) => {
-  let scope
-  if (type === 'user' || !type) {
-    scope = config.TOKEN.SCOPE.USER
-  } else if (type === 'super') {
-    scope = config.TOKEN.SCOPE.SUPER
+  let flag = false
+  for (const value of Object.values(config.SCOPE)) {
+    if (type === value) {
+      flag = true
+    }
+  }
+  // 输入为空
+  if (!type || !flag) {
+    type = config.SCOPE.USER
+  }
+  // 输入的值非法
+  if (!flag) {
+    throw new TokenException({
+      message: '@auth装饰器输入值非法！'
+    })
   }
   return middleware(async (ctx, next) => {
-    Token.checkScope(ctx, scope)
+    Token.checkScope(ctx, type)
     await next()
   })
 }

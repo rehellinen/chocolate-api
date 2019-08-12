@@ -3,8 +3,11 @@ import {
   get,
   mixin,
   auth,
-  validate
+  validate,
+  getConfig
 } from '../../core'
+
+const config = getConfig('token.scope')
 
 @controller('index')
 class IndexRouter {
@@ -12,7 +15,7 @@ class IndexRouter {
     name: 'index',
     scene: 'id'
   })
-  @auth('super')
+  @auth(config.SUPER)
   @get('')
   index = 'index.index'
 }
