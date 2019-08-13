@@ -1,9 +1,10 @@
-一个基于Koa2的API框架
+基于Koa2的API框架 - rehellinen-api
 =======================
 
 #### 新版框架重构中，预计八月底完成 ... 
 
-核心思想： 用更优雅的方式编写代码。
+#### 内置功能：
+路由、控制器、配置、异常、验证器、模型、Token、文件上传等等。
 
 ### 框架目录：
 ~~~
@@ -24,6 +25,7 @@
 ~~~
 
 ## 框架基本用法
+> 框架所有内置方法、类都通过 `/core/index.js` 获取
 ### （一）路由
 #### 存放目录
 /app/router
@@ -56,7 +58,10 @@ class Index {
 5. `@validate`在`@auth`之上时，先验证参数再验证权限。
 
 
-### （二）配置
+### （二）控制器
+控制器存放目录：/app/controller  
+
+### （三）配置
 配置文件存放目录：/config
 ```
 |-- config                配置文件目录
@@ -74,7 +79,7 @@ const config = getConfig()
 ```
 
 
-### （三）异常
+### （四）异常
 自定义异常存放目录：/common/exception    
 #### 返回的JSON格式
 ```
@@ -87,13 +92,18 @@ const config = getConfig()
 
 #### 抛出异常
 ```
-throw new SuccessMessage({
-  status: 10000,          // 自定义错误码
-  httpCode: 200,          // http状态码
-  message: '成功访问',    // 返回的描述信息
-  data: {success: true}   // 返回的数据
+throw new DataBaseException({
+  status: 10000,            // 自定义错误码
+  httpCode: 404,            // http状态码
+  message: '找不到数据',    // 返回的描述信息
+  data: {success: true}    // 返回的数据
 })
 ```
+
+#### 内置异常
+1. DataBaseException - 数据库错误
+2. ParamsException - 参数错误
+3. TokenException - 权限校验错误
 
 #### 自定义异常
 ```
@@ -112,16 +122,16 @@ export class MyException extends Exception{
 只有DEBUG设置为true，才展示详细错误信息。
 
 
-### （四）验证器
+### （五）验证器
 #### 验证器存放目录
 /common/validate  
 
 #### 作用
 对前端传来的数据进行校验。  
-GET、POST、PUT、DELETE方法携带的数据均能进行校验。
+对GET、POST、PUT、DELETE方法携带的数据与路由参数均能进行校验。
 
 #### 定义验证器
-1. scene定义验证场景，具体使用方法查看下面的示例
+1. scene对象定义验证场景，可参考下面示例
 2. `@rule`传入两个参数：  
 (1)验证的方法名称。  
 (2)验证不通过时的错误信息。
@@ -135,13 +145,17 @@ export class Index extends Validate {
   @rule('require', 'id不能为空')
   @rule('positiveInt', 'id必须为正整数')
   id
+  
   @rule('require', 'name不能为空')
   name
 }
 ```
 
-#### 路由中使用
-`@validate`接受一个对象，对象包含name和scene两个属性。name为验证器的名称，scene为场景名称
+#### 使用验证器
+1. 在路由中使用验证器  
+2. `@validate`接受一个对象，对象包含name和scene两个属性  
+(1) name为验证器的名称  
+(2) scene为场景名称
 ```
 @controller('index')
 class Index {
@@ -162,7 +176,7 @@ positiveInt       // 必须为正整数
 ```
 
 
-### （五）模型
+### （六）模型
 模型存放目录：/app/model  
 
 #### 介绍
@@ -236,16 +250,15 @@ export class IndexModel extends Model {
   delete ({ condition = {} })
 ```
 
-### （六）工具
+###（七）Token
 
-#### Token令牌
-内置方法：
+#### 获取Token
 ```
-constructor (scope)
+new Token(scope).get(cachedData)
+```
 
-// 获取Token的主方法
-get (cachedData)
-
+#### 其他方法
+```
 // 验证权限是否合法
 static checkScope (ctx, scope)
 
@@ -257,21 +270,19 @@ static getSpecifiedValue (ctx, key)
 
 // 检查Token是否过期
 static checkToken (ctx)
-
-// 获取Token：new Token($config.SCOPE.USER).get(cachedData)
 ```
 
-#### multer(上传文件)
-使用的是multer，更多功能请查阅相关文档  
+###（八）上传文件
+底层使用的是koa-multer
 （1）使用  
 在路由中使用：
 ```
-import { controller, post, middleware, Upload } from '../../core'
+import { controller, post, middleware, upload } from '../../core'
 
 @controller('image')
 class ImageRouter {
   @post('')
-  @middleware(new Upload().getMiddleware())
+  @middleware(upload)
   upload = 'index.upload'
 }
 ```
@@ -279,7 +290,3 @@ class ImageRouter {
 ```
 ctx.file / ctx.files中获取
 ```
-
-
-### （七）控制器
-控制器存放目录：/controller  
