@@ -113,24 +113,26 @@ export const isProduction = process.env.NODE_ENV === 'production'
  * @param {string} path 路径
  */
 export const dirExists = async (path) => {
-  const pathStat = await promisify(stat)(path)
-
-  if (pathStat && pathStat.isDirectory()) {
-    // 该路径文件夹，返回true
-    return true
-  } else if (pathStat) {
-    // 该路径为文件，返回false
-    return false
+  try {
+    const pathStat = await promisify(stat)(path)
+    if (pathStat && pathStat.isDirectory()) {
+      // 该路径文件夹，返回true
+      return true
+    } else if (pathStat) {
+      // 该路径为文件，返回false
+      return false
+    }
+    // 拿到上级路径
+    const tempDir = parse(path).dir
+    // 递归判断，如果上级目录也不存在，则会代码会在此处继续循环执行，直到目录存在
+    const status = await dirExists(tempDir)
+    let mkdirStatus
+    if (status) {
+      mkdirStatus = await promisify(mkdir)(path)
+    }
+    return mkdirStatus
+  } catch (e) {
   }
-  // 拿到上级路径
-  const tempDir = parse(path).dir
-  // 递归判断，如果上级目录也不存在，则会代码会在此处继续循环执行，直到目录存在
-  const status = await dirExists(tempDir)
-  let mkdirStatus
-  if (status) {
-    mkdirStatus = await promisify(mkdir)(path)
-  }
-  return mkdirStatus
 }
 
 export const getTodayDate = () => {
