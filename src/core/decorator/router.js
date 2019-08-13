@@ -13,26 +13,6 @@ export const controller = (path = '') => {
   }
 }
 
-export const mixin = (...sources) => {
-  return (target) => {
-    for (const source of sources) {
-      for (const name of Object.getOwnPropertyNames(source.prototype)) {
-        // 跳过构造函数
-        if (name === 'constructor') {
-          continue
-        }
-        const action = source.prototype[name]
-        target[name] = Array.isArray(action) ? action : [action]
-        routerMap.set({
-          target: target.prototype,
-          method: action.method,
-          path: normalizePath(action.path)
-        }, target[name])
-      }
-    }
-  }
-}
-
 export const get = (path) => baseMethod({ method: 'get', path })
 
 export const post = (path) => baseMethod({ method: 'post', path })

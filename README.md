@@ -31,7 +31,6 @@
 #### 路由类可使用的装饰器
 1. `@controller` - 接收一个参数，为一级URL
 2. `@get`, `@post`, `@put`, `@del` - 接收一个参数，为二级URL
-3. `@mixin` - 为一个路由批量增加方法
 3. `@middleware` - 增加一个中间件到koa-router
 4. `@validate` - 详情可查看`验证器`部分
 5. `@auth` - 详情可查看`权限管理`部分
@@ -50,20 +49,11 @@ class Index {
 }
 ```
 几点说明：
-1. 默认为二级路由（第二级可以为空），格式类似'/index/test'
-2. 上面定义了以'GET'方法访问'/index'的路由，并且将跳转至'Index'的'index'方法。
-3. `@get`等等http装饰器必须在最下层。
-4. `@validate`在`@auth`之上时，先验证参数再验证权限。
-
-#### 定义路由Mixin（必须以'Mixin'结尾）
-```
-export class CmsMixin {
-  @post('/test')
-  add () {
-    throw new SuccessMessage()
-  }
-}
-```
+1. 底层以koa-router实现 
+2. 默认为二级路由（第二级可以为空），格式类似'/index/test'
+3. 上面定义了以'GET'方法访问'/index'的路由，并且将跳转至'Index'的'index'方法。
+4. `@get`等等http装饰器必须在最下层。
+5. `@validate`在`@auth`之上时，先验证参数再验证权限。
 
 
 ### （二）配置

@@ -2,7 +2,6 @@ import {
   controller,
   get,
   post,
-  mixin,
   auth,
   validate,
   getConfig,
