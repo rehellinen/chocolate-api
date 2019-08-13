@@ -7,7 +7,7 @@ import {
   validate,
   getConfig,
   middleware,
-  Upload
+  upload
 } from '../../core'
 
 const config = getConfig('token.scope')
@@ -22,7 +22,7 @@ class IndexRouter {
   @get('')
   index = 'index.index'
 
-  @middleware(new Upload().getMiddleware())
+  @middleware(upload())
   @post('upload')
   upload = 'index.upload'
 }

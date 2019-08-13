@@ -4,7 +4,9 @@
  *  Create On 2018/9/26 10:21
  */
 import X2JS from 'x2js'
-import { resolve } from 'path'
+import { mkdir, stat } from 'fs'
+import { promisify } from 'util'
+import { resolve, parse } from 'path'
 import getRawBody from 'raw-body'
 
 /**
@@ -100,4 +102,45 @@ export function isEmptyObj (obj) {
  */
 export const firstUpperCase = ([first, ...rest]) => first.toUpperCase() + rest.join('')
 
+/**
+ * 是否为生产环境
+ * @type {boolean}
+ */
 export const isProduction = process.env.NODE_ENV === 'production'
+
+/**
+ * 路径是否存在，不存在则创建
+ * @param {string} path 路径
+ */
+export const dirExists = async (path) => {
+  const pathStat = await promisify(stat)(path)
+
+  if (pathStat && pathStat.isDirectory()) {
+    // 该路径文件夹，返回true
+    return true
+  } else if (pathStat) {
+    // 该路径为文件，返回false
+    return false
+  }
+  // 拿到上级路径
+  const tempDir = parse(path).dir
+  // 递归判断，如果上级目录也不存在，则会代码会在此处继续循环执行，直到目录存在
+  const status = await dirExists(tempDir)
+  let mkdirStatus
+  if (status) {
+    mkdirStatus = await promisify(mkdir)(path)
+  }
+  return mkdirStatus
+}
+
+export const getTodayDate = () => {
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = date.getMonth() < 10
+    ? '0' + (date.getMonth() + 1)
+    : date.getMonth() + 1
+  const day = date.getDate()
+
+  return `${year}${month}${day}`
+}
+
