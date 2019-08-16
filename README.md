@@ -265,7 +265,7 @@ export class IndexModel extends Model {
   delete ({ condition = {} })
 ```
 
-###（七）Token
+### （七）Token
 
 #### 获取Token
 ```
@@ -282,14 +282,14 @@ static checkScope (ctx, scope)
 // 验证权限是管理员
 static isSuper (ctx)
 
-// 获取缓存的指定数据
+// 获取缓存的指定数据（key即为Token）
 static getSpecifiedValue (ctx, key)
 
 // 检查Token是否过期
 static checkToken (ctx)
 ```
 
-###（八）上传文件
+### （八）上传文件
 底层使用的是koa-multer
 （1）使用  
 在路由中使用：
