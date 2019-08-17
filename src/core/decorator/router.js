@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/25 23:19
  */
-import {firstUpperCase, r } from '../utils'
+import { firstUpperCase, r } from '../utils'
 // 记录路由信息
 export const routerMap = new Map()
 

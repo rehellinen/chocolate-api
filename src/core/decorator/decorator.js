@@ -5,7 +5,7 @@
  */
 import { getConfig } from '../utils'
 import { Token } from '../class'
-import {getMapKey, routerMap} from './router'
+import { getMapKey, routerMap } from './router'
 import { TokenException } from '../exception'
 
 const config = getConfig('token')
