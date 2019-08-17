@@ -8,7 +8,7 @@ import { ParamsException } from '../exception'
 export class ValidateMethods {
   require (data = {}, field = '', errInfo = '') {
     if (data[field] == null || data[field] === '') {
-      this.throw(errInfo)
+      this.throw(errInfo || `${field}不能为空`)
     }
   }
 
@@ -17,7 +17,7 @@ export class ValidateMethods {
 
   positiveInt (data = {}, field = '', errInfo = '') {
     if (!/(^[1-9]\d*$)/.test(data[field])) {
-      this.throw(errInfo)
+      this.throw(errInfo || `${field}必须为正整数`)
     }
   }
 
