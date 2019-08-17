@@ -59,7 +59,20 @@ class Index {
 
 
 ### （二）控制器
-控制器存放目录：/app/controller  
+控制器存放目录：/app/controller
+```
+export class IndexController extends Controller {
+  index () {
+    this.app    // 当前应用实例
+    this.ctx    // 请求上下文
+    
+    // 返回JSON数据
+    this.json({
+      message: '上传成功'
+    })
+  }
+}
+```
 
 ### （三）配置
 配置文件存放目录：/config
@@ -75,7 +88,9 @@ class Index {
 使用助手函数：getConfig
 ```
 // 获取所有配置
-const config = getConfig()
+const config = getConfig()        // 所有配置
+const token = getConfig('token')  // 所有配置的TOKEN项
+const scope = getConfig('token.scope') // 所有配置的TOKEN项下的SCOPE项
 ```
 
 
@@ -96,7 +111,7 @@ throw new DataBaseException({
   status: 10000,            // 自定义错误码
   httpCode: 404,            // http状态码
   message: '找不到数据',    // 返回的描述信息
-  data: {success: true}    // 返回的数据
+  data: {success: true     }// 返回的数据
 })
 ```
 
@@ -169,7 +184,7 @@ class Index {
 }
 ```
 
-#### 验证方法
+#### 内置验证方法
 ```
 require           // 不能为空
 positiveInt       // 必须为正整数
@@ -250,10 +265,12 @@ export class IndexModel extends Model {
   delete ({ condition = {} })
 ```
 
-###（七）Token
+### （七）Token
 
 #### 获取Token
 ```
+// scope为配置中定义的SCOPE中的其中一项
+// cachedData为该Token对应的需要缓存的信息
 new Token(scope).get(cachedData)
 ```
 
@@ -265,14 +282,14 @@ static checkScope (ctx, scope)
 // 验证权限是管理员
 static isSuper (ctx)
 
-// 获取缓存的指定数据
+// 获取缓存的指定数据（key即为Token）
 static getSpecifiedValue (ctx, key)
 
 // 检查Token是否过期
 static checkToken (ctx)
 ```
 
-###（八）上传文件
+### （八）上传文件
 底层使用的是koa-multer
 （1）使用  
 在路由中使用：
