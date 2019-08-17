@@ -5,7 +5,7 @@
  */
 import { getConfig } from '../utils'
 import { Token } from '../class'
-import { routerMap } from './router'
+import {getMapKey, routerMap} from './router'
 import { TokenException } from '../exception'
 
 const config = getConfig('token')
@@ -34,10 +34,11 @@ export const auth = (type) => {
 }
 
 export const middleware = (middleware) => {
-  return (target, key) => {
+  return (target, key, descriptor) => {
+    const mapKey = getMapKey(target, key, descriptor)
     routerMap
-      .get(key)
-      .action
+      .get(mapKey)
+      .actions
       .unshift(middleware)
   }
 }

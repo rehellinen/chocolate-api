@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/25 23:19
  */
-import { firstUpperCase, r } from '../utils'
+import {firstUpperCase, r } from '../utils'
 // 记录路由信息
 export const routerMap = new Map()
 
@@ -11,6 +11,13 @@ export const controller = (path = '') => {
   return (target) => {
     target.prototype.prefix = normalizePath(path)
   }
+}
+
+// 获取独一无二的key
+export const getMapKey = (target, key, descriptor) => {
+  return target.constructor.name +
+    key +
+    descriptor.initializer && descriptor.initializer.call(this)
 }
 
 export const get = (path) => baseMethod({ method: 'get', path })
@@ -32,19 +39,12 @@ const normalizePath = (path = '') => {
 
 const baseMethod = ({ path = '', method }) => {
   return (target, key, descriptor) => {
-    // 处理mixin
-    if (target.constructor.name.includes('Mixin')) {
-      target[key].path = path
-      target[key].method = method
-      return
-    }
-
     const routerStr = descriptor.initializer && descriptor.initializer.call(this)
-    const action = getController(routerStr)
-    routerMap.set(key, {
-      action,
+    const actions = getController(routerStr)
+    routerMap.set(getMapKey(target, key, descriptor), {
       method,
       target,
+      actions,
       path: normalizePath(path)
     })
   }
