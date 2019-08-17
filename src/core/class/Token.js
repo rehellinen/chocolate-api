@@ -11,30 +11,36 @@ import { TokenException } from '../exception'
 const config = getConfig('token')
 
 export class Token {
+  expireTime = config.TOKEN_EXPIRES_IN
+
+
   /**
+   * 获取Token的主方法
    * @param scope 权限值
-   * @param expireTime 过期时间
+   * @param expireTime 过期时间（单位为秒）
+   * @param cachedData 需要缓存的数据
    */
-  constructor (scope, expireTime = config.TOKEN_EXPIRES_IN) {
-    this.scope = scope
-    this.expireTime = expireTime * 1000
+  get ({ scope, expireTime, cachedData = {} }) {
+    if (expireTime) {
+      this.expireTime = expireTime * 1000
+    }
+    Object.assign({}, cachedData, { scope })
+    return this._saveToCache(cachedData)
   }
 
   /**
    * 验证权限是管理员
-   * @param ctx
    */
-  static isSuper (ctx) {
-    Token.checkScope(ctx, config.SCOPE.SUPER)
+  static isSuper () {
+    Token.checkScope(this.ctx, config.SCOPE.SUPER)
   }
 
   /**
    * 验证权限是否合法
-   * @param ctx koa2上下文
    * @param scope 权限值
    */
-  static checkScope (ctx, scope) {
-    const cachedScope = Token.getSpecifiedValue(ctx, 'scope')
+  static checkScope (scope) {
+    const cachedScope = Token.getSpecifiedValue(this.ctx, 'scope')
     if (scope !== cachedScope) {
       throw new TokenException()
     }
@@ -42,12 +48,11 @@ export class Token {
 
   /**
    * 获取缓存的指定数据
-   * @param ctx koa2上下文
    * @param key 缓存的键
    * @return {*}
    */
-  static getSpecifiedValue (ctx, key) {
-    const info = cache.get(ctx.header.token)
+  static getSpecifiedValue (key) {
+    const info = cache.get(this.ctx.header.token)
 
     if (!info || !JSON.parse(info)[key]) {
       throw new TokenException()
@@ -58,10 +63,9 @@ export class Token {
 
   /**
    * 检查Token是否过期
-   * @param ctx Koa2上下文
    */
-  static checkToken (ctx) {
-    const token = cache.get(ctx.header.token)
+  static checkToken () {
+    const token = cache.get(this.ctx.header.token)
     if (!token) {
       throw new TokenException()
     }
@@ -76,15 +80,6 @@ export class Token {
     const prefix = config.TOKEN_PREFIX
 
     return md5(`${str}-${time}-${prefix}`)
-  }
-
-  /**
-   * 获取Token的主方法
-   * @param cachedData 需要缓存的数据
-   */
-  get (cachedData = {}) {
-    Object.assign(cachedData, { scope: this.scope })
-    return this._saveToCache(cachedData)
   }
 
   /**

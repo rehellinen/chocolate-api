@@ -1,4 +1,4 @@
-import { Controller, Model } from '../class'
+import {Controller, Model, Token} from '../class'
 import { getConfig } from '../utils'
 
 
@@ -11,6 +11,9 @@ export const init = app => {
     Controller.prototype.config = getConfig()
     // 初始化模型
     Model.prototype.config = getConfig()
+    // 初始化Token类
+    Token.prototype.ctx = ctx
+    Token.ctx = ctx
     await next()
   })
 }
