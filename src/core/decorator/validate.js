@@ -3,7 +3,7 @@ import { middleware } from './decorator'
 
 export const validateMap = new Map()
 
-export const validate = ({ name, scene }) => {
+export const validate = (name, scene) => {
   name = firstUpperCase(name)
   const Validate = require(r(`./common/validate/${name}`))[`${name}Validate`]
   return middleware(async (ctx, next) => {

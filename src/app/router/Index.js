@@ -13,10 +13,7 @@ const config = getConfig('token.scope')
 
 @controller('index')
 class IndexRouter {
-  @validate({
-    name: 'index',
-    scene: 'id'
-  })
+  @validate('index', 'id')
   @auth(config.SUPER)
   @get('')
   index = 'index.index'
