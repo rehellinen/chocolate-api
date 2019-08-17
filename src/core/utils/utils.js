@@ -8,6 +8,7 @@ import { mkdir, stat } from 'fs'
 import { promisify } from 'util'
 import { resolve, parse } from 'path'
 import getRawBody from 'raw-body'
+import chalk from 'chalk'
 
 /**
  * 以src为根目录
@@ -146,3 +147,6 @@ export const getTodayDate = () => {
   return `${year}${month}${day}`
 }
 
+export const warn = (msg) => {
+  console.log(chalk.red(`warning: ${msg}`))
+}

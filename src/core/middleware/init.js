@@ -1,4 +1,4 @@
-import {Controller, Model, Token} from '../class'
+import { Controller, Model, Token } from '../class'
 import { getConfig } from '../utils'
 
 
