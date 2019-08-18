@@ -46,6 +46,7 @@ export default {
   },
   // 模型中用到的配置
   MODEL: {
+    CONVERT_FIELDS: true, // 是否自动转换驼峰命名法 / 下划线命名法
     PAGE_SIZE: 15, // 分页大小
     // 数据库字段status的映射
     STATUS: {

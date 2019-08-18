@@ -5,13 +5,16 @@
  */
 import { DataBase } from './DataBase'
 import { DatabaseException } from '../exception'
-import { getConfig } from '../utils'
+import { camelCase, getConfig, snakeCase } from '../utils'
 
 const config = getConfig('model')
 
 export class Model {
-  // 获取唯一的db实例
+  // 唯一的db实例
   db = DataBase.getInstance()
+
+  // 表对应的模型
+  model
 
   // 所有需要关联的表的名称
   relation = []
@@ -29,6 +32,24 @@ export class Model {
     const config = this._processRelation()
     // 初始化模型
     this._generateModel(Object.assign(config, { tableName }))
+    this.model = this[tableName]
+  }
+
+  /**
+   * 获取一条数据
+   * @param {Object} condition 要查询的数据的条件
+   * @param {Array} relation 关联的模型名称
+   * @return {Promise<void>}
+   */
+  async getOne ({ condition = {}, relation = [] }) {
+    const model = this.model.forge()
+    this._processCondition(model, condition)
+
+    const data = await model.fetch({ withRelated: relation })
+    if (!data) {
+      throw new DatabaseException()
+    }
+    return data.serialize()
   }
 
   /**
@@ -38,16 +59,13 @@ export class Model {
    * @param {Array} relation 关联的模型名称
    * @return {Promise<void>}
    */
-  async getOneById ({ id, condition = {}, relation = [] }) {
-    const model = this.model.forge().where('id', id)
-    this._processCondition(model, condition)
-
-    const data = await model.fetch({ withRelated: relation })
-    if (!data) {
-      throw new DatabaseException()
-    }
-    return data.serialize()
+  async getOneById ({ id, relation = [] }) {
+    return this.getOne({
+      condition: { id },
+      relation
+    })
   }
+
 
   /**
    * 获取所有数据
@@ -124,11 +142,13 @@ export class Model {
    * 根据ID修改数据
    * 软删除，即status设为config.STATUS.DELETED
    * @param {Number} id 主键
+   * @param {Object} data 数据对象
    * @returns {Promise<void>}
    */
-  async editById (id) {
+  async editById (id, data) {
     return this.edit({
-      condition: { id }
+      condition: { id },
+      data
     })
   }
 
@@ -197,7 +217,9 @@ export class Model {
     const _this = this
     relationConf.forEach(item => {
       this.relation.push(item.tableName)
-      this._generateModel({ tableName: item.tableName })
+      this._generateModel({
+        tableName: item.tableName
+      })
       conf[item.tableName] = function () {
         return this[item.type ? item.type : 'hasOne'](
           _this[item.tableName],
@@ -211,11 +233,33 @@ export class Model {
 
   /**
    * 根据配置生成模型
-    * @param {Object} config 模型配置
+   * @param {Object} modelConf 模型配置
    * @private
    */
-  _generateModel (config) {
-    this[config.tableName] = this.db.Model.extend(config)
+  _generateModel (modelConf) {
+    const baseConf = config.CONVERT_FIELDS ? {
+      parse (response) {
+        for (const [key, value] of Object.entries(response)) {
+          const newKey = camelCase(key)
+          if (newKey !== key) {
+            response[newKey] = value
+            Reflect.deleteProperty(response, key)
+          }
+        }
+        return response
+      },
+      format (attributes) {
+        for (const [key, value] of Object.entries(attributes)) {
+          const newKey = snakeCase(key)
+          if (newKey !== key) {
+            attributes[newKey] = value
+            Reflect.deleteProperty(attributes, key)
+          }
+        }
+        return attributes
+      }
+    } : {}
+    this[modelConf.tableName] = this.db.Model.extend(Object.assign(baseConf, modelConf))
   }
 
   /**
@@ -228,7 +272,7 @@ export class Model {
    * @private
    */
   _processCondition (model, condition) {
-    for (const [key, value] of condition.entries()) {
+    for (const [key, value] of Object.entries(condition)) {
       if (Array.isArray(value)) {
         model = model.where(key, ...value)
       } else {
