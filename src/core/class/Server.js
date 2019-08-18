@@ -7,7 +7,9 @@ import Koa from 'koa'
 import R from 'ramda'
 import chalk from 'chalk'
 import portfinder from 'portfinder'
-import { r, getConfig } from '../utils'
+import { r, getConfig, warn } from '../utils'
+import { Controller } from './Controller'
+import { Model } from './Model'
 
 const config = getConfig()
 
@@ -33,6 +35,8 @@ export class Server {
   async start () {
     // 添加中间件
     this.useMiddlewares()(this.middlewares)
+    // 初始化框架类库
+    this.initLibs()
     // 判断端口号是否占用
     await this.checkPort()
     // 启动服务器
@@ -41,11 +45,20 @@ export class Server {
     console.log(chalk.blue(`Server listens on ${this.host}:${this.port}`))
   }
 
+  initLibs () {
+    // 初始化Controller
+    Controller.prototype.app = this.app
+    Controller.prototype.config = getConfig()
+    // 初始化Model
+    Model.prototype.config = getConfig()
+  }
+
   async checkPort () {
-    portfinder.basePort = this.port
-    const newPort = await portfinder.getPortPromise()
+    const newPort = await portfinder.getPortPromise({
+      basePort: this.port
+    })
     if (newPort !== this.port) {
-      console.log(chalk.red(`error: ${this.port} port is occupied. open a new port: ${newPort}\n`))
+      warn(`[System] port ${this.port} is occupied. open a new port: ${newPort}\n`)
       this.port = newPort
     }
   }
