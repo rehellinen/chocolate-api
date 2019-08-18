@@ -41,10 +41,7 @@
 ```
 @controller('index')
 class Index {
-  @validate({
-    name: 'index',
-    scene: 'id'
-  })
+  @validate('index', 'id')
   @auth('super')
   @get('')
   index = 'index.index'
@@ -110,8 +107,8 @@ const scope = getConfig('token.scope') // 所有配置的TOKEN项下的SCOPE项
 throw new DataBaseException({
   status: 10000,            // 自定义错误码
   httpCode: 404,            // http状态码
-  message: '找不到数据',    // 返回的描述信息
-  data: {success: true     }// 返回的数据
+  message: '找不到数据',     // 返回的描述信息
+  data: { success: true }   // 返回的数据
 })
 ```
 
@@ -149,7 +146,7 @@ export class MyException extends Exception{
 1. scene对象定义验证场景，可参考下面示例
 2. `@rule`传入两个参数：  
 (1)验证的方法名称。  
-(2)验证不通过时的错误信息。
+(2)验证不通过时的错误信息（可缺省）。
 ```
 export class Index extends Validate {
   scene = {
@@ -168,16 +165,13 @@ export class Index extends Validate {
 
 #### 使用验证器
 1. 在路由中使用验证器  
-2. `@validate`接受一个对象，对象包含name和scene两个属性  
+2. `@validate`接受两个参数，分别为name和scene
 (1) name为验证器的名称  
 (2) scene为场景名称
 ```
 @controller('index')
 class Index {
-  @validate({
-    name: 'index',
-    scene: 'id'
-  })
+  @validate('index', 'id')
   @auth('super')
   @get('')
   index = 'index.index'
@@ -224,15 +218,15 @@ export class IndexModel extends Model {
 参数解释:
 1. id (Number) 数据的ID
 2. condition (Object) 查询条件，有以下两种格式：  
-    1. { status: 1, id: 6 }
-    2. { status: ['=', 1], id: ['=', 6] }
+  1. { status: 1, id: 6 }
+  2. { status: ['=', 1], id: ['=', 6] }
 3. order (Array) 排序条件
-    1. ['order', 'id']   
-    2. [ { field: 'order', rule: 'ASC' } ]
+  1. ['order', 'id']   
+  2. [ { field: 'order', rule: 'ASC' } ]
 4. relation (Array) 关联模型名称   
 5. pageConf (Object) 分页的配置
-    1. pageSize - 单页大小
-    2. page - 页码
+  1. pageSize - 单页大小
+  2. page - 页码
 6. data (Object|Array) 需要添加 / 更新的数据    
 ```
   // 根据id获取数据
