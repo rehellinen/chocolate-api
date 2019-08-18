@@ -1,5 +1,5 @@
 /**
- *  User.js
+ *  Token.js
  *  Create By rehellinen
  *  Create On 2018/9/28 20:37
  */
@@ -30,17 +30,19 @@ export class Token {
 
   /**
    * 验证权限是管理员
+   *  @param ctx
    */
-  static isSuper () {
-    Token.checkScope(this.ctx, config.SCOPE.SUPER)
+  static isSuper (ctx) {
+    Token.checkScope(ctx, config.SCOPE.SUPER)
   }
 
   /**
    * 验证权限是否合法
+   * @param ctx
    * @param scope 权限值
    */
-  static checkScope (scope) {
-    const cachedScope = Token.getSpecifiedValue(this.ctx, 'scope')
+  static checkScope (ctx, scope) {
+    const cachedScope = Token.getSpecifiedValue(ctx, 'scope')
     if (scope !== cachedScope) {
       throw new TokenException()
     }
@@ -48,11 +50,12 @@ export class Token {
 
   /**
    * 获取缓存的指定数据
+   * @param ctx
    * @param key 缓存的键
    * @return {*}
    */
-  static getSpecifiedValue (key) {
-    const info = cache.get(this.ctx.header.token)
+  static getSpecifiedValue (ctx, key) {
+    const info = cache.get(ctx.header.token)
 
     if (!info || !JSON.parse(info)[key]) {
       throw new TokenException()
@@ -63,9 +66,10 @@ export class Token {
 
   /**
    * 检查Token是否过期
+   * @param ctx
    */
-  static checkToken () {
-    const token = cache.get(this.ctx.header.token)
+  static checkToken (ctx) {
+    const token = cache.get(ctx.header.token)
     if (!token) {
       throw new TokenException()
     }
