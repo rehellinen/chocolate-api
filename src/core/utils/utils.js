@@ -148,5 +148,26 @@ export const getTodayDate = () => {
 }
 
 export const warn = (msg) => {
-  console.log(chalk.red(`warning: ${msg}`))
+  console.log(chalk.yellow(`warning: ${msg}`))
 }
+
+export const error = (msg) => {
+  console.log(chalk.red(`error: ${msg}`))
+}
+
+export const snakeCase = (string) => [...string]
+  .reduce((result, word, index) => (
+    result +
+    (index && word >= 'A' && word <= 'Z' ? '_' : '') +
+    word.toLowerCase()
+  ), '')
+
+export const camelCase = (string) => [...string]
+  .reduce((result, word, index, arr) => {
+    if (word === '_') {
+      arr[index + 1] = arr[index + 1].toUpperCase()
+      return result
+    } else {
+      return result + word
+    }
+  }, '')
