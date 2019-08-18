@@ -10,16 +10,16 @@ import { TokenException } from '../exception'
 
 const config = getConfig('token')
 
-export const auth = (type) => {
+export const auth = (scope) => {
   let flag = false
   for (const value of Object.values(config.SCOPE)) {
-    if (type === value) {
+    if (scope === value) {
       flag = true
     }
   }
   // 输入为空
-  if (!type || !flag) {
-    type = config.SCOPE.USER
+  if (!scope) {
+    scope = config.SCOPE.USER
   }
   // 输入的值非法
   if (!flag) {
@@ -28,7 +28,7 @@ export const auth = (type) => {
     })
   }
   return middleware(async (ctx, next) => {
-    Token.checkScope(ctx, type)
+    Token.checkScope(ctx, scope)
     await next()
   })
 }

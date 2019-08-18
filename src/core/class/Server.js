@@ -18,7 +18,7 @@ export class Server {
   app = new Koa()
 
   // 中间件配置
-  middlewares = ['exception', 'init', 'router']
+  middlewares = ['exception', 'router']
 
   // 监听IP
   host = process.env.HOST || config.HOST || '127.0.0.1'
