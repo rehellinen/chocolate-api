@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/25 23:19
  */
-import { firstUpperCase, r } from '../utils'
+import { error, firstUpperCase, r } from '../utils'
 // 记录路由信息
 export const routerMap = new Map()
 
@@ -53,12 +53,19 @@ const baseMethod = ({ path = '', method }) => {
 // 获取控制器
 const getController = (str = '') => {
   const [controller, action] = str.split('.')
-  const Controller = require(
-    r(`./app/controller/${firstUpperCase(controller)}.js`)
-  )[`${firstUpperCase(controller)}Controller`]
+  const controllerName = firstUpperCase(controller)
+
+  const file = require(r(`./app/controller/${controllerName}.js`))
+  const Controller = file[controllerName]
+  const instance = new Controller()
+  if (!instance[action]) {
+    error(`[Controller] ${controllerName} doesn't have the ${action} method`)
+  }
   return [
     async (ctx, next) => {
-      await new Controller()[action](ctx, next)
+      instance.setConfig(ctx, next)
+      await instance[action]()
+      await next()
     }
   ]
 }
