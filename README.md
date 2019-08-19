@@ -222,15 +222,15 @@ export class IndexModel extends Model {
 参数解释:
 1. id (Number) 数据的ID
 2. condition (Object) 查询条件，有以下两种格式：  
-  1. { status: 1, id: 6 }
-  2. { status: ['=', 1], id: ['=', 6] }
-3. order (Array) 排序条件(默认值为['id'])
-  1. ['order', 'id']   
-  2. [ { field: 'order', rule: 'ASC' } ]
+ (1) { status: 1, id: 6 }  
+ (2) { status: ['=', 1], id: ['=', 6] }
+3. order (Array) 排序条件(默认值为['id'])  
+ (1) ['order', 'id']  
+ (2) [ { field: 'order', rule: 'ASC' } ]
 4. relation (Array) 关联模型名称   
-5. pageConf (Object) 分页的配置
-  1. pageSize - 单页大小
-  2. page - 页码
+5. pageConf (Object) 分页的配置  
+ (1) pageSize - 单页大小  
+ (2) page - 页码
 6. data (Object|Array) 需要添加 / 更新的数据    
 ```
   // 获取一条数据
