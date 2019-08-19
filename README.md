@@ -214,13 +214,17 @@ export class IndexModel extends Model {
 }
 ```
 
+#### 自动转换命名法
+对于变量的命名法，数据库中常使用的是下划线命名法，而前端经常使用的是驼峰命名法。
+因此框架内置自动转换命名法的功能，只需要在`base.conf.js`中将MODEL.CONVERT_FIELDS设置为`true`即可。
+
 #### Model实例方法：
 参数解释:
 1. id (Number) 数据的ID
 2. condition (Object) 查询条件，有以下两种格式：  
   1. { status: 1, id: 6 }
   2. { status: ['=', 1], id: ['=', 6] }
-3. order (Array) 排序条件
+3. order (Array) 排序条件(默认值为['id'])
   1. ['order', 'id']   
   2. [ { field: 'order', rule: 'ASC' } ]
 4. relation (Array) 关联模型名称   
@@ -229,30 +233,28 @@ export class IndexModel extends Model {
   2. page - 页码
 6. data (Object|Array) 需要添加 / 更新的数据    
 ```
+  // 获取一条数据
+  async getOne ({ condition = {}, relation = [], order = ['id'] })
+
   // 根据id获取数据
-  getOneById ({id, condition = {}, relation = []})
+  getOneById ({id, relation = []})
   
   // 获取所有数据
   getAll ({condition = {}, relation = [], order = ['id']}) 
     
   // 分页方法
-  pagination ({
-    pageConf = {}, 
-    condition = {}, 
-    relation = [], 
-    order = ['id']
-  })
+  async pagination ({ pageConf = {}, condition = {}, relation = [], order = ['id'] })
   
   // 保存数据
   save (data)
   
   // 根据ID修改数据
-  editById (id)
+  editById (id, data)
   
   // 根据特定条件修改一条数据
   edit ({condition = {}, data})
   
-  // 根据ID删除数据
+  // 根据ID删除数据(软删除，即status设为config.MODEL.STATUS.DELETED)
   deleteById (id)
   
   // 根据特定条件删除数据
@@ -264,8 +266,9 @@ export class IndexModel extends Model {
 #### 获取Token
 ```
 // scope为配置中定义的SCOPE中的其中一项
+// expireTime为过期时间，单位为s
 // cachedData为该Token对应的需要缓存的信息
-new Token(scope).get(cachedData)
+new Token().get({ scope, expireTime, cachedData = {} })
 ```
 
 #### 其他方法
@@ -285,7 +288,7 @@ static checkToken (ctx)
 
 ### （八）上传文件
 底层使用的是koa-multer
-（1）使用  
+#### 使用  
 在路由中使用：
 ```
 import { controller, post, middleware, upload } from '../../core'
@@ -297,7 +300,7 @@ class ImageRouter {
   upload = 'index.upload'
 }
 ```
-（2）如何获取上传后的文件名
+#### 如何获取相关的文件信息
 ```
-ctx.file / ctx.files中获取
+ctx.req.file
 ```
