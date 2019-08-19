@@ -41,9 +41,10 @@ export class Model {
    * @param {Array} relation 关联的模型名称
    * @return {Promise<void>}
    */
-  async getOne ({ condition = {}, relation = [] }) {
+  async getOne ({ condition = {}, relation = [], order = ['id'] }) {
     const model = this.model.forge()
     this._processCondition(model, condition)
+    this._processOrder(model, order)
 
     const data = await model.fetch({ withRelated: relation })
     if (!data) {
