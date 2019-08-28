@@ -7,6 +7,7 @@ export const exception = (app) => {
       ctx.status = e.httpCode
       ctx.type = types.json
       ctx.body = e.getError()
+      ctx.body.request = `${ctx.method} ${ctx.url}`
     } else {
       if (getConfig().DEBUG) {
         console.log(e)
@@ -14,7 +15,8 @@ export const exception = (app) => {
         ctx.type = types.json
         ctx.body = {
           status: 500,
-          message: e.toString()
+          message: e.toString(),
+          request: `${ctx.method} ${ctx.url}`
         }
       } else {
         ctx.body = '服务器内部错误'
