@@ -41,10 +41,8 @@
 ```
 @controller('index')
 class Index {
-  @validate('index', 'id')
-  @auth('super')
-  @get('')
-  index = 'index.index'
+  @validate('index', 'id') @auth('super')
+  @get('') index = 'index.index'
 }
 ```
 几点说明：
@@ -140,7 +138,8 @@ export class MyException extends Exception{
 
 #### 作用
 对前端传来的数据进行校验。  
-对GET、POST、PUT、DELETE方法携带的数据与路由参数均能进行校验。
+同时对`ctx.headers`, `ctx.params`, `ctx.query`, `ctx.body`进行校验。  
+若上述四个对象中出现同样的key，则会发生覆盖的情况，因此不要定义相同的键。
 
 #### 定义验证器
 1. scene对象定义验证场景，可参考下面示例
@@ -171,9 +170,7 @@ export class Index extends Validate {
 ```
 @controller('index')
 class Index {
-  @validate('index', 'id')
-  @auth('super')
-  @get('')
+  @validate('index', 'id') @auth('super') @get('')
   index = 'index.index'
 }
 ```
