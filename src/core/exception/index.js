@@ -1,5 +1,2 @@
 export * from './Exception'
-export * from './DatabaseException'
-export * from './ParamsException'
-export * from './SuccessMessage'
-export * from './TokenException'
+export * from './CoreException'
