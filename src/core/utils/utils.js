@@ -74,15 +74,19 @@ export function parseBody (params) {
  * @returns {Promise<*>}
  */
 export const getParams = async (ctx) => {
-  if (ctx.method === 'GET') {
-    return ctx.query
-  } else {
-    const rawReqBody = await getRawBody(ctx.req, {
-      length: ctx.req.headers['content-length'],
-      limit: '1mb'
+  const params = Object.assign({},
+    ctx.headers,
+    ctx.params,
+    ctx.query
+  )
+  if (ctx.method !== 'GET') {
+    const body = await getRawBody(ctx.req, {
+      length: ctx.headers['content-length'],
+      limit: '5mb'
     })
-    return parseBody(rawReqBody)
+    Object.assign(params, parseBody(body))
   }
+  return params
 }
 
 /**
