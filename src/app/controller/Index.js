@@ -1,8 +1,10 @@
 import { Controller } from '../../core'
 
-export class IndexController extends Controller {
+export class Index extends Controller {
   index () {
-    this.json('成功访问')
+    this.json({
+      message: '成功访问'
+    })
   }
 
   upload () {
