@@ -54,11 +54,10 @@ export class Server {
   }
 
   async checkPort () {
-    const newPort = await portfinder.getPortPromise({
-      basePort: this.port
-    })
+    portfinder.basePort = 3000
+    const newPort = await portfinder.getPortPromise()
     if (newPort !== this.port) {
-      warn(`[System] port ${this.port} is occupied. open a new port: ${newPort}\n`)
+      warn(`[System] port ${this.port} is occupied and opened a new port: ${newPort}`)
       this.port = newPort
     }
   }
