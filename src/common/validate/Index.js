@@ -5,7 +5,7 @@
  */
 import { rule, Validate } from '../../core'
 
-export class IndexValidate extends Validate {
+export class Index extends Validate {
   scene = {
     id: ['id']
   }

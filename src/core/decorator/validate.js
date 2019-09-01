@@ -7,7 +7,7 @@ export const validate = (name, scene) => {
   name = firstUpperCase(name)
   const Validate = require(
     r(`${getConfig('dir.validate')}/${name}`)
-  )[`${name}Validate`]
+  )[name]
   return middleware(async (ctx, next) => {
     await new Validate().check(ctx, scene)
     await next()
