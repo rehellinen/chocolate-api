@@ -7,7 +7,7 @@ import Koa from 'koa'
 import R from 'ramda'
 import chalk from 'chalk'
 import portfinder from 'portfinder'
-import { r, getConfig, warn } from '../utils'
+import { r, getConfig, warn, coreConfig } from '../utils'
 import { Controller } from './Controller'
 import { Model } from './Model'
 
@@ -64,7 +64,7 @@ export class Server {
 
   useMiddlewares () {
     return R.map(R.pipe(
-      item => `${r('./core/middleware')}/${item}`,
+      item => `${r(coreConfig.DIR.MIDDLEWARE)}/${item}`,
       require,
       R.map(item => item(this.app))
     ))

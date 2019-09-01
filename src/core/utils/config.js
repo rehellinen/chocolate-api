@@ -13,6 +13,12 @@ const config = {
   ...(isProduction ? prodConf : devConf)
 }
 
+export const coreConfig = {
+  DIR: {
+    MIDDLEWARE: 'core/middleware'
+  }
+}
+
 export const getConfig = (prefix = '') => {
   let res = config
   prefix.split('.').forEach(item => {

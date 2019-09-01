@@ -39,6 +39,7 @@ export class Model {
    * 获取一条数据
    * @param {Object} condition 要查询的数据的条件
    * @param {Array} relation 关联的模型名称
+   * @param {Array} order Array 设置排序的字段
    * @return {Promise<void>}
    */
   async getOne ({ condition = {}, relation = [], order = ['id'] }) {
