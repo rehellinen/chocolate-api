@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/25 23:19
  */
-import { error, firstUpperCase, r } from '../utils'
+import { error, firstUpperCase, r, getConfig } from '../utils'
 // 记录路由信息
 export const routerMap = new Map()
 
@@ -55,11 +55,11 @@ const getController = (str = '') => {
   const [controller, action] = str.split('.')
   const controllerName = firstUpperCase(controller)
 
-  const file = require(r(`./app/controller/${controllerName}.js`))
+  const file = require(r(`${getConfig('dir.controller')}/${controllerName}.js`))
   const Controller = file[controllerName]
   const instance = new Controller()
   if (!instance[action]) {
-    error(`[Controller] ${controllerName} doesn't have the ${action} method`)
+    error(`[Controller] '${controllerName}' doesn't have the '${action}' method`)
   }
   return [
     async (ctx, next) => {

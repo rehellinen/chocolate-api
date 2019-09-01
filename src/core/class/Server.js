@@ -33,8 +33,9 @@ export class Server {
   }
 
   async start () {
-    // 添加中间件
-    this.useMiddlewares()(this.middlewares)
+    // 添加中间件，先添加框架的中间件，再添加用户自定义的
+    this.useMiddlewares(coreConfig.DIR.MIDDLEWARE)(this.middlewares)
+    this.useMiddlewares(config.DIR.MIDDLEWARE)(config.MIDDLEWARE)
     // 初始化框架类库
     this.initLibs()
     // 判断端口号是否占用
@@ -62,9 +63,9 @@ export class Server {
     }
   }
 
-  useMiddlewares () {
+  useMiddlewares (path) {
     return R.map(R.pipe(
-      item => `${r(coreConfig.DIR.MIDDLEWARE)}/${item}`,
+      item => `${r(path)}/${item}`,
       require,
       R.map(item => item(this.app))
     ))

@@ -5,9 +5,18 @@
  */
 // 框架核心功能配置
 export default {
-  PORT: 3000, // 端口号
-  HOST: '127.0.0.1', // 地址
-  DEBUG: true, // 是否开启调试模式
+  PORT: 3000,
+  HOST: '127.0.0.1',
+  DEBUG: true,
+  MIDDLEWARE: ['example'],
+  DIR: {
+    CONTROLLER: 'app/controller',
+    MODEL: 'app/model',
+    ROUTER: 'app/router',
+    EXCEPTION: 'common/exception',
+    MIDDLEWARE: 'common/middleware',
+    VALIDATE: 'common/validate'
+  },
   // CORS相关
   CORS: {
     OPEN: false, // 是否开启

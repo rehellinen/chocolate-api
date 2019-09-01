@@ -1,11 +1,13 @@
-import { firstUpperCase, r } from '../utils'
+import { firstUpperCase, r, getConfig } from '../utils'
 import { middleware } from './decorator'
 
 export const validateMap = new Map()
 
 export const validate = (name, scene) => {
   name = firstUpperCase(name)
-  const Validate = require(r(`./common/validate/${name}`))[`${name}Validate`]
+  const Validate = require(
+    r(`${getConfig('dir.validate')}/${name}`)
+  )[`${name}Validate`]
   return middleware(async (ctx, next) => {
     await new Validate().check(ctx, scene)
     await next()
