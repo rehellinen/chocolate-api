@@ -3,7 +3,8 @@
  *  Create By rehellinen
  *  Create On 2018/10/25 23:19
  */
-import { error, firstUpperCase, r, getConfig } from '../utils'
+import { firstUpperCase, r, getConfig } from '../utils'
+import { LibsNotFound } from '../exception'
 // 记录路由信息
 export const routerMap = new Map()
 
@@ -54,15 +55,30 @@ const baseMethod = ({ path = '', method }) => {
 const getController = (str = '') => {
   const [controller, action] = str.split('.')
   const controllerName = firstUpperCase(controller)
-
-  const file = require(r(`${getConfig('dir.controller')}/${controllerName}.js`))
+  const controllerPath = r(getConfig('dir.controller'), `${controllerName}.js`)
+  let file
+  try {
+    file = require(controllerPath)
+  } catch (e) {
+    throw new LibsNotFound({
+      message: `[Controller] can't find the file\nFile Path: ${controllerPath}`
+    })
+  }
   const Controller = file[controllerName]
+  if (!Controller || !Controller.prototype.constructor) {
+    throw new LibsNotFound({
+      message: `[Controller] '${controllerName}' is not a constructor\nFile Path: ${controllerPath}`
+    })
+  }
   const instance = new Controller()
   if (!instance[action]) {
-    error(`[Controller] '${controllerName}' doesn't have the '${action}' method`)
+    throw new LibsNotFound({
+      message: `[Controller] '${controllerName}' doesn't have the '${action}' method\nFile Path: ${controllerPath}`
+    })
   }
   return [
     async (ctx, next) => {
+      const instance = new Controller()
       instance.setConfig(ctx, next)
       await instance[action]()
       await next()
