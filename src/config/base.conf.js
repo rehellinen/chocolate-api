@@ -10,6 +10,7 @@ export default {
   DEBUG: true,
   MIDDLEWARE: ['example'],
   DIR: {
+    // 以src为根目录，app/controller表示/src/app/controller
     CONTROLLER: 'app/controller',
     MODEL: 'app/model',
     ROUTER: 'app/router',
@@ -17,10 +18,9 @@ export default {
     MIDDLEWARE: 'common/middleware',
     VALIDATE: 'common/validate'
   },
-  // CORS相关
   CORS: {
-    OPEN: false, // 是否开启
-    METHODS: ['GET', 'POST', 'DELETE', 'PUT'], // 允许的方法
+    OPEN: false,
+    METHODS: ['GET', 'POST', 'DELETE', 'PUT'],
     ORIGIN: '*', // Access-Control-Allow-Origin
     MAX_AGE: 5, // Access-Control-Max-Age
     CREDENTIALS: true, // Access-Control-Allow-Credentials
@@ -36,22 +36,13 @@ export default {
   },
   // TOKEN相关
   TOKEN: {
-    TOKEN_PREFIX: 'github.com/rehellinen', // 生成token的前缀
-    TOKEN_EXPIRES_IN: 7200, // token过期时间（单位为s）
+    SECRET: 'github.com/rehellinen', // 生成token的前缀
+    EXPIRES_IN: 7200, // token过期时间（单位为s）
     // token权限
     SCOPE: {
       USER: Symbol('user'),
       SUPER: Symbol('super')
     }
-  },
-  // 数据库连接
-  DATABASE: {
-    host: '127.0.0.1', // 主机
-    port: 3306, // 端口号
-    user: 'root', // 登录账户
-    password: '123456', // 密码
-    database: '', // 数据库名称
-    charset: 'utf8' // 字符集
   },
   // 模型中用到的配置
   MODEL: {
