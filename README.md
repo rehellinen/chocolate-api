@@ -42,8 +42,8 @@
 ```
 @prefix('index')
 class Index {
-  @validate('index', 'id') @auth('super')
-  @get('') index = 'index.index'
+  @validate('index', 'id') @auth('super') @get('') 
+  index = 'index.index'
 }
 ```
 几点说明：
@@ -331,9 +331,8 @@ static checkToken (ctx)
 import { prefix, post, middleware, upload } from '../../core'
 
 @prefix('image')
-class ImageRouter {
-  @post('')
-  @middleware(upload)
+class Image {
+  @post('') @middleware(upload)
   upload = 'index.upload'
 }
 ```
