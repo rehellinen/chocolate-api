@@ -4,7 +4,7 @@
 #### 新版框架重构中，预计八月底完成 ... 
 
 #### 内置功能：
-路由、控制器、配置、异常、验证器、模型、Token、文件上传等等。
+路由、控制器、配置、异常、验证器、中间件、模型、Token、文件上传等等。
 
 ### 框架目录：
 ~~~
@@ -15,6 +15,7 @@
 |-- common            公共模块目录
 |   |-- exception     用户自定义异常
 |   |-- validate      验证器
+|   |-- middleware    中间件
 |-- config            配置文件目录
 |-- core              框架核心类库
 |   |-- class         类文件
@@ -71,13 +72,27 @@ export class IndexController extends Controller {
 
 ### （三）配置
 配置文件存放目录：/config
+
+#### 文件结构
 ```
 |-- config                配置文件目录
 |   |-- base.conf.js      基本配置
-|   |-- dev.conf.js       自定义配置
-|   |-- prod.conf.js      数据库配置
+|   |-- dev.conf.js       开发环境配置
+|   |-- prod.conf.js      生成环境配置
 ```
-> 注：配置项具体作用在文件中有详细注释
+> 注意：dev / prod中的配置项会覆盖base中的配置项
+
+#### 配置项解释
+1. PORT - 启动的服务器端口。
+2. HOST - 启动的服务器IP。
+3. DEBUG - 调试模式。开启时，API会返回具体错误信息，建议生产环境关闭。
+4. MIDDLEWARE - 中间件配置，详情见（六）中间件。
+5. DIR - 配置控制器等等文件放置的目录（以src为根目录）
+6. CORS - CORS协议详细配置
+7. UPLOAD - 文件上传配置
+8. TOKEN - TOKEN令牌配置
+9. MODEL - MODEL配置
+10. DATABASE - 数据库连接配置
 
 #### 获取配置
 使用助手函数：getConfig
@@ -182,7 +197,32 @@ positiveInt       // 必须为正整数
 ```
 
 
-### （六）模型
+### （六）中间件
+中间件存放目录：/common/middleware
+
+#### 定义中间件
+注意：
+1. 中间件文件命名要与导出的函数命名相同。
+2. 函数接受一个参数，为app（Koa2实例）
+如：`example.js`
+```
+export const example = app => {
+  app.use(async (ctx, next) => {
+    console.log('example-before')
+    await next()
+    console.log('example-after')
+  })
+}
+```
+ 
+ #### 使用中间件
+ 需要到`base.conf.js`中的`MIDDLEWARE`数组中添加相应的文件名。  
+ ```
+// 使用上面定义的`example.js`
+MIDDLEWARE: ['example']
+```
+
+### （七）模型
 模型存放目录：/app/model  
 
 #### 介绍
@@ -258,7 +298,7 @@ export class IndexModel extends Model {
   delete ({ condition = {} })
 ```
 
-### （七）Token
+### （八）Token
 
 #### 获取Token
 ```
@@ -283,7 +323,7 @@ static getSpecifiedValue (ctx, key)
 static checkToken (ctx)
 ```
 
-### （八）上传文件
+### （九）上传文件
 底层使用的是koa-multer
 #### 使用  
 在路由中使用：
