@@ -31,7 +31,7 @@ export default {
   },
   // 上传文件相关
   UPLOAD: {
-    UPLOAD_DIR: 'upload', // 上传文件的根目录，upload表示/src/upload/
+    UPLOAD_DIR: '../upload', // 上传文件的根目录，upload表示/src/upload/
     UPLOAD_NAME: 'file' // 表单中表示上传文件的key
   },
   // TOKEN相关
