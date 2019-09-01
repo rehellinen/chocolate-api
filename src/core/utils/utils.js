@@ -12,10 +12,10 @@ import chalk from 'chalk'
 
 /**
  * 以src为根目录
- * @param path
+ * @param paths
  * @returns {string}
  */
-export const r = path => resolve(__dirname, '../../', path)
+export const r = (...paths) => resolve(__dirname, '../../', ...paths)
 
 /**
  * 解析XML
@@ -105,7 +105,10 @@ export function isEmptyObj (obj) {
  * @param str 字符串
  * @returns {string}
  */
-export const firstUpperCase = ([first, ...rest]) => first.toUpperCase() + rest.join('')
+export const firstUpperCase = (str) => {
+  const [first, ...rest] = str
+  return first.toUpperCase() + rest.join('')
+}
 
 /**
  * 是否为生产环境
@@ -152,11 +155,11 @@ export const getTodayDate = () => {
 }
 
 export const warn = (msg) => {
-  console.log(chalk.yellow(`warning: ${msg}`))
+  console.log(chalk.yellow(`Warning: ${msg}`))
 }
 
 export const error = (msg) => {
-  console.log(chalk.red(`error: ${msg}`))
+  console.log(chalk.red(`Error: ${msg}`))
 }
 
 export const snakeCase = (string) => [...string]
