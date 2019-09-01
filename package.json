@@ -7,7 +7,7 @@
     "dev": "nodemon --watch ./src --exec node index.js",
     "prod": "cross-env NODE_ENV=production pm2 start index.js -n re-api",
     "build": "babel src --out-dir dist",
-    "eslint": "eslint ./src --fix"
+    "lint": "eslint ./src --fix"
   },
   "author": "rehellinen",
   "license": "ISC",

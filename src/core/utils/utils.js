@@ -178,3 +178,5 @@ export const camelCase = (string) => [...string]
       return result + word
     }
   }, '')
+
+export const isClass = (func) => func && typeof func === 'function' && func.prototype.constructor

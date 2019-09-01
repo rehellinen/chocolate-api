@@ -3,7 +3,7 @@
  *  Create By rehellinen
  *  Create On 2018/10/25 23:19
  */
-import { firstUpperCase, r, getConfig } from '../utils'
+import { firstUpperCase, r, getConfig, isClass } from '../utils'
 import { LibsNotFound } from '../exception'
 // 记录路由信息
 export const routerMap = new Map()
@@ -54,26 +54,26 @@ const baseMethod = ({ path = '', method }) => {
 // 获取控制器
 const getController = (str = '') => {
   const [controller, action] = str.split('.')
-  const controllerName = firstUpperCase(controller)
-  const controllerPath = r(getConfig('dir.controller'), `${controllerName}.js`)
+  const name = firstUpperCase(controller)
+  const path = r(getConfig('dir.controller'), `${name}.js`)
   let file
   try {
-    file = require(controllerPath)
+    file = require(path)
   } catch (e) {
     throw new LibsNotFound({
-      message: `[Controller] can't find the file\nFile Path: ${controllerPath}`
+      message: `[Controller] can't find the file\nFile Path: ${path}`
     })
   }
-  const Controller = file[controllerName]
-  if (!Controller || !Controller.prototype.constructor) {
+  const Controller = file[name]
+  if (!isClass(Controller)) {
     throw new LibsNotFound({
-      message: `[Controller] '${controllerName}' is not a constructor\nFile Path: ${controllerPath}`
+      message: `[Controller] '${name}' is not a constructor\nFile Path: ${path}`
     })
   }
   const instance = new Controller()
   if (!instance[action]) {
     throw new LibsNotFound({
-      message: `[Controller] '${controllerName}' doesn't have the '${action}' method\nFile Path: ${controllerPath}`
+      message: `[Controller] '${name}' doesn't have the '${action}' method\nFile Path: ${path}`
     })
   }
   return [
