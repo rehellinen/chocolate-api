@@ -11,7 +11,7 @@ import { TokenException } from '../exception'
 const config = getConfig('token')
 
 export class Token {
-  expireTime = config.TOKEN_EXPIRES_IN
+  expireTime = config.EXPIRES_IN * 1000
 
 
   /**
@@ -81,7 +81,7 @@ export class Token {
   static _generateToken () {
     const str = getRandChars(32)
     const time = new Date().getTime()
-    const prefix = config.TOKEN_PREFIX
+    const prefix = config.SECRET
 
     return md5(`${str}-${time}-${prefix}`)
   }
