@@ -8,7 +8,7 @@ import { LibsNotFound } from '../exception'
 // 记录路由信息
 export const routerMap = new Map()
 
-export const controller = (path = '') => {
+export const prefix = (path = '') => {
   return (target) => {
     target.prototype.prefix = normalizePath(path)
   }

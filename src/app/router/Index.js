@@ -1,5 +1,5 @@
 import {
-  controller,
+  prefix,
   get,
   post,
   auth,
@@ -11,7 +11,7 @@ import {
 
 const config = getConfig('token.scope')
 
-@controller('index')
+@prefix('index')
 class IndexRouter {
   @validate('index', 'id') @auth(config.SUPER) @get('')
   index = 'index.index'

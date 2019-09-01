@@ -32,7 +32,7 @@
 /app/router
 
 #### 路由类可使用的装饰器
-1. `@controller` - 接收一个参数，为一级URL
+1. `@prefix` - 接收一个参数，为一级URL
 2. `@get`, `@post`, `@put`, `@del` - 接收一个参数，为二级URL
 3. `@middleware` - 增加一个中间件到koa-router
 4. `@validate` - 详情可查看`验证器`部分
@@ -40,7 +40,7 @@
 
 #### 定义路由
 ```
-@controller('index')
+@prefix('index')
 class Index {
   @validate('index', 'id') @auth('super')
   @get('') index = 'index.index'
@@ -183,7 +183,7 @@ export class Index extends Validate {
 (1) name为验证器的名称  
 (2) scene为场景名称
 ```
-@controller('index')
+@prefix('index')
 class Index {
   @validate('index', 'id') @auth('super') @get('')
   index = 'index.index'
@@ -328,9 +328,9 @@ static checkToken (ctx)
 #### 使用  
 在路由中使用：
 ```
-import { controller, post, middleware, upload } from '../../core'
+import { prefix, post, middleware, upload } from '../../core'
 
-@controller('image')
+@prefix('image')
 class ImageRouter {
   @post('')
   @middleware(upload)
