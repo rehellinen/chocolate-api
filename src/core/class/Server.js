@@ -7,9 +7,10 @@ import Koa from 'koa'
 import R from 'ramda'
 import chalk from 'chalk'
 import portfinder from 'portfinder'
-import { r, getConfig, warn, coreConfig } from '../utils'
+import { r, getConfig, warn, coreConfig, error } from '../utils'
 import { Controller } from './Controller'
 import { Model } from './Model'
+import { LibsNotFound } from '../exception'
 
 const config = getConfig()
 
@@ -33,17 +34,21 @@ export class Server {
   }
 
   async start () {
-    // 添加中间件，先添加框架的中间件，再添加用户自定义的
-    this.useMiddlewares(coreConfig.DIR.MIDDLEWARE)(this.middlewares)
-    this.useMiddlewares(config.DIR.MIDDLEWARE)(config.MIDDLEWARE)
-    // 初始化框架类库
-    this.initLibs()
-    // 判断端口号是否占用
-    await this.checkPort()
-    // 启动服务器
-    this.app.listen(this.port, this.host)
-    console.log(chalk.blue(`Welcome to use rehellinen-api ^ ^`))
-    console.log(chalk.blue(`Server listens on ${this.host}:${this.port}`))
+    try {
+      // 添加中间件，先添加框架的中间件，再添加用户自定义的
+      this.useMiddlewares(coreConfig.DIR.MIDDLEWARE)(this.middlewares)
+      this.useMiddlewares(config.DIR.MIDDLEWARE)(config.MIDDLEWARE || [])
+      // 初始化框架类库
+      this.initLibs()
+      // 判断端口号是否占用
+      await this.checkPort()
+      // 启动服务器
+      this.app.listen(this.port, this.host)
+      console.log(chalk.blue(`Welcome to use rehellinen-api ^ ^`))
+      console.log(chalk.blue(`Server listens on ${this.host}:${this.port}`))
+    } catch (e) {
+      Server.processError(e)
+    }
   }
 
   initLibs () {
@@ -69,5 +74,13 @@ export class Server {
       require,
       R.map(item => item(this.app))
     ))
+  }
+
+  static processError (e) {
+    if (e instanceof LibsNotFound) {
+      error(e.message)
+    } else {
+      console.log(e)
+    }
   }
 }
