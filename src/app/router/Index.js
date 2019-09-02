@@ -13,7 +13,7 @@ const config = getConfig('token.scope')
 
 @prefix('index')
 class IndexRouter {
-  @validate('index', 'id') @auth(config.SUPER) @get('')
+  @validate('index', 'edit') @auth(config.SUPER) @post('')
   index = 'index.index'
 
   @middleware(upload()) @post('upload')
