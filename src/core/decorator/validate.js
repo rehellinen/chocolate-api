@@ -28,7 +28,8 @@ export const validate = (name, scene) => {
 }
 
 export const rule = (funcName, errInfo, ...params) => {
-  return (target, key) => {
+  return (target, key, descriptor) => {
+    const defaultVal = descriptor.initializer && descriptor.initializer.call(this)
     const rules = validateMap.get(target) || {}
     if (!rules[key]) {
       rules[key] = []
@@ -36,6 +37,7 @@ export const rule = (funcName, errInfo, ...params) => {
     }
     // 由验证函数名称、错误提示信息、验证函数额外参数构成的数组
     rules[key].push([funcName, errInfo, params])
+    rules[key]._default = defaultVal
   }
 }
 
