@@ -12,7 +12,7 @@ export const validate = (name, scene) => {
     file = require(path)
   } catch (e) {
     throw new LibsNotFound({
-      message: `[Validate] can't find the file\nFile Path: ${path}`
+      message: `[Validator] can't find the file\nFile Path: ${path}`
     })
   }
   const Validator = file[name]
@@ -32,9 +32,20 @@ export const rule = (funcName, errInfo, ...params) => {
     const rules = validateMap.get(target) || {}
     if (!rules[key]) {
       rules[key] = []
+      validateMap.set(target, rules)
     }
     // 由验证函数名称、错误提示信息、验证函数额外参数构成的数组
     rules[key].push([funcName, errInfo, params])
-    validateMap.set(target, rules)
+  }
+}
+
+export const type = (type) => {
+  return (target, key) => {
+    const rules = validateMap.get(target) || {}
+    if (!rules[key]) {
+      rules[key] = []
+      validateMap.set(target, rules)
+    }
+    rules[key]._type = type
   }
 }
