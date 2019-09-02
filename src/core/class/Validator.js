@@ -4,13 +4,13 @@
  *  Create On 2018/10/12 21:21
  */
 import validator from 'validator'
-import { ValidateMethods } from './ValidateMethods'
+import { ValidatorMethods } from './ValidatorMethods'
 import { getParams, isFunction, toString } from '../utils'
 import { validateMap } from '../decorator'
 import { LibsNotFound, ParamsException } from '../exception'
 
 
-export class Validator extends ValidateMethods {
+export class Validator extends ValidatorMethods {
   // 原始的参数列表
   rawParams = {}
 
