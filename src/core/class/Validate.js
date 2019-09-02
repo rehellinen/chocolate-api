@@ -97,7 +97,7 @@ export class Validator extends ValidateMethods {
 
     if (isFunction(this[funcName])) {
       // 优先使用自定义验证函数
-      if (!await this[funcName](this.rawParams, this._key, ...funcParams)) {
+      if (!await this[funcName](this._key, this.rawParams[this._key], this.rawParams, ...funcParams)) {
         this._addError(errInfo)
       }
     } else if (isFunction(validator[funcName])) {
