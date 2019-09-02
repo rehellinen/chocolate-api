@@ -27,13 +27,14 @@ export const validate = (name, scene) => {
   })
 }
 
-export const rule = (funcName, errInfo) => {
+export const rule = (funcName, errInfo, ...params) => {
   return (target, key) => {
     const rules = validateMap.get(target) || {}
     if (!rules[key]) {
       rules[key] = []
     }
-    rules[key].push([funcName, errInfo])
+    // 由验证函数名称、错误提示信息、验证函数额外参数构成的数组
+    rules[key].push([funcName, errInfo, params])
     validateMap.set(target, rules)
   }
 }
