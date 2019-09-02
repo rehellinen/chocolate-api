@@ -179,4 +179,13 @@ export const camelCase = (string) => [...string]
     }
   }, '')
 
+export const getToStringTag = (obj) => Object.prototype.toString.call(obj)
+
 export const isClass = (func) => func && typeof func === 'function' && func.prototype.constructor
+
+export const isObject = (obj) => obj !== null && (typeof obj === 'object')
+
+export const isFunction = (func) => getToStringTag(func) === '[object Function]' ||
+    getToStringTag(func) === '[object AsyncFunction]' ||
+    getToStringTag(func) === '[object GeneratorFunction]' ||
+    getToStringTag(func) === '[object Proxy]'
