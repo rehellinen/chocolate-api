@@ -24,10 +24,10 @@ export class Validator extends ValidateMethods {
   errors = {}
 
   // 当前正在处理的数据的Key
-  key = ''
+  _key = ''
 
   // 当前正在处理的数据的Value
-  value = ''
+  _value = ''
 
   /**
    * 验证主方法
@@ -42,14 +42,22 @@ export class Validator extends ValidateMethods {
     const allRules = validateMap.get(this.constructor.prototype)
 
     for (const key of keys) {
-      this.key = key
-      this.value = toString(this.rawParams[key])
+      this._key = key
+      this._value = toString(this.rawParams[key])
 
       const rules = allRules[key]
-      for (const rule of rules) {
-        await this._validate(rule)
+      if (rules._default && !this._value.trim()) {
+        // 处理默认值的情况。undefined、null、''、'   '均视为未传值
+        if (isFunction(rules._default)) {
+          rules._default = await rules._default()
+        }
+        this.checkedParams[key] = rules._default
+      } else {
+        for (const rule of rules) {
+          await this._validate(rule)
+        }
+        this._convertDataType(rules)
       }
-      this._convertDataType(rules)
     }
     // 处理异常
     if (Object.keys(this.errors).length > 0) {
@@ -67,7 +75,7 @@ export class Validator extends ValidateMethods {
    * @param rules
    */
   _convertDataType (rules) {
-    let value = this.value
+    let value = this._value
     const funcNames = rules.map((item) => item[0])
 
     if (funcNames.includes('isInt') || rules._type === 'int') {
@@ -77,7 +85,7 @@ export class Validator extends ValidateMethods {
     } else if (funcNames.includes('isBoolean') || rules._type === 'boolean') {
       value = validator.toBoolean(value)
     }
-    this.checkedParams[this.key] = value
+    this.checkedParams[this._key] = value
   }
 
   /**
@@ -89,12 +97,12 @@ export class Validator extends ValidateMethods {
 
     if (isFunction(this[funcName])) {
       // 优先使用自定义验证函数
-      if (!await this[funcName](this.rawParams, this.key, ...funcParams)) {
+      if (!await this[funcName](this.rawParams, this._key, ...funcParams)) {
         this._addError(errInfo)
       }
     } else if (isFunction(validator[funcName])) {
       // 第三方库 - validator.js
-      if (!validator[funcName](this.value, ...funcParams)) {
+      if (!validator[funcName](this._value, ...funcParams)) {
         this._addError(errInfo)
       }
     } else {
@@ -109,7 +117,7 @@ export class Validator extends ValidateMethods {
    * @param errInfo 错误信息
    */
   _addError (errInfo) {
-    const key = this.key
+    const key = this._key
     if (!Array.isArray(this.errors[key])) {
       this.errors[key] = []
     }
