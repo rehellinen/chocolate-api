@@ -1,10 +1,15 @@
 基于Koa2的API框架 - rehellinen-api
 =======================
 
-#### 新版框架重构中，预计八月底完成 ... 
-
 #### 内置功能：
-路由、控制器、配置、异常、验证器、中间件、模型、Token、文件上传等等。
+1. 装饰器实现的路由
+2. 功能强大的验证器
+3. 全局异常处理
+4. 基于Token的权限系统
+5. 文件上传
+6. 配置
+7. 中间件
+8. 控制器、模型
 
 ### 框架目录：
 ~~~
@@ -34,7 +39,7 @@
 #### 路由类可使用的装饰器
 1. `@prefix` - 接收一个参数，为一级URL
 2. `@get`, `@post`, `@put`, `@del` - 接收一个参数，为二级URL
-3. `@middleware` - 增加一个中间件到koa-router
+3. `@middleware` - 接受一个参数，为中间件，功能为增加一个中间件到koa-router
 4. `@validate` - 详情可查看`验证器`部分
 5. `@auth` - 详情可查看`权限管理`部分
 
@@ -42,33 +47,162 @@
 ```
 @prefix('index')
 class Index {
-  @validate('index', 'id') @auth('super') @get('') 
+  @validate('index', 'id') @auth('super') @get('index') 
   index = 'index.index'
 }
 ```
 几点说明：
 1. 底层以koa-router实现 
-2. 默认为二级路由（第二级可以为空），格式类似'/index/test'
+2. 提供一级 / 二级路由（均可为空）的形式帮助组织路由
 3. 上面定义了以'GET'方法访问'/index'的路由，并且将跳转至'Index'的'index'方法。
-4. `@get`等等http装饰器必须在最下层。
+4. `@get`等等http动词装饰器必须在最下层。
 5. `@validate`在`@auth`之上时，先验证参数再验证权限。
 
 
-### （二）控制器
-控制器存放目录：/app/controller
+### （二）验证器
+#### 存放目录
+/common/validate  
+
+#### 简单介绍
+对前端传来的数据进行校验。  
+同时对`ctx.headers`, `ctx.params`, `ctx.query`, `ctx.body`进行校验。  
+若上述四个对象中出现同样的key，则会发生覆盖的情况，为避免冲突，以上四个对象中不要定义相同的key。
+
+#### 在路由中使用
+1. 在路由中使用`@validate`定义需要使用的验证器及其场景  
+2. `@validate`接受两个参数：  
+(1) name为验证器的名称  
+(2) scene为场景名称
 ```
-export class IndexController extends Controller {
-  index () {
-    this.app    // 当前应用实例
-    this.ctx    // 请求上下文
-    
-    // 返回JSON数据
-    this.json({
-      message: '上传成功'
-    })
+// 这是路由类
+@prefix('index')
+class Index {
+  @validate('index', 'id') @auth('super') @get('')
+  index = 'index.index'
+}
+```
+
+#### 验证器类可使用的装饰器
+1. `@rule` - 传入若干个参数：  
+(1)第一个参数：验证的方法名称  
+(2)第二个参数：验证不通过时的错误信息  
+(3)其他参数：传递给验证方法的参数（可为空）
+2. `@type` - 传入一个参数，功能为设定强制类型转换，可以为`int`、`float`、`boolean`
+
+
+#### 关于scene
+为增加复用性，验证器采用了场景验证的方式
+```
+export class Index extends Validator {
+  scene = {
+    add: ['account', 'name']
+    edit: ['id', 'account', 'name']
+  }
+  
+  @rule('require', 'ID不能为空')
+  id
+  
+  @rule('require', '账户不能为空')
+  account  
+  
+  @rule('require', '名称不能为空')
+  name
+}
+```
+上例表示add场景验证account和name，edit场景验证id、account和name。
+
+#### 自定义验证方法
+继承`Validator`后直接在类中编写即可：
+```
+export class Index extends Validator {
+  scene = {
+    edit: ['id', 'account', 'name']
+  }
+
+  @rule('isLegalAccount', '账户格式不合法')
+  account
+
+  isLegalAccount (key, value, params) {
+    return value.toString().length === 10 && value.startsWith('2019')
   }
 }
 ```
+验证器方法接受三个参数：  
+(1)验证参数的key  
+(2)验证参数的value  
+(3)所有参数组成的对象
+
+#### 默认值
+1. 给一个属性赋的值即为默认值
+2. 若给一个属性赋了值，则表示该参数为可选参数
+3. 可以赋值为一个函数（包括async函数）
+```
+// 模拟异步请求
+const http = () => new Promise(resolve => {
+  setTimeout(() => {
+    resolve({ res: 'test' })
+  }, 500)
+})
+
+export class Index extends Validator {
+  scene = {
+    edit: ['id', 'account', 'name']
+  }
+
+  @rule('require', '账户不能为空')
+  @type('int')
+  account = async () => {
+    const { res } = await http()
+    return res
+  }
+  
+  @rule('require', '名称不能为空', /test$/)
+  name = 'foo_test'
+}
+```
+
+#### 内置验证方法
+集成了Validator.js，可以参考相关文档。  
+框架内置方法：
+```
+require       // 不能为空
+```
+
+#### 定义一个复杂的验证器
+下面为一个较复杂的验证器定义：
+```
+// 模拟异步请求
+const http = () => new Promise(resolve => {
+  setTimeout(() => {
+    resolve({ res: 'test' })
+  }, 500)
+})
+
+export class Index extends Validator {
+  scene = {
+    edit: ['id', 'account', 'name']
+  }
+
+  @rule('isInt', 'id必须为正整数', { min: 1 })
+  @rule('require', 'id不能为空')
+  id
+
+  @rule('matches', '名称格式不合法', /test$/)
+  name = 'foo_test'
+
+  @rule('isLegalAccount', '账户格式不合法')
+  @type('int')
+  account = async () => {
+    const { res } = await http()
+    return res
+  }
+
+  isLegalAccount (key, value, params) {
+    return value.toString().length === 10 && value.startsWith('2019')
+  }
+}
+```
+
 
 ### （三）配置
 配置文件存放目录：/config
@@ -125,12 +259,8 @@ throw new DataBaseException({
 })
 ```
 
-#### 内置异常
-1. DataBaseException - 数据库错误
-2. ParamsException - 参数错误
-3. TokenException - 权限校验错误
-
 #### 自定义异常
+注意：必须要继承`Exception`才能被框架正确处理
 ```
 export class MyException extends Exception{
   constructor(config) {
@@ -143,57 +273,23 @@ export class MyException extends Exception{
   }
 }
 ```
-> 当发生HTTP状态码为500的错误时：  
-只有DEBUG设置为true，才展示详细错误信息。
+> 当发生HTTP状态码为500的错误时，只有当DEBUG设置为true，才展示详细错误信息。
 
 
-### （五）验证器
-#### 验证器存放目录
-/common/validate  
-
-#### 作用
-对前端传来的数据进行校验。  
-同时对`ctx.headers`, `ctx.params`, `ctx.query`, `ctx.body`进行校验。  
-若上述四个对象中出现同样的key，则会发生覆盖的情况，因此不要定义相同的键。
-
-#### 定义验证器
-1. scene对象定义验证场景，可参考下面示例
-2. `@rule`传入两个参数：  
-(1)验证的方法名称。  
-(2)验证不通过时的错误信息（可缺省）。
+### （五）控制器
+控制器存放目录：/app/controller
 ```
-export class Index extends Validate {
-  scene = {
-    add: ['name'],
-    edit: ['id', 'name']
+export class IndexController extends Controller {
+  index () {
+    this.app    // 当前应用实例
+    this.ctx    // 请求上下文
+    
+    // 返回JSON数据
+    this.json({
+      message: '上传成功'
+    })
   }
-
-  @rule('require', 'id不能为空')
-  @rule('positiveInt', 'id必须为正整数')
-  id
-  
-  @rule('require', 'name不能为空')
-  name
 }
-```
-
-#### 使用验证器
-1. 在路由中使用验证器  
-2. `@validate`接受两个参数，分别为name和scene
-(1) name为验证器的名称  
-(2) scene为场景名称
-```
-@prefix('index')
-class Index {
-  @validate('index', 'id') @auth('super') @get('')
-  index = 'index.index'
-}
-```
-
-#### 内置验证方法
-```
-require           // 不能为空
-positiveInt       // 必须为正整数
 ```
 
 
