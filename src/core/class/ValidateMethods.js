@@ -5,14 +5,10 @@
  */
 
 export class ValidateMethods {
-  require (data = {}, field = '') {
-    return data[field] != null && data[field] !== ''
-  }
-
-  empty (data = {}, field = '') {
-  }
-
-  positiveInt (data = {}, field = '') {
-    return /(^[1-9]\d*$)/.test(data[field])
+  require (key, value, params) {
+    if (typeof value === 'string') {
+      value = value.trim()
+    }
+    return value != null && value !== ''
   }
 }
