@@ -65,14 +65,14 @@ class Index {
 
 #### 简单介绍
 对前端传来的数据进行校验。  
-同时对`ctx.headers`, `ctx.params`, `ctx.query`, `ctx.body`进行校验。  
-若上述四个对象中出现同样的key，则会发生覆盖的情况，为避免冲突，以上四个对象中不要定义相同的key。
+同时对`ctx.headers`, `ctx.params`, `ctx.query`, `ctx.body`中的参数进行校验。  
+若上述四个对象中出现同样的key，则会发生覆盖的情况，为避免冲突，以上四个对象中不要传入相同key的参数。
 
 #### 在路由中使用
 1. 在路由中使用`@validate`定义需要使用的验证器及其场景  
 2. `@validate`接受两个参数：  
-(1) name为验证器的名称  
-(2) scene为场景名称
+(1) 验证器的文件名称（若需要使用`Index.js`，则填入`Index`或者`index`）  
+(2) 场景名称
 ```
 // 这是路由类
 @prefix('index')
@@ -83,15 +83,19 @@ class Index {
 ```
 
 #### 验证器类可使用的装饰器
-1. `@rule` - 传入若干个参数：  
-(1)第一个参数：验证的方法名称  
-(2)第二个参数：验证不通过时的错误信息  
-(3)其他参数：传递给验证方法的参数（可为空）
-2. `@type` - 传入一个参数，功能为设定强制类型转换，可以为`int`、`float`、`boolean`
+1. `@rule` - 定义验证函数。  
+传入若干个参数：  
+(1)验证的方法名称（必填）  
+(2)验证不通过时的错误信息（必填）  
+(3)其他参数：传递给验证方法的参数
+2. `@type` - 定义强制类型转换。  
+传入一个参数，为`int`、`float`、`boolean`中其中一个
+3. `@extend` - 继承另一个验证类定义的字段、方法。  
+传入一个参数，为验证器类。
 
-
-#### 关于scene
-为增加复用性，验证器采用了场景验证的方式
+#### 定义一个简单的验证器
+1. 必须继承`Validator`
+2. 导出的类名称必须与文件名相同，并且首字母大写
 ```
 export class Index extends Validator {
   scene = {
@@ -109,15 +113,20 @@ export class Index extends Validator {
   name
 }
 ```
-上例表示add场景验证account和name，edit场景验证id、account和name。
+上面的代码定义了三个类属性（`id`、`account`、`name`），并且通过`@rule`指定了相应的验证规则， 
+以及两个验证场景（`add`、`edit`）。
+
+#### 关于scene
+使用类属性`scene`指定场景，`scene`为一个对象，key为场景名称，value为一个数组，表示该场景需要验证的所有参数。  
+上例中定义了两个验证场景：
+1. add场景验证account和name两个参数。
+2. edit场景验证id、account和name三个参数。
 
 #### 自定义验证方法
-继承`Validator`后直接在类中编写即可：
+直接在类中编写即可：
 ```
 export class Index extends Validator {
-  scene = {
-    edit: ['account']
-  }
+  scene = { edit: ['account'] }
 
   @rule('isLegalAccount', '账户格式不合法')
   account
@@ -135,25 +144,24 @@ export class Index extends Validator {
 #### 默认值与可选参数
 将一个参数设置为可选参数的方式：
 1. 加上装饰器`@rule('optional')`
-2. 设置默认值
-
-设置默认值的方式：  
-给属性赋的值即为默认值。
-> 注意：可以赋值为函数（包括async函数），并取函数返回值为默认值。
+2. 设置默认值（设置默认值的方式为给属性赋的值）
+> 注意：可以赋值为函数（包括async函数），系统将取函数返回值为默认值。
 
 ```
 // 模拟异步请求
 const http = () => new Promise(resolve => {
-  setTimeout(() => {
-    resolve({ res: 'test' })
-  }, 500)
+  setTimeout(() => resolve({ res: 'test' }), 500)
 })
 
 export class Index extends Validator {
-  scene = {
-    edit: ['id', 'account', 'name']
-  }
-
+  scene = { edit: ['id', 'account', 'name'] }
+  
+  // 当用户没有传入`id`参数时，不会取得默认值 
+  @rule('isInt', 'id必须为正整数', { min: 1 })
+  @rule('optional')
+  id
+  
+  // 当用户没有传入`account`参数时，取得函数返回值`test` 为默认值
   @rule('require', '账户不能为空')
   @type('int')
   account = async () => {
@@ -161,54 +169,49 @@ export class Index extends Validator {
     return res
   }
   
+  // 当用户没有传入`name`参数时，取得默认值`foo_test`
   @rule('require', '名称不能为空', /test$/)
   name = 'foo_test'
 }
+```  
+
+#### 强制类型转换
+自动转换： 
+1. 当验证规则为`isInt`时，将自动转为`int`
+2. 当验证规则为`isFloat`时，将自动转为`float`
+3. 当验证规则为`isBoolean`时，将自动转为`boolean`
+
+显式指定：
+1. `@type('int')` - 自动转为`int`
+2. `@type('float')` - 自动转为`float`
+3. `@type('boolean')` - 自动转为`boolean`
+
 ```
-当用户没有传入`account`参数时，取得默认值`test`。  
-当用户没有传入`name`参数时，取得默认值`foo_test`。  
-
-
-#### 内置验证方法
-集成了Validator.js，可以参考相关文档。  
-框架内置方法：
-```
-require       // 不能为空
-```
-
-#### 定义一个复杂的验证器
-下面为一个较复杂的验证器定义：
-```
-// 模拟异步请求
-const http = () => new Promise(resolve => {
-  setTimeout(() => {
-    resolve({ res: 'test' })
-  }, 500)
-})
-
-export class Index extends Validator {
-  scene = {
-    edit: ['id', 'account', 'name']
-  }
-
-  @rule('isInt', 'id必须为正整数', { min: 1 })
-  @rule('require', 'id不能为空')
-  id
-
-  @rule('matches', '名称格式不合法', /test$/)
-  name = 'foo_test'
-
+export class Buy extends Validator {
+  scene = { buy: ['price', 'account'] }
+  
+  // price参数将自动转为Float类型
+  @rule('isFloat', '价格不合法')
+  price
+  
+  // account将转为int类型 
   @rule('isLegalAccount', '账户格式不合法')
   @type('int')
-  account = async () => {
-    const { res } = await http()
-    return res
-  }
-
+  account
+   
   isLegalAccount (key, value, params) {
     return value.toString().length === 10 && value.startsWith('2019')
   }
 }
+```
+    
+
+#### 内置验证方法
+1. 集成了Validator.js的所有方法，更多验证函数请参考其文档。  
+2. 框架内置方法：
+```
+require       // 不能为空
+optional      // 指定该参数为可选参数
 ```
 
 
