@@ -113,11 +113,12 @@ export class Index extends Validator {
   name
 }
 ```
-上面的代码定义了三个类属性（`id`、`account`、`name`），并且通过`@rule`指定了相应的验证规则， 
-以及两个验证场景（`add`、`edit`）。
 
-#### 关于scene
-使用类属性`scene`指定场景，`scene`为一个对象，key为场景名称，value为一个数组，表示该场景需要验证的所有参数。  
+#### 关于验证场景
+使用类属性`scene`指定场景，`scene`为一个对象：
+1. key为场景名称
+2. value为一个数组，表示该场景需要验证的所有参数。  
+
 上例中定义了两个验证场景：
 1. add场景验证account和name两个参数。
 2. edit场景验证id、account和name三个参数。
@@ -205,6 +206,39 @@ export class Buy extends Validator {
 }
 ```
     
+
+#### 继承其他验证器
+通过`@extend`装饰器实现
+```
+export class Base extends Validator {
+  @rule('isInt', '必须为正整数', { min: 1 })
+  @rule('require', '不能为空')
+  id
+  
+  isLegalAccount (key, value, params) {
+    return value.toString().length === 10 && value.startsWith('2019')
+  }  
+}
+
+@extend(Base)
+class Index extends Validator {
+  scene = {
+    edit: ['id', 'account', 'name']
+  }
+
+  @rule('matches', '名称格式不合法', /test$/)
+  @rule('optional')
+  name
+
+  @rule('isLegalAccount', '账户格式不合法')
+  @type('int')
+  account = '2019052462'
+}
+
+export { Index }
+```
+上例中`Index`继承了`Base`的`id`校验规则以及`isLegalAccount`自定义验证方法
+
 
 #### 内置验证方法
 1. 集成了Validator.js的所有方法，更多验证函数请参考其文档。  
