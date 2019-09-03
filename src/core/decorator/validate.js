@@ -51,3 +51,15 @@ export const type = (type) => {
     rules[key]._type = type
   }
 }
+
+export const extend = (validator) => {
+  return (target) => {
+    const child = validateMap.get(target.prototype)
+    const parent = validateMap.get(validator.prototype)
+    for (const [key, value] of Object.entries(parent)) {
+      if (!child[key]) {
+        child[key] = value
+      }
+    }
+  }
+}
