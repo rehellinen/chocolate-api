@@ -35,9 +35,14 @@ export const rule = (funcName, errInfo, ...params) => {
       rules[key] = []
       validateMap.set(target, rules)
     }
-    // 由验证函数名称、错误提示信息、验证函数额外参数构成的数组
-    rules[key].push([funcName, errInfo, params])
-    rules[key]._default = defaultVal
+    if (defaultVal != null || funcName === 'optional') {
+      rules[key]._option = true
+      rules[key]._default = defaultVal
+    }
+    if (funcName !== 'optional') {
+      // 由验证函数名称、错误提示信息、验证函数额外参数构成的数组
+      rules[key].push([funcName, errInfo, params])
+    }
   }
 }
 
