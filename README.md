@@ -116,7 +116,7 @@ export class Index extends Validator {
 ```
 export class Index extends Validator {
   scene = {
-    edit: ['id', 'account', 'name']
+    edit: ['account']
   }
 
   @rule('isLegalAccount', '账户格式不合法')
@@ -132,10 +132,15 @@ export class Index extends Validator {
 (2)验证参数的value  
 (3)所有参数组成的对象
 
-#### 默认值
-1. 给一个属性赋的值即为默认值
-2. 若给一个属性赋了值，则表示该参数为可选参数
-3. 可以赋值为一个函数（包括async函数）
+#### 默认值与可选参数
+将一个参数设置为可选参数的方式：
+1. 加上装饰器`@rule('optional')`
+2. 设置默认值
+
+设置默认值的方式：  
+给属性赋的值即为默认值。
+> 注意：可以赋值为函数（包括async函数），并取函数返回值为默认值。
+
 ```
 // 模拟异步请求
 const http = () => new Promise(resolve => {
@@ -160,6 +165,9 @@ export class Index extends Validator {
   name = 'foo_test'
 }
 ```
+当用户没有传入`account`参数时，取得默认值`test`。  
+当用户没有传入`name`参数时，取得默认值`foo_test`。  
+
 
 #### 内置验证方法
 集成了Validator.js，可以参考相关文档。  
