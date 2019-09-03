@@ -40,18 +40,24 @@ export class Validator extends ValidatorMethods {
     const keys = this.scene[scene]
     // 获取所有字段的所有验证规则
     const allRules = validateMap.get(this.constructor.prototype)
-
     for (const key of keys) {
       this._key = key
       this._value = toString(this.rawParams[key])
 
       const rules = allRules[key]
-      if (rules._default && !this._value.trim()) {
+      if (!rules || rules.length === 0) {
+        throw new LibsNotFound({
+          message: `[Validator] ${this.constructor.name}验证器中，${scene}场景中指定的${key}字段没有定义规则`
+        })
+      }
+      if (rules._option && !this._value.trim()) {
         // 处理默认值的情况。undefined、null、''、'   '均视为未传值
         if (isFunction(rules._default)) {
           rules._default = await rules._default()
         }
-        this.checkedParams[key] = rules._default
+        if (rules._default != null) {
+          this.checkedParams[key] = rules._default
+        }
       } else {
         for (const rule of rules) {
           await this._validate(rule)
