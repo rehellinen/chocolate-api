@@ -1,4 +1,4 @@
-import { firstUpperCase, r, getConfig, isClass } from '../utils'
+import { firstUpperCase, r, getConfig, isClass, isFunction } from '../utils'
 import { middleware } from './decorator'
 import { LibsNotFound } from '../exception'
 
@@ -61,9 +61,20 @@ export const extend = (validator) => {
   return (target) => {
     const child = validateMap.get(target.prototype)
     const parent = validateMap.get(validator.prototype)
+    // 处理验证规则
     for (const [key, value] of Object.entries(parent)) {
       if (!child[key]) {
         child[key] = value
+      }
+    }
+    // 处理自定义方法
+    for (const key of Reflect.ownKeys(validator.prototype)) {
+      if (key === 'constructor') {
+        continue
+      }
+      const value = validator.prototype[key]
+      if (isFunction(value) && !target.prototype[key]) {
+        target.prototype[key] = value
       }
     }
   }
