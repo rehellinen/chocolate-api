@@ -4,11 +4,19 @@
  *  Create On 2018/10/12 21:21
  */
 import validator from 'validator'
-import { ValidatorMethods } from './ValidatorMethods'
 import { getParams, isFunction, toString } from '../utils'
 import { validateMap } from '../decorator'
 import { LibsNotFound, ParamsException } from '../exception'
 
+
+class ValidatorMethods {
+  require (key, value, params) {
+    if (typeof value === 'string') {
+      value = value.trim()
+    }
+    return value != null && value !== ''
+  }
+}
 
 export class Validator extends ValidatorMethods {
   // 原始的参数列表

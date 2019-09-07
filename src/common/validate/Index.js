@@ -22,6 +22,7 @@ class Index extends Validator {
   @rule('matches', '名称格式不合法', /test$/)
   name = 'foo_test'
 
+  // isLegalAccount在BaseValidator中已定义
   @rule('isLegalAccount', '账户格式不合法')
   @type('int')
   account = async () => {
