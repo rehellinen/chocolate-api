@@ -1,4 +1,4 @@
-import {
+const {
   prefix,
   get,
   post,
@@ -7,7 +7,7 @@ import {
   getConfig,
   middleware,
   upload
-} from '../../core'
+} = require('rehellinen-api-core')
 
 const config = getConfig('token.scope')
 

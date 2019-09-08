@@ -1,4 +1,4 @@
-import { Controller } from '../../core'
+const { Controller } = require('rehellinen-api-core')
 
 export class Index extends Controller {
   index () {

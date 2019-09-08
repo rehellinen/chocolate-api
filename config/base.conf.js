@@ -3,6 +3,9 @@
  *  Create By rehellinen
  *  Create On 2018/10/26 15:07
  */
+import { resolve } from 'path'
+
+
 // 框架核心功能配置
 export default {
   PORT: 3000,
@@ -10,7 +13,6 @@ export default {
   DEBUG: true,
   MIDDLEWARE: ['example'],
   DIR: {
-    // 以src为根目录，app/controller表示/src/app/controller
     CONTROLLER: 'app/controller',
     MODEL: 'app/model',
     ROUTER: 'app/router',
@@ -31,7 +33,7 @@ export default {
   },
   // 上传文件相关
   UPLOAD: {
-    UPLOAD_DIR: '../upload', // 上传文件的根目录，upload表示/src/upload/
+    UPLOAD_DIR: 'upload', // 上传文件的根目录，upload表示/upload/
     UPLOAD_NAME: 'file' // 表单中表示上传文件的key
   },
   // TOKEN相关
