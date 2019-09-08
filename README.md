@@ -1,8 +1,12 @@
-基于Koa2的API框架 - rehellinen-api
-=======================
+rehellinen-api
+================
+### 一个基于Koa2的API框架
+
+#### 安装方法：
+`npm install --save-dev rehellinen-api-core`
 
 #### 内置功能：
-1. 装饰器实现的路由
+1. 使用装饰器编写路由
 2. 功能强大的验证器
 3. 全局异常处理
 4. 基于Token的权限系统
@@ -22,16 +26,10 @@
 |   |-- validate      验证器
 |   |-- middleware    中间件
 |-- config            配置文件目录
-|-- core              框架核心类库
-|   |-- class         类文件
-|   |-- decorator     装饰器
-|   |-- exception     异常
-|   |-- middleware    中间件
-|   |-- utils         工具
 ~~~
 
 ## 框架基本用法
-> 框架所有内置方法、类都通过 `/core/index.js` 获取
+> 框架所有内置方法、类都通过 `rehellinen-api-core` 包获取
 ### （一）路由
 #### 存放目录
 /app/router
@@ -371,7 +369,6 @@ MIDDLEWARE: ['example']
 2. this.model可获取当前模型实例
   
 #### 使用方式
-`Model` 所在文件：/libs/model/Model.js
 ```
 自定义模型：
 export class IndexModel extends Model {
@@ -469,7 +466,7 @@ static checkToken (ctx)
 #### 使用  
 在路由中使用：
 ```
-import { prefix, post, middleware, upload } from '../../core'
+import { prefix, post, middleware, upload } from 'rehellinen-api-core'
 
 @prefix('image')
 class Image {
