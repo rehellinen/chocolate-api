@@ -1,6 +1,11 @@
 rehellinen-api
 ================
-### 一个基于Koa2的API框架
+## 介绍
+基于Koa2二次开发，封装了开发API的常用功能。
+
+#### 核心类库：
+[rehellinen-api-core](https://github.com/rehellinen/rehellinen-api-core)
+> 框架所有内置方法、类都通过 `rehellinen-api-core` 包获取
 
 #### 安装方法：
 `npm install --save-dev rehellinen-api-core`
@@ -29,7 +34,6 @@ rehellinen-api
 ~~~
 
 ## 框架基本用法
-> 框架所有内置方法、类都通过 `rehellinen-api-core` 包获取
 ### （一）路由
 #### 存放目录
 /app/router
